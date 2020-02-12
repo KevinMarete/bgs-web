@@ -35,22 +35,18 @@ Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 });
 
+Route::get('/account', function () {
+    $data = array (
+        'page_title' => 'Manage Account',
+        'content_view' => View::make('auth.account')
+    );
+    return view('template.main', $data);
+});
+
 Route::get('/dashboard', function () {
     $data = array (
         'page_title' => 'Dashboard',
-        'content_view' => View::make('account.profile')
+        'content_view' => View::make('admin.dashboard')
     );
-    return view('template.template', $data);
-});
-
-Route::get('/profile', function () {
-    return view('account.profile');
-});
-
-Route::get('/change-password', function () {
-    return view('account.change-password');
-});
-
-Route::get('/manage-subscription', function () {
-    return view('account.manage-subscription');
+    return view('template.main', $data);
 });

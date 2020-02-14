@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ForgotPasswordController extends Controller
+class SignInController extends Controller
 {
-    public function resetAccount(Request $request)
+    public function authenticateAccount(Request $request)
     {
         $request_data = $request->all();
-        return redirect('/sign-in');
+        return redirect('/dashboard');
     }
 }

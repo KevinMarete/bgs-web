@@ -29,73 +29,82 @@
                         </ul>
                         <div class="tab-content py-4">
                             <div class="tab-pane active" id="profile">
-                                <form role="form">
+                                <form role="form" action="/update-account" method="POST">
+                                    @csrf
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Firstname</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="text" value="">
+                                            <input class="form-control" type="text" value="{{ $profile['firstname'] }}" name="firstname" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Lastname</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="text" value="">
+                                            <input class="form-control" type="text" value="{{ $profile['lastname'] }}" name="lastname" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Organization</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control" size="0" disabled>
+                                            <select class="form-control" size="0" disabled name="organization_id" required>
                                                 <option value="">Select Organization</option>
+                                                @foreach ($organizations as $organization)
+                                                    @if ($organization['id'] === $profile['organization_id'])
+                                                        <option value="{{ $organization['id'] }}" selected>{{ $organization['name'] }}</option>
+                                                    @else
+                                                        <option value="{{ $organization['id'] }}">{{ $organization['name'] }}</option>
+                                                    @endif
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Email</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="email" value="">
+                                            <input class="form-control" type="email" value="{{ $profile['email'] }}" name="email" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Phone</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="text" value="">
+                                            <input class="form-control" type="number" value="{{ $profile['phone'] }}" name="phone" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label"></label>
                                         <div class="col-lg-9">
-                                            <input type="reset" class="btn btn-secondary" value="Cancel">
-                                            <input type="button" class="btn btn-primary" value="Update Profile">
+                                            <button type="reset" class="btn btn-secondary">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Update Profile</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="tab-pane" id="password">
-                                <form role="form">
+                                <form role="form" action="/change-password" method="POST">
+                                    @csrf
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Current Password</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="password" value="11111122333">
+                                            <input class="form-control" type="password" value="" placeholder="*********" name="old_password" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">New Password</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="password" value="11111122333">
+                                            <input class="form-control" type="password" value="" placeholder="*********" name="new_password" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Confirm password</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="password" value="11111122333">
+                                            <input class="form-control" type="password" value="" placeholder="*********" name="confirm_password" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label"></label>
                                         <div class="col-lg-9">
-                                            <input type="reset" class="btn btn-secondary" value="Cancel">
-                                            <input type="button" class="btn btn-primary" value="Change Password">
+                                            <button type="reset" class="btn btn-secondary">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Change Password</button>
                                         </div>
                                     </div>
                                 </form>
@@ -104,51 +113,30 @@
                                 <!--subscription options-->
                                 <div class="container">
                                     <div class="card-deck mb-3 text-center">
-                                        <div class="card mb-4 box-shadow">
-                                        <div class="card-header">
-                                            <h4 class="my-0 font-weight-normal">Free</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <h1 class="card-title pricing-card-title">Ksh.1000 <small class="text-muted">/ mo</small></h1>
-                                            <ul class="list-unstyled mt-3 mb-4">
-                                            <li>10 users included</li>
-                                            <li>2 GB of storage</li>
-                                            <li>Email support</li>
-                                            <li>Help center access</li>
-                                            </ul>
-                                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Selected Option</button>
-                                        </div>
-                                        </div>
-                                        <div class="card mb-4 box-shadow">
-                                        <div class="card-header">
-                                            <h4 class="my-0 font-weight-normal">Pro</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <h1 class="card-title pricing-card-title">Ksh.3000 <small class="text-muted">/ mo</small></h1>
-                                            <ul class="list-unstyled mt-3 mb-4">
-                                            <li>20 users included</li>
-                                            <li>10 GB of storage</li>
-                                            <li>Priority email support</li>
-                                            <li>Help center access</li>
-                                            </ul>
-                                            <button type="button" class="btn btn-lg btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Choose Option</button>
-                                        </div>
-                                        </div>
-                                        <div class="card mb-4 box-shadow">
-                                        <div class="card-header">
-                                            <h4 class="my-0 font-weight-normal">Enterprise</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <h1 class="card-title pricing-card-title">Ksh.5000 <small class="text-muted">/ mo</small></h1>
-                                            <ul class="list-unstyled mt-3 mb-4">
-                                            <li>30 users included</li>
-                                            <li>15 GB of storage</li>
-                                            <li>Phone and email support</li>
-                                            <li>Help center access</li>
-                                            </ul>
-                                            <button type="button" class="btn btn-lg btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Choose Option</button>
-                                        </div>
-                                        </div>
+                                        @foreach ($subscriptions as $subscription)
+                                            <div class="card mb-4 box-shadow">
+                                                <div class="card-header">
+                                                    <h4 class="my-0 font-weight-normal">{{ $subscription['name'] }}</h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h1 class="card-title pricing-card-title">Ksh.{{ $subscription['price'] }} <small class="text-muted">/ mo</small></h1>
+                                                    <ul class="list-unstyled mt-3 mb-4">
+                                                        @foreach ($subscription['details'] as $detail)
+                                                            <li>{{ $detail }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                    @if ($subscription['id'] === $profile['subscriptions']['subscription']['id'] && $profile['subscriptions']['status'] === 'active')
+                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-success" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $subscription['price'] }}">Current Package</button>
+                                                        <strong><small>Expires on: {{ $profile['subscriptions']['end_date'] }}  </small></strong>
+                                                    @elseif ($subscription['id'] === $profile['subscriptions']['subscription']['id'] && $profile['subscriptions']['status'] !== 'active')
+                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $subscription['price'] }}">Expired Package</button>
+                                                        <strong><small>Expired on: {{ $profile['subscriptions']['end_date'] }} </small></strong>
+                                                    @else
+                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $subscription['price'] }}">Select Package</button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>  
                                 <!--payment options-->
@@ -169,22 +157,23 @@
                                                             <a class="nav-link active show" data-toggle="pill" href="#nav-tab-card">
                                                             <i class="fa fa-credit-card"></i> Debit/Credit Card</a></li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">
+                                                            <a class="nav-link" data-toggle="pill" href="#nav-tab-mobile">
                                                             <i class="fa fa-university"></i>  Mobile Money</a></li>
                                                     </ul>
                                                     <div class="tab-content">
                                                         <div class="tab-pane fade active show" id="nav-tab-card">
-                                                            <p class="alert alert-success">Some text success or error</p>
-                                                            <form role="form">
+                                                            <form role="form" action="/card-subscription" method="POST">
+                                                                @csrf
                                                                 <div class="form-group">
                                                                     <label for="username">Full name (on the card)</label>
-                                                                    <input type="text" class="form-control" name="username" placeholder="" required="">
+                                                                    <input type="hidden" class="form-control subscription-price" name="price">
+                                                                    <input type="text" class="form-control" name="card_name" required>
                                                                 </div> <!-- form-group.// -->
 
                                                                 <div class="form-group">
                                                                     <label for="cardNumber">Card number</label>
                                                                     <div class="input-group">
-                                                                        <input type="text" class="form-control" name="cardNumber" placeholder="">
+                                                                        <input type="number" class="form-control" name="card_number" required>
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text text-muted">
                                                                                 <i class="fab fa-cc-visa"></i> &nbsp; <i class="fab fa-cc-amex"></i> &nbsp; 
@@ -199,33 +188,43 @@
                                                                         <div class="form-group">
                                                                             <label><span class="hidden-xs">Expiration</span> </label>
                                                                             <div class="input-group">
-                                                                                <input type="number" class="form-control" placeholder="MM" name="">
-                                                                                <input type="number" class="form-control" placeholder="YY" name="">
+                                                                                <input type="number" class="form-control" placeholder="MM" name="expiry_month" required>
+                                                                                <input type="number" class="form-control" placeholder="YY" name="expiry_year" required>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-sm-4">
                                                                         <div class="form-group">
                                                                             <label data-toggle="tooltip" title="" data-original-title="3 digits code on back side of the card">CVV <i class="fa fa-question-circle"></i></label>
-                                                                            <input type="number" class="form-control" required="">
+                                                                            <input type="number" class="form-control" name="cvv_code" required>
                                                                         </div> <!-- form-group.// -->
                                                                     </div>
                                                                 </div> <!-- row.// -->
-                                                                <button class="subscribe btn btn-primary btn-block" type="button"> Confirm  </button>
+                                                                <button class="subscribe btn btn-primary btn-block" type="submit"> Confirm  </button>
                                                             </form>
                                                         </div> <!-- tab-pane.// -->
-                                                        <div class="tab-pane fade" id="nav-tab-bank">
-                                                            <p>Mobile Money Details</p>
-                                                            <dl class="param">
-                                                                <dt>Paybill Number: </dt>
-                                                                <dd> 800500</dd>
-                                                            </dl>
-                                                            <dl class="param">
-                                                                <dt>Account number: </dt>
-                                                                <dd> BGS</dd>
-                                                            </dl>
-                                                            <p><strong>Note:</strong>Additional transaction costs will be charged</p>
-                                                            <button class="subscribe btn btn-primary btn-block" type="button">Pay Now</button>
+                                                        <div class="tab-pane fade" id="nav-tab-mobile">
+                                                            <form role="form" action="/mobile-subscription" method="POST">
+                                                                @csrf
+                                                                <p>Mobile Money Details</p>
+                                                                <dl class="param">
+                                                                    <dt>Paybill Number: </dt>
+                                                                    <dd> {{ $payment['account_number'] }}</dd>
+                                                                </dl>
+                                                                <dl class="param">
+                                                                    <dt>Account number: </dt>
+                                                                    <dd> {{ $payment['account_number'] }}</dd>
+                                                                </dl>
+                                                                <dl class="param">
+                                                                    <dt>Phone number: </dt>
+                                                                    <dd> 
+                                                                        <input type="hidden" class="form-control subscription-price" name="price">
+                                                                        <input type="number" name="phone" value="{{ $profile['phone'] }}" required/> 
+                                                                    </dd>
+                                                                </dl>
+                                                                <p><strong>Note:</strong> Additional transaction costs will be charged</p>
+                                                                <button class="subscribe btn btn-primary btn-block" type="submit">Pay Now</button>
+                                                            </form>
                                                         </div> <!-- tab-pane.// -->
                                                     </div> <!-- tab-content .// -->
                                                 </div> <!-- card-body.// -->

@@ -11,38 +11,44 @@
 |
 */
 
+/*Default Route*/
 Route::get('/', function () {
     return view('auth.sign-in');
 });
 
+/*Registration*/
 Route::get('/registration', function () {
     return view('auth.registration');
 });
 
-Route::get('/create-organization', function () {
-    return view('auth.create-organization');
-});
+/*Organization*/
+Route::get('/create-organization', 'Auth\CreateOrganizationController@displayView'); 
+Route::post('/add-organization', 'Auth\CreateOrganizationController@saveOrganization');
 
-Route::get('/sign-up', function () {
-    return view('auth.sign-up');
-});
+/*Sign-Up*/
+Route::get('/sign-up', 'Auth\SignUpController@displayView'); 
+Route::post('/add-account', 'Auth\SignUpController@saveAccount');
 
+/*Sign-In*/
 Route::get('/sign-in', function () {
     return view('auth.sign-in');
 });
+Route::post('/authenticate', 'Auth\SignInController@authenticateAccount');
 
+/*Forgot-Password*/
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 });
+Route::post('/reset-account', 'Auth\ForgotPasswordController@manageSubscription');
 
-Route::get('/account', function () {
-    $data = array (
-        'page_title' => 'Manage Account',
-        'content_view' => View::make('auth.account')
-    );
-    return view('template.main', $data);
-});
+/*Manage Account*/
+Route::get('/account', 'Auth\AccountController@displayView');
+Route::post('/update-account', 'Auth\AccountController@updateAccount');
+Route::post('/change-password', 'Auth\AccountController@changePassword');
+Route::post('/card-subscription', 'Auth\AccountController@cardSubscription'); 
+Route::post('/mobile-subscription', 'Auth\AccountController@phoneSubscription'); 
 
+/*Stub Dashboard*/
 Route::get('/dashboard', function () {
     $data = array (
         'page_title' => 'Dashboard',

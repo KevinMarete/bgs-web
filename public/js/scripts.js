@@ -71,4 +71,10 @@
     }
   });
 
+  //Click subscription option
+  $(document).on( "click", ".subscription-btn", function() {
+    //Add price to hidden field(s) in form
+    $(".subscription-price").val($(this).data('price'))
+  });
+
 })(jQuery);

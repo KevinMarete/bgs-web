@@ -28,7 +28,9 @@ class SubscriptionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, Subscription::$rules);
-        $subscription = Subscription::create($request->all());
+        $subscription = Subscription::updateOrCreate([
+            'user_id' => $request->user_id
+        ], $request->all());
         return response()->json($subscription);
     }
 

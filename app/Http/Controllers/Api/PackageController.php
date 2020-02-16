@@ -29,7 +29,9 @@ class PackageController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, Package::$rules);
-        $package = Package::create($request->all());
+        $package = Package::firstOrCreate([
+            'name' => $request->name
+        ], $request->all());
         return response()->json($package);
     }
 

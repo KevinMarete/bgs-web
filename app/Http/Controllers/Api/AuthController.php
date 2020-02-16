@@ -23,8 +23,11 @@ class AuthController extends Controller
 	public function register(Request $request) 
 	{
 		$this->validate($request, User::$rules);
-	    $request['password']=Hash::make($request['password']);
-	    $user = User::create($request->toArray());
+		$request['password']=Hash::make($request['password']);
+		$user = User::firstOrCreate([
+            'email' => $request->email,
+            'organization_id' => $request->organization_id,
+        ], $request->toArray());
 
 	    return response($user, 200);
 	}
@@ -43,7 +46,7 @@ class AuthController extends Controller
 
 	public function activate(Request $request) 
 	{	
-	    $user = User::find($request->id);
+		$user = User::where('email', $request->email)->first();
 		if ($user) {
 			$code = strtoupper(substr(md5($user->id.$user->email.$this->seeder), 0, 4));
 			if($code == $request->code){
@@ -54,11 +57,11 @@ class AuthController extends Controller
 				return response(['msg'=> 'Account verified'], 200);
 			}else{
 				$response = 'Account not verified';
-	        	return response(['error' => $response], 401);
+	        	return response(['error' => $response]);
 			}
 		} else {
 			$response = 'User does not exist';
-	        return response(['error' => $response], 401);
+	        return response(['error' => $response]);
 	    }
 	}
 
@@ -112,15 +115,15 @@ class AuthController extends Controller
 	        		return response(['msg' => $response], 200);
 			    } else {
 			    	$response = 'Passwords do not match';
-		        	return response(['error' => $response], 422);
+		        	return response(['error' => $response]);
 			    }
 	        } else {
-	            $response = "Wrong username or password";
-	            return response(['error' => $response], 401);
+	            $response = "Wrong current password";
+	            return response(['error' => $response]);
 	        }
 	    } else {
 	        $response = 'User does not exist';
-	        return response(['error' => $response], 401);
+	        return response(['error' => $response]);
 	    }
 	}
 
@@ -143,10 +146,10 @@ class AuthController extends Controller
 	        	return response(['msg' => $response], 200);
 	        } else {
 	        	$response = 'Email exists';
-	        	return response(['error' => $response], 209);
+	        	return response(['error' => $response]);
 	        }
 		}
-		return response(['error' => 'Details could not be updated'], 500);
+		return response(['error' => 'Details could not be updated']);
 	}
 
 	public function logout (Request $request) {

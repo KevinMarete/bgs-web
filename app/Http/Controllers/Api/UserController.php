@@ -29,7 +29,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, User::$rules);
-        $user = User::create($request->all());
+        $user = User::firstOrCreate([
+            'email' => $request->email,
+            'organization_id' => $request->organization_id,
+        ], $request->all());
         return response()->json($user);
     }
 
@@ -90,7 +93,7 @@ class UserController extends Controller
      */
     public function getUserSubscription($id)
     {
-        $subscription = Subscription::with('user', 'package')->where('user_id', $id)->get();
+        $subscription = Subscription::with('user', 'package')->where('user_id', $id)->first();
         return response()->json($subscription);
     }
 }

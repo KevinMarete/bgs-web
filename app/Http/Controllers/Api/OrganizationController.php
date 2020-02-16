@@ -26,9 +26,12 @@ class OrganizationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         $this->validate($request, Organization::$rules);
-        $organization = Organization::create($request->all());
+        $organization = Organization::firstOrCreate([
+            'name' => $request->name,
+            'organization_type_id' => $request->organization_type_id
+        ], $request->all());
         return response()->json($organization);
     }
 

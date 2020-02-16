@@ -28,7 +28,10 @@ class OrganizationTypeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, OrganizationType::$rules);
-        $organizationtype = OrganizationType::create($request->all());
+        $organizationtype = OrganizationType::firstOrCreate([
+            'name' => $request->name,
+            'role_id' => $request->role_id,
+        ], $request->all());
         return response()->json($organizationtype);
     }
 

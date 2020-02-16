@@ -73,8 +73,14 @@
 
   //Click subscription option
   $(document).on( "click", ".subscription-btn", function() {
-    //Add price to hidden field(s) in form
+    //Add price, package to hidden field(s) in form
     $(".subscription-price").val($(this).data('price'))
+    $(".subscription-package").val($(this).data('package'))
   });
+
+  //Fade-out alert boxes in 5secs
+  setTimeout(function() {
+    $(".alert").hide()
+  }, 10000);
 
 })(jQuery);

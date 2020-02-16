@@ -36,7 +36,7 @@ class User extends Authenticatable
         "firstname" => "required",
         "lastname" => "required",
         "phone" => "required",
-        "email" => "required|email|unique:tbl_user",
+        "email" => "required|email",
         "password" => "required",
         "organization_id" => "required|numeric",
     ];

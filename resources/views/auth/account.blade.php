@@ -10,6 +10,9 @@
     </div>
 </div>
 <div class="container-fluid mt-n10">
+    @if (Session::has('bgs_msg'))
+        {!! session('bgs_msg') !!}
+    @endif
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
@@ -34,6 +37,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Firstname</label>
                                         <div class="col-lg-9">
+                                            <input class="form-control" type="hidden" value="{{ $profile['id'] }}" name="id" required>
                                             <input class="form-control" type="text" value="{{ $profile['firstname'] }}" name="firstname" required>
                                         </div>
                                     </div>
@@ -85,7 +89,8 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Current Password</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="password" value="" placeholder="*********" name="old_password" required>
+                                            <input class="form-control" type="hidden" value="{{ $profile['email'] }}" name="email" required>
+                                            <input class="form-control" type="password" value="" placeholder="*********" name="password" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -113,26 +118,26 @@
                                 <!--subscription options-->
                                 <div class="container">
                                     <div class="card-deck mb-3 text-center">
-                                        @foreach ($subscriptions as $subscription)
+                                        @foreach ($packages as $package)
                                             <div class="card mb-4 box-shadow">
                                                 <div class="card-header">
-                                                    <h4 class="my-0 font-weight-normal">{{ $subscription['name'] }}</h4>
+                                                    <h4 class="my-0 font-weight-normal">{{ $package['name'] }}</h4>
                                                 </div>
                                                 <div class="card-body">
-                                                    <h1 class="card-title pricing-card-title">Ksh.{{ $subscription['price'] }} <small class="text-muted">/ mo</small></h1>
+                                                    <h1 class="card-title pricing-card-title">Ksh.{{ $package['price'] }} <small class="text-muted">/ mo</small></h1>
                                                     <ul class="list-unstyled mt-3 mb-4">
-                                                        @foreach ($subscription['details'] as $detail)
+                                                        @foreach (json_decode($package['details']) as $detail)
                                                             <li>{{ $detail }}</li>
                                                         @endforeach
                                                     </ul>
-                                                    @if ($subscription['id'] === $profile['subscriptions']['subscription']['id'] && $profile['subscriptions']['status'] === 'active')
-                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-success" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $subscription['price'] }}">Current Package</button>
-                                                        <strong><small>Expires on: {{ $profile['subscriptions']['end_date'] }}  </small></strong>
-                                                    @elseif ($subscription['id'] === $profile['subscriptions']['subscription']['id'] && $profile['subscriptions']['status'] !== 'active')
-                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $subscription['price'] }}">Expired Package</button>
-                                                        <strong><small>Expired on: {{ $profile['subscriptions']['end_date'] }} </small></strong>
+                                                    @if ($package['id'] === $subscription['package']['id'] && $subscription['status'] === 'active')
+                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-success" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Current Package</button>
+                                                        <strong><small>Expires on: {{ $subscription['end_date'] }}  </small></strong>
+                                                    @elseif ($package['id'] === $subscription['package']['id'] && $subscription['status'] !== 'active')
+                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Expired Package</button>
+                                                        <strong><small>Expired on: {{ $subscription['end_date'] }} </small></strong>
                                                     @else
-                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $subscription['price'] }}">Select Package</button>
+                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Select Package</button>
                                                     @endif
                                                 </div>
                                             </div>
@@ -166,6 +171,10 @@
                                                                 @csrf
                                                                 <div class="form-group">
                                                                     <label for="username">Full name (on the card)</label>
+                                                                    <input type="hidden" class="form-control" name="start_date" value="{{ date('Y-m-d') }}">
+                                                                    <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
+                                                                    <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
+                                                                    <input type="hidden" class="form-control subscription-package" name="package_id">
                                                                     <input type="hidden" class="form-control subscription-price" name="price">
                                                                     <input type="text" class="form-control" name="card_name" required>
                                                                 </div> <!-- form-group.// -->
@@ -209,7 +218,7 @@
                                                                 <p>Mobile Money Details</p>
                                                                 <dl class="param">
                                                                     <dt>Paybill Number: </dt>
-                                                                    <dd> {{ $payment['account_number'] }}</dd>
+                                                                    <dd> {{ $payment['paybill_number'] }}</dd>
                                                                 </dl>
                                                                 <dl class="param">
                                                                     <dt>Account number: </dt>
@@ -218,6 +227,12 @@
                                                                 <dl class="param">
                                                                     <dt>Phone number: </dt>
                                                                     <dd> 
+                                                                        <input type="hidden" class="form-control" name="start_date" value="{{ date('Y-m-d') }}">
+                                                                        <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
+                                                                        <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
+                                                                        <input type="hidden" class="form-control subscription-package" name="package_id">
+                                                                        <input type="hidden" class="form-control" name="paybill_number" value="{{ $payment['paybill_number'] }}">
+                                                                        <input type="hidden" class="form-control" name="account_number" value="{{ $payment['account_number'] }}">
                                                                         <input type="hidden" class="form-control subscription-price" name="price">
                                                                         <input type="number" name="phone" value="{{ $profile['phone'] }}" required/> 
                                                                     </dd>

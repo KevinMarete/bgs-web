@@ -37,7 +37,7 @@
     <div class="sb-sidenav-footer">
         <div>
             <div class="small">Logged in as:</div>
-            Demo User
+            {{ session()->get('firstname').' '.session()->get('lastname') }}
         </div>
     </div>
 </nav>

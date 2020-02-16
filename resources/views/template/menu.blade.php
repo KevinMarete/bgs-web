@@ -15,15 +15,15 @@
                 <h6 class="dropdown-header d-flex align-items-center">
                     <i class="sb-dropdown-user-img" data-feather="user"></i>
                     <div class="sb-dropdown-user-details">
-                        <div class="sb-dropdown-user-details-name">Full Name</div>
-                        <div class="sb-dropdown-user-details-email">Email Address</div>
+                        <div class="sb-dropdown-user-details-name">{{ session()->get('firstname').' '.session()->get('lastname') }}</div>
+                        <div class="sb-dropdown-user-details-email">{{ session()->get('email') }}</div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/account"
                     ><div class="sb-dropdown-item-icon"><i data-feather="settings"></i></div>
                     Account</a
-                ><a class="dropdown-item" href="/sign-in"
+                ><a class="dropdown-item" href="/sign-out"
                     ><div class="sb-dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout</a
                 >

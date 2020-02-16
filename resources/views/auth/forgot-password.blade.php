@@ -20,6 +20,9 @@
             <div id="layoutAuthentication_content">
                 <main>
                     <div class="container">
+                        @if (Session::has('bgs_msg'))
+                            {!! session('bgs_msg') !!}
+                        @endif
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
@@ -28,7 +31,7 @@
                                         <div class="small mb-3 text-muted">Enter your email address and we will send you a link to reset your password.</div>
                                         <form action="/reset-account" method="POST">
                                             @csrf
-                                            <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" name="email"/></div>
+                                            <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" name="email" required/></div>
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="/sign-in">Return to login</a><button class="btn btn-primary" type="submit">Reset Password</button></div>
                                         </form>
                                     </div>

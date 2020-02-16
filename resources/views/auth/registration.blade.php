@@ -20,6 +20,9 @@
             <div id="layoutAuthentication_content">
                 <main>
                     <div class="container">
+                        @if (Session::has('bgs_msg'))
+                            {!! session('bgs_msg') !!}
+                        @endif
                         <div class="row justify-content-center">
                             <!-- Create Organization-->
                             <div class="col-xl-4 col-lg-6 col-md-8 col-sm-11">

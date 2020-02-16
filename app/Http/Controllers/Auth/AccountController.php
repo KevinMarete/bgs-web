@@ -5,16 +5,34 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use GuzzleHttp\Client;
 
 class AccountController extends Controller
-{
+{   
+    protected $client;
+
+    public function __construct()
+    {   
+        //Setup Curl client
+        $this->client = new Client([
+            'base_uri' => env('API_URL'),
+            'defaults' => [
+                'exceptions' => false
+            ],
+            'timeout'  => 10.0
+        ]); 
+    }
+
     public function displayView()
     {   
+        $token = session()->get('token');
+        $user_id = session()->get('id');
         $view_data = [
-            'profile' => $this->getProfile(),
+            'profile' => $this->getProfile($token),
             'organizations' => $this->getOrganizations(),
-            'subscriptions' => $this->getSubscriptions(),
-            'payment' => $this->getPaymentDetails()
+            'packages' => $this->getPackages($token),
+            'payment' => $this->getPaymentDetails(),
+            'subscription' => $this->getUserSubscription($token, $user_id)
         ];
         $data = ['page_title' => 'Manage Account', 'content_view' => View::make('auth.account', $view_data)];
 
@@ -23,76 +41,210 @@ class AccountController extends Controller
 
     public function updateAccount(Request $request)
     {
-        $request_data = $request->all();
+        //Send request data to Api
+        $response = $this->client->put("profile", [
+            'headers' => [
+                'Authorization' => 'Bearer '.session()->get('token')
+            ],
+            'json' => $request->all()
+        ]);
+        $response = json_decode($response->getBody(), true);
+
+        if(isset($response['error'])){
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> '.$response["error"].'
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }else{
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> '.$response["msg"].'
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+        $request->session()->flash('bgs_msg', $flash_msg);
+
         return redirect('/account');
     }
 
     public function changePassword(Request $request)
     {
-        $request_data = $request->all();
+        //Send request data to Api
+        $response = $this->client->post("changepassword", [
+            'headers' => [
+                'Authorization' => 'Bearer '.session()->get('token')
+            ],
+            'json' => $request->all()
+        ]);
+        $response = json_decode($response->getBody(), true);
+
+        if(isset($response['error'])){
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> '.$response["error"].'
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }else{
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> '.$response["msg"].'
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+        $request->session()->flash('bgs_msg', $flash_msg);
+
         return redirect('/account');
     }
 
     public function cardSubscription(Request $request)
     {
-        $request_data = $request->all();
+        //Send request data to Api
+        $response = $this->client->post("subscription", [
+            'headers' => [
+                'Authorization' => 'Bearer '.session()->get('token')
+            ],
+            'json' => $request->all()
+        ]);
+        $response = json_decode($response->getBody(), true);
+
+        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your subscription has been updated.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+
+        $request->session()->flash('bgs_msg', $flash_msg);
+
         return redirect('/account');
     }
 
     public function phoneSubscription(Request $request)
     {
-        $request_data = $request->all();
+        //Send request data to Api
+        $response = $this->client->post("subscription", [
+            'headers' => [
+                'Authorization' => 'Bearer '.session()->get('token')
+            ],
+            'json' => $request->all()
+        ]);
+        $response = json_decode($response->getBody(), true);
+
+        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your subscription has been updated.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+
+        $request->session()->flash('bgs_msg', $flash_msg);
+
         return redirect('/account');
     }
 
-    public function getProfile()
+    public function getProfile($token=null)
     {   
-        $profile = [
-            'firstname' => 'Kevin', 
-            'lastname' => 'Marete',
-            'email' => 'kevomarete@gmail.com',
-            'phone' => '0725102659',
-            'organization_id' => '1',
-            'subscriptions' => [
-                'status' => 'active',
-                'start_date' => '2020-02-01',
-                'end_date' => date('jS-M-Y', strtotime('2020-03-01')),
-                'subscription' => [
-                    'id' => '1',
-                    'name' => 'Basic',
+        $profile = [];
+        if($token !== null){
+            $request = $this->client->get('me', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
                 ]
-            ]
-        ];
+            ]);
+            $response = $request->getBody();
+            $profile = json_decode($response, true);
+        }
+
         return $profile;
+    }
+    
+    public function getUserSubscription($token=null, $user_id=null)
+    {   
+        $subscription = [];
+
+        if($token !== null){
+            $request = $this->client->get('user/'.$user_id.'/subscription', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
+                ]
+            ]);
+            $response = json_decode($request->getBody(), true);
+
+            $subscription = [
+                'status' => ( date('Y-m-d', strtotime($response['end_date'])) >= date('Y-m-d') ? 'active' : 'inactive'),
+                'start_date' => $response['start_date'],
+                'end_date' => date('jS-M-Y', strtotime($response['end_date'])),
+                'package' => [
+                    'id' => $response['package']['id'],
+                    'name' => $response['package']['id']
+                ]
+            ];
+        }
+
+        return $subscription;
     }
 
     public function getOrganizations()
     {   
-        $types = [
-            ['id' => '1', 'name' => 'Maisha Poa Clinic'],
-            ['id' => '2', 'name' => 'Kenyatta National Hospital'],
-            ['id' => '3', 'name' => 'Neem Pharmacy']
-        ];
+        $request = $this->client->get('organizations');
+        $response = $request->getBody();
+        $types = json_decode($response, true);
         return $types;
     }
 
-    public function getSubscriptions()
+    public function getPackages($token=null)
     {   
-        $subscriptions = [
-            ['id' => '1', 'name' => 'Basic', 'price' => '1000', 'details' => ['Limited access to promos & deals', 'Limited access to sellers', 'Email support', 'Help center access']],
-            ['id' => '2', 'name' => 'Professional', 'price' => '3000', 'details' => ['Medium access to promos & deals', 'Medium access to sellers', 'Priority email support', 'Help center access']],
-            ['id' => '3', 'name' => 'Enterprise', 'price' => '5000', 'details' => ['All access to promos & deals', 'All access to sellers', 'Phone and email support', 'Help center access']]
-        ];
-        return $subscriptions;
+        $packages = [];
+        if($token !== null){
+            $request = $this->client->get('packages', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
+                ]
+            ]);
+            $response = $request->getBody();
+            $packages = json_decode($response, true);
+        }
+        return $packages;
     }
 
     public function getPaymentDetails()
     {   
         $payment = [
-            'paybill_number' => '800500',
-            'account_number' => 'BGS'
+            'paybill_number' => env('PAYBILL_NUMBER'),
+            'account_number' => env('ACCOUNT_NUMBER')
         ];
         return $payment;
+    }
+
+    public function logout(Request $request)
+    {   
+        //Send request data to Api
+        $response = $this->client->post("logout", [
+            'headers' => [
+                'Authorization' => 'Bearer '.session()->get('token')
+            ]
+        ]);
+        $response = json_decode($response->getBody(), true);
+
+        //Clear sessions
+        $request->session()->flush();
+
+        if(isset($response['msg'])){
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> '.$response["msg"].'
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+            $request->session()->flash('bgs_msg', $flash_msg);
+        }
+
+        return redirect('/sign-in');
     }
 
 }

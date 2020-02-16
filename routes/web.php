@@ -35,11 +35,18 @@ Route::get('/sign-in', function () {
 });
 Route::post('/authenticate', 'Auth\SignInController@authenticateAccount');
 
+/*Activate-Account*/
+Route::get('/activate-account', function () {
+    return view('auth.activate-account');
+});
+Route::post('/activation', 'Auth\SignInController@activateAccount');
+
+
 /*Forgot-Password*/
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 });
-Route::post('/reset-account', 'Auth\ForgotPasswordController@manageSubscription');
+Route::post('/reset-account', 'Auth\ForgotPasswordController@resetAccount');
 
 /*Manage Account*/
 Route::get('/account', 'Auth\AccountController@displayView');
@@ -47,6 +54,7 @@ Route::post('/update-account', 'Auth\AccountController@updateAccount');
 Route::post('/change-password', 'Auth\AccountController@changePassword');
 Route::post('/card-subscription', 'Auth\AccountController@cardSubscription'); 
 Route::post('/mobile-subscription', 'Auth\AccountController@phoneSubscription'); 
+Route::get('/sign-out', 'Auth\AccountController@logout'); 
 
 /*Stub Dashboard*/
 Route::get('/dashboard', function () {

@@ -165,7 +165,15 @@ class AccountController extends Controller
     
     public function getUserSubscription($token=null, $user_id=null)
     {   
-        $subscription = [];
+        $subscription = [
+            'status' => 'inactive',
+            'start_date' => null,
+            'end_date' => null,
+            'package' => [
+                'id' => null,
+                'name' => null
+            ]
+        ];
 
         if($token !== null){
             $request = $this->client->get('user/'.$user_id.'/subscription', [
@@ -174,16 +182,17 @@ class AccountController extends Controller
                 ]
             ]);
             $response = json_decode($request->getBody(), true);
-
-            $subscription = [
-                'status' => ( date('Y-m-d', strtotime($response['end_date'])) >= date('Y-m-d') ? 'active' : 'inactive'),
-                'start_date' => $response['start_date'],
-                'end_date' => date('jS-M-Y', strtotime($response['end_date'])),
-                'package' => [
-                    'id' => $response['package']['id'],
-                    'name' => $response['package']['id']
-                ]
-            ];
+            if($response){
+                $subscription = [
+                    'status' => ( date('Y-m-d', strtotime($response['end_date'])) >= date('Y-m-d') ? 'active' : 'inactive'),
+                    'start_date' => $response['start_date'],
+                    'end_date' => date('jS-M-Y', strtotime($response['end_date'])),
+                    'package' => [
+                        'id' => $response['package']['id'],
+                        'name' => $response['package']['id']
+                    ]
+                ];
+            }
         }
 
         return $subscription;

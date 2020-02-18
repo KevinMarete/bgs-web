@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Role;
-use App\MenuRole;
+use App\ProductCategory;
+use App\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class ProductCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        return response()->json($roles);
+        $productcategories = ProductCategory::all();
+        return response()->json($productcategories);
     }
 
     /**
@@ -28,11 +28,11 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Role::$rules);
-        $role = Role::firstOrCreate([
+        $this->validate($request, ProductCategory::$rules);
+        $productcategory = ProductCategory::firstOrCreate([
             'name' => $request->name
         ], $request->all());
-        return response()->json($role);
+        return response()->json($productcategory);
     }
 
     /**
@@ -43,11 +43,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
-        if(is_null($role)){
+        $productcategory = ProductCategory::find($id);
+        if(is_null($productcategory)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($role);
+        return response()->json($productcategory);
     }
 
     /**
@@ -59,13 +59,13 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Role::$rules);
-        $role  = Role::find($id);
-        if(is_null($role)){
+        $this->validate($request, ProductCategory::$rules);
+        $productcategory  = ProductCategory::find($id);
+        if(is_null($productcategory)){
             return response()->json(['error' => 'not_found']);
         }
-        $role->update($request->all());
-        return response()->json($role);
+        $productcategory->update($request->all());
+        return response()->json($productcategory);
     }
 
     /**
@@ -76,23 +76,23 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id);
-        if(is_null($role)){
+        $productcategory = ProductCategory::find($id);
+        if(is_null($productcategory)){
             return response()->json(['error' => 'not_found']);
         }
-        $role->delete();
+        $productcategory->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 
     /**
-     * Display the specified Role's menus.
+     * Display the specified ProductCategory's products.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getRoleMenus($id)
+    public function getCategoryProducts($id)
     {
-        $menuroles = MenuRole::with('menu', 'role')->where('role_id', $id)->get();
-        return response()->json($menuroles);
+        $products = Product::with('productcategory')->where('product_category_id', $id)->get();
+        return response()->json($products);
     }
 }

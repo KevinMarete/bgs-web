@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Role;
-use App\MenuRole;
+use App\OrganizationPaymentType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class OrganizationPaymentTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        return response()->json($roles);
+        $organization_payment_types = OrganizationPaymentType::all();
+        return response()->json($organization_payment_types);
     }
 
     /**
@@ -28,11 +27,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Role::$rules);
-        $role = Role::firstOrCreate([
-            'name' => $request->name
+        $this->validate($request, OrganizationPaymentType::$rules);
+        $organization_payment_type = OrganizationPaymentType::firstOrCreate([
+            'organization_id' => $request->organization_id,
+            'payment_type_id' => $request->payment_type_id
         ], $request->all());
-        return response()->json($role);
+        return response()->json($organization_payment_type);
     }
 
     /**
@@ -43,11 +43,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
-        if(is_null($role)){
+        $organization_payment_type = OrganizationPaymentType::find($id);
+        if(is_null($organization_payment_type)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($role);
+        return response()->json($organization_payment_type);
     }
 
     /**
@@ -59,13 +59,13 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Role::$rules);
-        $role  = Role::find($id);
-        if(is_null($role)){
+        $this->validate($request, OrganizationPaymentType::$rules);
+        $organization_payment_type  = OrganizationPaymentType::find($id);
+        if(is_null($organization_payment_type)){
             return response()->json(['error' => 'not_found']);
         }
-        $role->update($request->all());
-        return response()->json($role);
+        $organization_payment_type->update($request->all());
+        return response()->json($organization_payment_type);
     }
 
     /**
@@ -76,23 +76,11 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id);
-        if(is_null($role)){
+        $organization_payment_type = OrganizationPaymentType::find($id);
+        if(is_null($organization_payment_type)){
             return response()->json(['error' => 'not_found']);
         }
-        $role->delete();
+        $organization_payment_type->delete();
         return response()->json(['msg' => 'Removed successfully']);
-    }
-
-    /**
-     * Display the specified Role's menus.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function getRoleMenus($id)
-    {
-        $menuroles = MenuRole::with('menu', 'role')->where('role_id', $id)->get();
-        return response()->json($menuroles);
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Organization;
+use App\Offer;
+use App\OrganizationPaymentType;
+use App\Stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -82,5 +85,41 @@ class OrganizationController extends Controller
         }
         $organization->delete();
         return response()->json(['msg' => 'Removed successfully']);
+    }
+
+    /**
+     * Display the specified Organization's offers.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationOffers($id)
+    {
+        $offers = Offer::with('organization')->where('organization_id', $id)->get();
+        return response()->json($offers);
+    }
+
+    /**
+     * Display the specified Organization's PaymentTypes.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationPaymentTypes($id)
+    {
+        $payment_types = OrganizationPaymentType::with('organization')->where('organization_id', $id)->get();
+        return response()->json($payment_types);
+    }
+
+    /**
+     * Display the specified Organization's Stocks.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationStocks($id)
+    {
+        $stocks = Stock::with('organization', 'product', 'stocktype', 'user')->where('organization_id', $id)->get();
+        return response()->json($stocks);
     }
 }

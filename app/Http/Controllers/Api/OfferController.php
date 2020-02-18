@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Role;
-use App\MenuRole;
+use App\Offer;
+use App\Promo;
+use App\Deal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class OfferController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        return response()->json($roles);
+        $offers = Offer::all();
+        return response()->json($offers);
     }
 
     /**
@@ -28,11 +29,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Role::$rules);
-        $role = Role::firstOrCreate([
-            'name' => $request->name
+        $this->validate($request, Offer::$rules);
+        $offer = Offer::firstOrCreate([
+            'description' => $request->description,
+            'organization_id' => $request->organization_id
         ], $request->all());
-        return response()->json($role);
+        return response()->json($offer);
     }
 
     /**
@@ -43,11 +45,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
-        if(is_null($role)){
+        $offer = Offer::find($id);
+        if(is_null($offer)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($role);
+        return response()->json($offer);
     }
 
     /**
@@ -59,13 +61,13 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Role::$rules);
-        $role  = Role::find($id);
-        if(is_null($role)){
+        $this->validate($request, Offer::$rules);
+        $offer  = Offer::find($id);
+        if(is_null($offer)){
             return response()->json(['error' => 'not_found']);
         }
-        $role->update($request->all());
-        return response()->json($role);
+        $offer->update($request->all());
+        return response()->json($offer);
     }
 
     /**
@@ -76,23 +78,35 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id);
-        if(is_null($role)){
+        $offer = Offer::find($id);
+        if(is_null($offer)){
             return response()->json(['error' => 'not_found']);
         }
-        $role->delete();
+        $offer->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 
     /**
-     * Display the specified Role's menus.
+     * Display the specified Offer's promos.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getRoleMenus($id)
+    public function getOfferPromos($id)
     {
-        $menuroles = MenuRole::with('menu', 'role')->where('role_id', $id)->get();
-        return response()->json($menuroles);
+        $promos = Promo::with('offer')->where('offer_id', $id)->get();
+        return response()->json($promos);
+    }
+
+    /**
+     * Display the specified Offer's deals.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOfferDeals($id)
+    {
+        $deals = Deal::with('offer')->where('offer_id', $id)->get();
+        return response()->json($deals);
     }
 }

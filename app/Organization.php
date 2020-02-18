@@ -11,10 +11,13 @@ class Organization extends Model
 
     protected $table = 'tbl_organization';
 
-    protected $fillable = ['name', 'organization_type_id'];
+    protected $fillable = ['name', 'town', 'road', 'building', 'organization_type_id'];
 
     public static $rules = [
         "name" => "required",
+        "town" => "required",
+        "road" => "required",
+        "building" => "required",
         "organization_type_id" => "required|numeric"
 	];
 

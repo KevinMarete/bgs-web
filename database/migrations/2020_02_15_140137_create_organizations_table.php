@@ -16,6 +16,9 @@ class CreateOrganizationsTable extends Migration
         Schema::create('tbl_organization', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('town');
+            $table->string('road');
+            $table->string('building');
             $table->integer('organization_type_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
@@ -27,9 +30,14 @@ class CreateOrganizationsTable extends Migration
 
         //Add default data
         DB::table('tbl_organization')->insert(
-            array(
-                ['name' => 'BGS', 'organization_type_id' => '1', 'created_at' => now()]
-            )
+            array([
+                'name' => 'BGS', 
+                'town' => 'Nairobi', 
+                'road' => 'Market Street', 
+                'building' => 'Yala Towers', 
+                'organization_type_id' => '1', 
+                'created_at' => now()
+            ])
         );
     }
 

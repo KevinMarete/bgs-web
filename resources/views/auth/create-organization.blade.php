@@ -33,6 +33,9 @@
                                         <form action="/add-organization" method="POST">
                                             @csrf
                                             <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter new organization name" aria-label="Organization Name" aria-describedby="orgNameExample" name="name" required/></div>
+                                            <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter organization town" aria-label="Organization Town" aria-describedby="orgTownExample" name="town" required/></div>
+                                            <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter organization street/road" aria-label="Organization Street/Road" aria-describedby="orgRoadExample" name="road" required/></div>
+                                            <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter organization building" aria-label="Organization Building" aria-describedby="orgBuildingExample" name="building" required/></div>
                                             <div class="form-group">
                                                 <select class="form-control form-control-solid" aria-label="Type of Organization" aria-describedby="orgTypeExample" name="organization_type_id" required>
                                                     <option value="">Type of Organization</option>

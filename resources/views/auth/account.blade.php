@@ -71,7 +71,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Phone</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="number" value="{{ $profile['phone'] }}" name="phone" required>
+                                            <input class="form-control" type="text" value="{{ $profile['phone'] }}" name="phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -182,7 +182,7 @@
                                                                 <div class="form-group">
                                                                     <label for="cardNumber">Card number</label>
                                                                     <div class="input-group">
-                                                                        <input type="number" class="form-control" name="card_number" required>
+                                                                        <input type="text" class="form-control" name="card_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text text-muted">
                                                                                 <i class="fab fa-cc-visa"></i> &nbsp; <i class="fab fa-cc-amex"></i> &nbsp; 
@@ -197,15 +197,15 @@
                                                                         <div class="form-group">
                                                                             <label><span class="hidden-xs">Expiration</span> </label>
                                                                             <div class="input-group">
-                                                                                <input type="number" class="form-control" placeholder="MM" name="expiry_month" required>
-                                                                                <input type="number" class="form-control" placeholder="YY" name="expiry_year" required>
+                                                                                <input type="text" class="form-control" placeholder="MM" name="expiry_month" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                                <input type="text" class="form-control" placeholder="YY" name="expiry_year" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-sm-4">
                                                                         <div class="form-group">
                                                                             <label data-toggle="tooltip" title="" data-original-title="3 digits code on back side of the card">CVV <i class="fa fa-question-circle"></i></label>
-                                                                            <input type="number" class="form-control" name="cvv_code" required>
+                                                                            <input type="text" class="form-control" name="cvv_code" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                         </div> <!-- form-group.// -->
                                                                     </div>
                                                                 </div> <!-- row.// -->
@@ -234,7 +234,7 @@
                                                                         <input type="hidden" class="form-control" name="paybill_number" value="{{ $payment['paybill_number'] }}">
                                                                         <input type="hidden" class="form-control" name="account_number" value="{{ $payment['account_number'] }}">
                                                                         <input type="hidden" class="form-control subscription-price" name="price">
-                                                                        <input type="number" name="phone" value="{{ $profile['phone'] }}" required/> 
+                                                                        <input type="text" name="phone" value="{{ $profile['phone'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
                                                                     </dd>
                                                                 </dl>
                                                                 <p><strong>Note:</strong> Additional transaction costs will be charged</p>

@@ -54,7 +54,7 @@
                                                     <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" name="email" required/></div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group"><label class="small mb-1" for="inputPhone">Phone</label><input class="form-control py-4" id="inputPhone" type="number" aria-describedby="phoneHelp" placeholder="Enter phone number" name="phone" required/></div>
+                                                    <div class="form-group"><label class="small mb-1" for="inputPhone">Phone</label><input class="form-control py-4" id="inputPhone" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" aria-describedby="phoneHelp" placeholder="Enter phone number" name="phone" required/></div>
                                                 </div>
                                             </div>
                                             <div class="form-row">

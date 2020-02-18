@@ -38,6 +38,7 @@ class CreateUsersTable extends Migration
                     'phone' => '0725102659',
                     'email' => 'kevomarete@gmail.com',
                     'password' => '$2y$10$Pm9//JP64ObJ9Eqj82u07uDZpXEFCNqDvkPqCFJ.P8IdDiZMUEys.',
+                    'email_verified_at' => now(),
                     'organization_id' => '1', 
                     'created_at' => now()
                 ]

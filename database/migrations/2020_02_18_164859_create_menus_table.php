@@ -1,0 +1,55 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateMenusTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tbl_menu', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('link');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->unique(['name']);
+        });
+
+        //Add default data
+        DB::table('tbl_menu')->insert(
+            array(
+                ['name' => 'Dashboard', 'link' => '/dashboard', 'created_at' => now()],
+                ['name' => 'OrganizationTypes', 'link' => '/organization-types', 'created_at' => now()],
+                ['name' => 'Packages', 'link' => '/packages', 'created_at' => now()],
+                ['name' => 'Roles', 'link' => '/roles', 'created_at' => now()],
+                ['name' => 'ProductCategories', 'link' => '/product-categories', 'created_at' => now()],
+                ['name' => 'StockTypes', 'link' => '/stock-types', 'created_at' => now()],
+                ['name' => 'PaymentTypes', 'link' => '/payment-types', 'created_at' => now()],
+                ['name' => 'Products', 'link' => '/products', 'created_at' => now()],
+                ['name' => 'Offers', 'link' => '/offers', 'created_at' => now()],
+                ['name' => 'Stocks', 'link' => '/stocks', 'created_at' => now()],
+                ['name' => 'Search', 'link' => '/search', 'created_at' => now()],
+                ['name' => 'Deals', 'link' => '/deals', 'created_at' => now()],
+                ['name' => 'Promos', 'link' => '/promos', 'created_at' => now()]
+            )
+        );
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('tbl_menu');
+    }
+}

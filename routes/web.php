@@ -56,11 +56,5 @@ Route::post('/card-subscription', 'Auth\AccountController@cardSubscription');
 Route::post('/mobile-subscription', 'Auth\AccountController@phoneSubscription'); 
 Route::get('/sign-out', 'Auth\AccountController@logout'); 
 
-/*Stub Dashboard*/
-Route::get('/dashboard', function () {
-    $data = array (
-        'page_title' => 'Dashboard',
-        'content_view' => View::make('admin.dashboard')
-    );
-    return view('template.main', $data);
-});
+/*Stub Admin Dashboard with dynamic menus*/
+Route::get('/dashboard', 'Admin\DashboardController@displayView'); 

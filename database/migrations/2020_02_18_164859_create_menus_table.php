@@ -26,19 +26,19 @@ class CreateMenusTable extends Migration
         //Add default data
         DB::table('tbl_menu')->insert(
             array(
-                ['name' => 'Dashboard', 'link' => '/dashboard', 'created_at' => now()],
-                ['name' => 'OrganizationTypes', 'link' => '/organization-types', 'created_at' => now()],
-                ['name' => 'Packages', 'link' => '/packages', 'created_at' => now()],
-                ['name' => 'Roles', 'link' => '/roles', 'created_at' => now()],
-                ['name' => 'ProductCategories', 'link' => '/product-categories', 'created_at' => now()],
-                ['name' => 'StockTypes', 'link' => '/stock-types', 'created_at' => now()],
-                ['name' => 'PaymentTypes', 'link' => '/payment-types', 'created_at' => now()],
-                ['name' => 'Products', 'link' => '/products', 'created_at' => now()],
-                ['name' => 'Offers', 'link' => '/offers', 'created_at' => now()],
-                ['name' => 'Stocks', 'link' => '/stocks', 'created_at' => now()],
-                ['name' => 'Search', 'link' => '/search', 'created_at' => now()],
-                ['name' => 'Deals', 'link' => '/deals', 'created_at' => now()],
-                ['name' => 'Promos', 'link' => '/promos', 'created_at' => now()]
+                ['name' => 'Dashboard', 'link' => '/dashboard', 'icon' => 'feather-activity', 'created_at' => now()],
+                ['name' => 'OrganizationTypes', 'link' => '/organization-types', 'icon' => 'feather-layout', 'created_at' => now()],
+                ['name' => 'Packages', 'link' => '/packages', 'icon' => 'feather-package', 'created_at' => now()],
+                ['name' => 'Roles', 'link' => '/roles', 'icon' => 'feather-filter', 'created_at' => now()],
+                ['name' => 'ProductCategories', 'link' => '/product-categories', 'icon' => 'feather-activity', 'created_at' => now()],
+                ['name' => 'StockTypes', 'link' => '/stock-types', 'icon' => 'feather-package', 'created_at' => now()],
+                ['name' => 'PaymentTypes', 'link' => '/payment-types', 'icon' => 'feather-package', 'created_at' => now()],
+                ['name' => 'Products', 'link' => '/products', 'icon' => 'feather-package', 'created_at' => now()],
+                ['name' => 'Offers', 'link' => '/offers', 'icon' => 'feather-activity', 'created_at' => now()],
+                ['name' => 'Stocks', 'link' => '/stocks', 'icon' => 'feather-package', 'created_at' => now()],
+                ['name' => 'Search', 'link' => '/search', 'icon' => 'feather-filter', 'created_at' => now()],
+                ['name' => 'Deals', 'link' => '/deals', 'icon' => 'feather-activity', 'created_at' => now()],
+                ['name' => 'Promos', 'link' => '/promos', 'icon' => 'feather-bar-chart', 'created_at' => now()]
             )
         );
     }

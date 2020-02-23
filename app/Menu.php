@@ -11,11 +11,12 @@ class Menu extends Model
 
     protected $table = 'tbl_menu';
 
-    protected $fillable = ['name', 'link'];
+    protected $fillable = ['name', 'link', 'icon'];
 
     public static $rules = [
         "name" => "required|unique:tbl_menu",
-        "link" => "required"
+        "link" => "required",
+        "icon" => "required",
 	];
 
 }

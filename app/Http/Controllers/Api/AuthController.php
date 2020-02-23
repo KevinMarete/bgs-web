@@ -128,7 +128,7 @@ class AuthController extends Controller
 	}
 
 	public function viewprofile(Request $request){
-		$user = User::with('organization')->find(auth('api')->user()->id);
+		$user = User::with('organization', 'organization.organization_type', 'organization.organization_type.role')->find(auth('api')->user()->id);
 	    return response($user, 200);
 	}
 

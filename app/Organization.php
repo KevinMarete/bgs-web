@@ -21,7 +21,7 @@ class Organization extends Model
         "organization_type_id" => "required|numeric"
 	];
 
-    public function organizationtype()
+    public function organization_type()
     {
         return $this->belongsTo('App\OrganizationType');
     }

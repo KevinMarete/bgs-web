@@ -18,7 +18,7 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        $organizations = Organization::all();
+        $organizations = Organization::with('organization_type', 'organization_type.role')->get();
         return response()->json($organizations);
     }
 
@@ -46,7 +46,7 @@ class OrganizationController extends Controller
      */
     public function show($id)
     {
-        $organization = Organization::find($id);
+        $organization = Organization::with('organization_type', 'organization_type.role')->find($id);
         if(is_null($organization)){
             return response()->json(['error' => 'not_found']);
         }

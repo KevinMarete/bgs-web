@@ -23,7 +23,7 @@ class Product extends Model
         "product_category_id" => "required|numeric"
 	];
 
-    public function productcategory()
+    public function product_category()
     {
         return $this->belongsTo('App\ProductCategory');
     }

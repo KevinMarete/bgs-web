@@ -30,7 +30,7 @@ class Stock extends Model
         return $this->belongsTo('App\Product');
     }
 
-    public function stocktype()
+    public function stock_type()
     {
         return $this->belongsTo('App\StockType');
     }

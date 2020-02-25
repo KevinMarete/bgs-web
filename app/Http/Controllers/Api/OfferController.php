@@ -17,7 +17,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::all();
+        $offers = Offer::with('organization')->get();
         return response()->json($offers);
     }
 
@@ -45,7 +45,7 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        $offer = Offer::find($id);
+        $offer = Offer::with('organization')->find($id);
         if(is_null($offer)){
             return response()->json(['error' => 'not_found']);
         }

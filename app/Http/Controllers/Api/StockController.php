@@ -15,7 +15,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $stocks = Stock::all();
+        $stocks = Stock::with('product', 'stock_type', 'organization')->get();
         return response()->json($stocks);
     }
 
@@ -40,7 +40,7 @@ class StockController extends Controller
      */
     public function show($id)
     {
-        $stock = Stock::find($id);
+        $stock = Stock::with('product', 'stock_type', 'organization')->find($id);
         if(is_null($stock)){
             return response()->json(['error' => 'not_found']);
         }

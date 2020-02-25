@@ -2,31 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use GuzzleHttp\Client;
 
-class AccountController extends Controller
+class AccountController extends MyController
 {   
-    protected $client;
-
-    public function __construct()
-    {   
-        //Setup Curl client
-        $this->client = new Client([
-            'base_uri' => env('API_URL'),
-            'defaults' => [
-                'exceptions' => false
-            ],
-            'timeout'  => 10.0
-        ]); 
-    }
-
+    
     public function displayView()
     {   
         $token = session()->get('token');
         $user_id = session()->get('id');
+        $role_id = session()->get('organization.organization_type.role_id');
         $view_data = [
             'profile' => $this->getProfile($token),
             'organizations' => $this->getOrganizations(),
@@ -34,7 +21,11 @@ class AccountController extends Controller
             'payment' => $this->getPaymentDetails(),
             'subscription' => $this->getUserSubscription($token, $user_id)
         ];
-        $data = ['page_title' => 'Manage Account', 'content_view' => View::make('auth.account', $view_data)];
+        $data = [
+            'page_title' => 'Manage Account', 
+            'content_view' => View::make('auth.account', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id)
+        ];
 
         return view('template.main', $data);
     }

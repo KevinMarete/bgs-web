@@ -23,7 +23,12 @@ class SignInController extends Controller
     }
 
     public function authenticateAccount(Request $request)
-    {
+    {   
+        $redirect_url = [
+            'admin' => '/dashboard',
+            'buyer' => '/search',
+            'seller' => '/catalogue'
+        ];
         //Send request data to Api
         $response = $this->client->post("login", ['json' => $request->all()]);
         $response = json_decode($response->getBody(), true);
@@ -62,7 +67,7 @@ class SignInController extends Controller
                         </div>';
             $request->session()->flash('bgs_msg', $flash_msg);
 
-            return redirect('/dashboard');
+            return redirect($redirect_url[session()->get('organization.organization_type.role.name')]);
         }
     }
 

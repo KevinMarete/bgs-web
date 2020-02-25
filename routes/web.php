@@ -41,7 +41,6 @@ Route::get('/activate-account', function () {
 });
 Route::post('/activation', 'Auth\SignInController@activateAccount');
 
-
 /*Forgot-Password*/
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
@@ -56,5 +55,22 @@ Route::post('/card-subscription', 'Auth\AccountController@cardSubscription');
 Route::post('/mobile-subscription', 'Auth\AccountController@phoneSubscription'); 
 Route::get('/sign-out', 'Auth\AccountController@logout'); 
 
-/*Stub Admin Dashboard with dynamic menus*/
-Route::get('/dashboard', 'Admin\DashboardController@displayView'); 
+/*Admin Routes*/
+Route::get('/dashboard', 'Admin\AdminController@displayDashboardView'); 
+Route::get('/organizationtypes', 'Admin\AdminController@displayTableView'); 
+Route::get('/packages', 'Admin\AdminController@displayTableView'); 
+Route::get('/roles', 'Admin\AdminController@displayTableView'); 
+Route::get('/product-categories', 'Admin\AdminController@displayTableView'); 
+Route::get('/stocktypes', 'Admin\AdminController@displayTableView'); 
+Route::get('/payment-types', 'Admin\AdminController@displayTableView'); 
+
+/*Buyer Routes*/
+Route::get('/search', 'Buyer\BuyerController@displaySearchView'); 
+Route::get('/deals', 'Buyer\BuyerController@displayDealView'); 
+Route::get('/promos', 'Buyer\BuyerController@displayPromoView'); 
+
+/*Seller Routes*/
+Route::get('/catalogue', 'Seller\SellerController@displayCatalogueView');  
+Route::get('/products', 'Seller\SellerController@displayTableView'); 
+Route::get('/offers', 'Seller\SellerController@displayTableView'); 
+Route::get('/stocks', 'Seller\SellerController@displayTableView');

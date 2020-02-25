@@ -39,9 +39,10 @@ class CreateMenuRolesTable extends Migration
                 ['menu_id' => '8', 'role_id' => '3', 'created_at' => now()],
                 ['menu_id' => '9', 'role_id' => '3', 'created_at' => now()],
                 ['menu_id' => '10', 'role_id' => '3', 'created_at' => now()],
-                ['menu_id' => '11', 'role_id' => '2', 'created_at' => now()],
+                ['menu_id' => '11', 'role_id' => '3', 'created_at' => now()],
                 ['menu_id' => '12', 'role_id' => '2', 'created_at' => now()],
                 ['menu_id' => '13', 'role_id' => '2', 'created_at' => now()],
+                ['menu_id' => '14', 'role_id' => '2', 'created_at' => now()],
             )
         );
     }

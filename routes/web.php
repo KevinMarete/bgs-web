@@ -74,3 +74,7 @@ Route::get('/catalogue', 'Seller\SellerController@displayCatalogueView');
 Route::get('/products', 'Seller\SellerController@displayTableView'); 
 Route::get('/offers', 'Seller\SellerController@displayTableView'); 
 Route::get('/stocks', 'Seller\SellerController@displayTableView');
+Route::get('/manage/{resource}', 'Seller\SellerController@displayManageView');
+Route::post('/manage/{resource}/{action}', 'Seller\SellerController@displayManageView');
+Route::get('/manage/{resource}/{action}/{id}', 'Seller\SellerController@displayManageView');
+Route::post('/manage/{resource}/{action}/{id}', 'Seller\SellerController@displayManageView');

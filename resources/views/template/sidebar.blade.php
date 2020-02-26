@@ -3,7 +3,7 @@
         <div class="nav accordion" id="accordionSidenav">
             <div class="sb-sidenav-menu-heading">{{ session()->get('organization.organization_type.name').'<>'.session()->get('organization.name') }}</div>
             @foreach ($menus as $menu_item)
-                <a class="nav-link" href="{{ $menu_item['menu']['link'] }}">
+                <a class="nav-link {{ strtolower($menu_item['menu']['name']) }}" href="{{ $menu_item['menu']['link'] }}">
                     <div class="sb-nav-link-icon"><i data-feather="{{ $menu_item['menu']['icon'] }}"></i></div>
                     {{ $menu_item['menu']['name'] }}
                 </a>

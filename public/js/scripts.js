@@ -83,4 +83,19 @@
     $(".alert").hide()
   }, 10000);
 
+  //Show confirm on .delete
+  $('.delete').click(function() {
+    var r = confirm("Are you sure?");
+    if (r == true){
+      $(this).attr('disabled', 'disabled');
+    }else{
+      return false;
+    }
+  });
+
+  //Active sidebar link
+  $('.nav-link').removeClass('active');
+  $('.'+$('.page-name').val()).addClass('active');
+
+
 })(jQuery);

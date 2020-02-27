@@ -18,7 +18,7 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    <input type="hidden" class="page-name" value="{{ strtolower($page_title) }}"/>
+                    <input type="hidden" class="page-name" value="{{ str_replace(' ', '-', strtolower($page_title)) }}"/>
                     {!!$content_view!!}
                 </main>
                 <footer class="sb-footer py-4 mt-auto sb-footer-light">

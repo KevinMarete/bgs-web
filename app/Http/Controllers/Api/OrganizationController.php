@@ -119,7 +119,7 @@ class OrganizationController extends Controller
      */
     public function getOrganizationStocks($id)
     {
-        $stocks = Stock::with('organization', 'product', 'stocktype', 'user')->where('organization_id', $id)->get();
+        $stocks = Stock::with('organization', 'product', 'stock_type', 'user')->where('organization_id', $id)->get();
         return response()->json($stocks);
     }
 }

@@ -17,7 +17,8 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('molecular_name');
             $table->string('brand_name');
-            $table->integer('pack_size')->unsigned();
+            $table->string('pack_size');
+            $table->string('strength');
             $table->integer('minimum_order_quantity')->unsigned();
             $table->double('unit_price', 8, 2);
             $table->double('delivery_cost', 8, 2);
@@ -25,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['molecular_name', 'brand_name', 'pack_size', 'product_category_id']);
+            $table->unique(['molecular_name', 'brand_name', 'pack_size', 'strength', 'product_category_id']);
 
             $table->foreign('product_category_id')->references('id')->on('tbl_product_category')->onUpdate('cascade')->onDelete('cascade');
         });

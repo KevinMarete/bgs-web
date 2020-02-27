@@ -14,7 +14,7 @@ class Package extends Model
     protected $fillable = ['name', 'price', 'details'];
 
     public static $rules = [
-      "name" => "required|unique:tbl_package",
+      "name" => "required",
       "price" => "required|numeric",
       "details" => "required|JSON"
     ];

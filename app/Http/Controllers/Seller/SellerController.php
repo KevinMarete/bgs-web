@@ -29,10 +29,11 @@ class SellerController extends MyController
         $resource_name = ucwords(str_replace('-', ' ', $resource));
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
         $view_data = [
             'resource_name' => $resource_name,
             'table_headers' => $this->getResourceKeys($resource),
-            'table_data' => $this->getResourceData($token, $resource)
+            'table_data' => $this->getResourceData($token, 'organization/'.$organization_id.'/'.$resource)
         ];
         $data = [
             'page_title' => $resource_name, 
@@ -64,7 +65,6 @@ class SellerController extends MyController
         $header_data = [];
         if($resource != null){
             $headers = [
-                'products' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'product_category', 'minimum_order_quantity', 'unit_price', 'delivery_cost'],
                 'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
                 'stocks' => ['id', 'product', 'stock_type', 'transaction_date', 'batch_number', 'expiry_date', 'quantity', 'balance', 'organization']
             ];
@@ -130,7 +130,6 @@ class SellerController extends MyController
     {   
         $dropdown_data = [];
         $data_sources = [
-            'products' => ['product-categories'],
             'offers' => ['organizations'],
             'stocks' => ['products', 'stocktypes', 'organizations']
         ];

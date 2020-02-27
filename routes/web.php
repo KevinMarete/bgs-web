@@ -63,6 +63,11 @@ Route::get('/roles', 'Admin\AdminController@displayTableView');
 Route::get('/product-categories', 'Admin\AdminController@displayTableView'); 
 Route::get('/stocktypes', 'Admin\AdminController@displayTableView'); 
 Route::get('/payment-types', 'Admin\AdminController@displayTableView'); 
+Route::get('/products', 'Admin\AdminController@displayTableView'); 
+Route::get('/manage/{resource}', 'Admin\AdminController@displayManageView');
+Route::post('/manage/{resource}/{action}', 'Admin\AdminController@displayManageView');
+Route::get('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
+Route::post('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
 
 /*Buyer Routes*/
 Route::get('/search', 'Buyer\BuyerController@displaySearchView'); 
@@ -71,10 +76,5 @@ Route::get('/promos', 'Buyer\BuyerController@displayPromoView');
 
 /*Seller Routes*/
 Route::get('/catalogue', 'Seller\SellerController@displayCatalogueView');  
-Route::get('/products', 'Seller\SellerController@displayTableView'); 
 Route::get('/offers', 'Seller\SellerController@displayTableView'); 
 Route::get('/stocks', 'Seller\SellerController@displayTableView');
-Route::get('/manage/{resource}', 'Seller\SellerController@displayManageView');
-Route::post('/manage/{resource}/{action}', 'Seller\SellerController@displayManageView');
-Route::get('/manage/{resource}/{action}/{id}', 'Seller\SellerController@displayManageView');
-Route::post('/manage/{resource}/{action}/{id}', 'Seller\SellerController@displayManageView');

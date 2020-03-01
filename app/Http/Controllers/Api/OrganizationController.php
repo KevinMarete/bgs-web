@@ -122,4 +122,16 @@ class OrganizationController extends Controller
         $stocks = Stock::with('organization', 'product', 'stock_type', 'user')->where('organization_id', $id)->get();
         return response()->json($stocks);
     }
+
+    /**
+     * Display the specified Organization's StockBalances.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationStockBalances($id)
+    {
+        $stockbalances = Stock::with('organization', 'product')->where('organization_id', $id)->get();
+        return response()->json($stockbalances);
+    }
 }

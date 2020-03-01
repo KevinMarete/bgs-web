@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('product_category')->get();
+        $products = Product::with('product_category')->orderBy('molecular_name', 'ASC')->limit(100)->get();
         return response()->json($products);
     }
 

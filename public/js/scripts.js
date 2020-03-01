@@ -94,8 +94,40 @@
   });
 
   //Active sidebar link
-  $('.nav-link').removeClass('active');
+  $('.menu .nav-link').removeClass('active');
   $('.'+$('.page-name').val()).addClass('active');
 
+  //Add new table row
+  $(document).on('click', '.add', function () {
+    var $tr    = $(this).closest('.tr_clone');
+    //Current row values
+    var product =$tr.find('.product').val();
+    var batch_number =$tr.find('.batch_number').val();
+    var expiry_date =$tr.find('.expiry_date').val();
+    var quantity =$tr.find('.quantity').val();
+    if(product !== '' && batch_number !== '' && expiry_date !== '' && quantity !== ''){
+      var $clone = $tr.clone();
+      $clone.find(':text').val('');
+      $clone.find('.expiry_date').val('');
+      $tr.after($clone);
+    }else{
+      alert('Please ensure all inputs are filled!')
+    }
+  });
+
+  //Remove new table row
+  $(document).on('click', '.remove', function () {
+    var rowCount = $('.transactions-tbl>tbody tr').length;
+    if(rowCount>1){
+      var r = confirm("Are you sure, you want to remove this row?");
+      if (r == true){
+        $(this).parent().parent().remove();
+      }else{
+        return false;
+      }
+    }else{
+      alert('You cannot remove the last row!')
+    }
+  });
 
 })(jQuery);

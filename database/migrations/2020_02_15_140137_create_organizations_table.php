@@ -31,11 +31,25 @@ class CreateOrganizationsTable extends Migration
         //Add default data
         DB::table('tbl_organization')->insert(
             array([
-                'name' => 'BGS', 
+                'name' => 'BGS MEDS', 
                 'town' => 'Nairobi', 
                 'road' => 'Market Street', 
                 'building' => 'Yala Towers', 
                 'organization_type_id' => '1', 
+                'created_at' => now()
+            ],[
+                'name' => 'BGS Chemist', 
+                'town' => 'Nairobi', 
+                'road' => 'Market Street', 
+                'building' => 'Yala Towers', 
+                'organization_type_id' => '3', 
+                'created_at' => now()
+            ], [
+                'name' => 'BGS Distributors', 
+                'town' => 'Nairobi', 
+                'road' => 'Market Street', 
+                'building' => 'Yala Towers', 
+                'organization_type_id' => '6', 
                 'created_at' => now()
             ])
         );

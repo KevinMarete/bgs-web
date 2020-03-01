@@ -40,7 +40,28 @@ class CreateUsersTable extends Migration
                     'password' => '$2y$10$Pm9//JP64ObJ9Eqj82u07uDZpXEFCNqDvkPqCFJ.P8IdDiZMUEys.',
                     'email_verified_at' => now(),
                     'organization_id' => '1', 
-                    'created_at' => now()
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ],[
+                    'firstname' => 'Test', 
+                    'lastname' => 'Chemist',
+                    'phone' => '0725102658',
+                    'email' => 'malibu@gmail.com',
+                    'password' => '$2y$10$Pm9//JP64ObJ9Eqj82u07uDZpXEFCNqDvkPqCFJ.P8IdDiZMUEys.',
+                    'email_verified_at' => now(),
+                    'organization_id' => '2', 
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ],[
+                    'firstname' => 'Test', 
+                    'lastname' => 'Supplier',
+                    'phone' => '0725102657',
+                    'email' => 'kemsa@gmail.com',
+                    'password' => '$2y$10$Pm9//JP64ObJ9Eqj82u07uDZpXEFCNqDvkPqCFJ.P8IdDiZMUEys.',
+                    'email_verified_at' => now(),
+                    'organization_id' => '3', 
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]
             )
         );

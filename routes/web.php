@@ -77,4 +77,7 @@ Route::get('/promos', 'Buyer\BuyerController@displayPromoView');
 /*Seller Routes*/
 Route::get('/catalogue', 'Seller\SellerController@displayCatalogueView');  
 Route::get('/offers', 'Seller\SellerController@displayTableView'); 
-Route::get('/stocks', 'Seller\SellerController@displayTableView');
+Route::get('/stocks', 'Seller\SellerController@displayBalancesTableView');
+Route::get('/stock-transactions', 'Seller\SellerController@displayTransactionView');
+Route::post('/save-transactions', 'Seller\SellerController@saveTransactions');
+Route::get('/bin-card/{product}', 'Seller\SellerController@displayBinCardView');

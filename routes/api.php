@@ -57,6 +57,8 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/payment-types', 'Api\OrganizationController@getOrganizationPaymentTypes');
         Route::get('/organization/{id}/stocks', 'Api\OrganizationController@getOrganizationStocks');
         Route::get('/organization/{id}/stockbalances', 'Api\OrganizationController@getOrganizationStockBalances');
+        Route::get('/organization/{id}/stocks/{product}', 'Api\OrganizationController@getOrganizationProductStocks');
+        Route::get('/organization/{id}/stockbalances/{product}', 'Api\OrganizationController@getOrganizationProductStockBalances');
 
         /*Package endpoints*/
         Route::get('/packages', 'Api\PackageController@index');
@@ -177,7 +179,8 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/stockbalance', 'Api\StockBalanceController@store');
         Route::put('/stockbalance/{id}', 'Api\StockBalanceController@update');
         Route::delete('/stockbalance/{id}', 'Api\StockBalanceController@destroy');
-
+        Route::post('/stockbatchbalance', 'Api\StockBalanceController@getStockBatchBalance');
+        Route::post('/calculatebalance', 'Api\StockBalanceController@CalculateBalance');
     });
 
 });

@@ -6,8 +6,10 @@ use App\Organization;
 use App\Offer;
 use App\OrganizationPaymentType;
 use App\Stock;
+use App\StockBalance;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationController extends Controller
 {
@@ -131,7 +133,37 @@ class OrganizationController extends Controller
      */
     public function getOrganizationStockBalances($id)
     {
-        $stockbalances = Stock::with('organization', 'product')->where('organization_id', $id)->get();
+        $stockbalances = DB::table('tbl_stock_balance AS sb')
+                            ->select(DB::raw('SUM(sb.quantity) as balance, sb.product_id, sb.organization_id, p.molecular_name, p.brand_name, p.pack_size, p.strength'))
+                            ->join('tbl_product AS p', 'p.id', '=', 'sb.product_id')
+                            ->where('organization_id', $id)
+                            ->groupBy('sb.product_id', 'sb.organization_id', 'p.molecular_name', 'p.brand_name', 'p.pack_size', 'p.strength')
+                            ->orderBy('p.molecular_name', 'DESC')
+                            ->get();
+        return response()->json($stockbalances);
+    }
+
+    /**
+     * Display the specified Organization and Product Stocks.
+     *
+     * @param  int  $id, $product
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationProductStocks($id, $product)
+    {
+        $stocks = Stock::with('organization', 'product', 'stock_type', 'user')->where('organization_id', $id)->where('product_id', $product)->orderBy('id', 'DESC')->get();
+        return response()->json($stocks);
+    }
+
+    /**
+     * Display the specified Organization and Product StockBalances.
+     *
+     * @param  int  $id, $product
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationProductStockBalances($id, $product)
+    {
+        $stockbalances = StockBalance::with('organization', 'product')->where('organization_id', $id)->where('product_id', $product)->orderBy('id', 'DESC')->get();
         return response()->json($stockbalances);
     }
 }

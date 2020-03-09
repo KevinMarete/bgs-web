@@ -59,6 +59,9 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/stockbalances', 'Api\OrganizationController@getOrganizationStockBalances');
         Route::get('/organization/{id}/stocks/{product}', 'Api\OrganizationController@getOrganizationProductStocks');
         Route::get('/organization/{id}/stockbalances/{product}', 'Api\OrganizationController@getOrganizationProductStockBalances');
+        Route::get('/organization/{id}/productnows', 'Api\OrganizationController@getOrganizationProductNows');
+        Route::get('/organization/{id}/productpromos', 'Api\OrganizationController@getOrganizationProductPromos');
+        Route::get('/organization/{id}/productdeals', 'Api\OrganizationController@getOrganizationProductDeals');
 
         /*Package endpoints*/
         Route::get('/packages', 'Api\PackageController@index');
@@ -124,20 +127,6 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/offer/{id}/promos', 'Api\OfferController@getOfferPromos');
         Route::get('/offer/{id}/deals', 'Api\OfferController@getOfferDeals');
 
-        /*Promo endpoints*/
-        Route::get('/promos', 'Api\PromoController@index');
-        Route::get('/promo/{id}', 'Api\PromoController@show');
-        Route::post('/promo', 'Api\PromoController@store');
-        Route::put('/promo/{id}', 'Api\PromoController@update');
-        Route::delete('/promo/{id}', 'Api\PromoController@destroy');
-
-        /*Deal endpoints*/
-        Route::get('/deals', 'Api\DealController@index');
-        Route::get('/deal/{id}', 'Api\DealController@show');
-        Route::post('/deal', 'Api\DealController@store');
-        Route::put('/deal/{id}', 'Api\DealController@update');
-        Route::delete('/deal/{id}', 'Api\DealController@destroy');
-
         /*StockType endpoints*/
         Route::get('/stocktypes', 'Api\StockTypeController@index');
         Route::get('/stocktype/{id}', 'Api\StockTypeController@show');
@@ -151,13 +140,6 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/stock', 'Api\StockController@store');
         Route::put('/stock/{id}', 'Api\StockController@update');
         Route::delete('/stock/{id}', 'Api\StockController@destroy');
-
-        /*StockOffer endpoints*/
-        Route::get('/stock-offers', 'Api\StockOfferController@index');
-        Route::get('/stock-offer/{id}', 'Api\StockOfferController@show');
-        Route::post('/stock-offer', 'Api\StockOfferController@store');
-        Route::put('/stock-offer/{id}', 'Api\StockOfferController@update');
-        Route::delete('/stock-offer/{id}', 'Api\StockOfferController@destroy');
 
         /*PaymentType endpoints*/
         Route::get('/payment-types', 'Api\PaymentTypeController@index');
@@ -181,6 +163,62 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::delete('/stockbalance/{id}', 'Api\StockBalanceController@destroy');
         Route::post('/stockbatchbalance', 'Api\StockBalanceController@getStockBatchBalance');
         Route::post('/calculatebalance', 'Api\StockBalanceController@CalculateBalance');
+
+        /*ProductNows endpoints*/
+        Route::get('/productnows', 'Api\ProductNowController@index');
+        Route::get('/productnow/{id}', 'Api\ProductNowController@show');
+        Route::post('/productnow', 'Api\ProductNowController@store');
+        Route::put('/productnow/{id}', 'Api\ProductNowController@update');
+        Route::delete('/productnow/{id}', 'Api\ProductNowController@destroy');
+
+        /*ProductPromos endpoints*/
+        Route::get('/productpromos', 'Api\ProductPromoController@index');
+        Route::get('/productpromo/{id}', 'Api\ProductPromoController@show');
+        Route::post('/productpromo', 'Api\ProductPromoController@store');
+        Route::put('/productpromo/{id}', 'Api\ProductPromoController@update');
+        Route::delete('/productpromo/{id}', 'Api\ProductPromoController@destroy');
+
+        /*ProductDeals endpoints*/
+        Route::get('/productdeals', 'Api\ProductDealController@index');
+        Route::get('/productdeal/{id}', 'Api\ProductDealController@show');
+        Route::post('/productdeal', 'Api\ProductDealController@store');
+        Route::put('/productdeal/{id}', 'Api\ProductDealController@update');
+        Route::delete('/productdeal/{id}', 'Api\ProductDealController@destroy');
+
+        /*Payments endpoints*/
+        Route::get('/payments', 'Api\PaymentController@index');
+        Route::get('/payment/{id}', 'Api\PaymentController@show');
+        Route::post('/payment', 'Api\PaymentController@store');
+        Route::put('/payment/{id}', 'Api\PaymentController@update');
+        Route::delete('/payment/{id}', 'Api\PaymentController@destroy');
+
+        /*PaymentNows endpoints*/
+        Route::get('/paymentnows', 'Api\PaymentNowController@index');
+        Route::get('/paymentnow/{id}', 'Api\PaymentNowController@show');
+        Route::post('/paymentnow', 'Api\PaymentNowController@store');
+        Route::put('/paymentnow/{id}', 'Api\PaymentNowController@update');
+        Route::delete('/paymentnow/{id}', 'Api\PaymentNowController@destroy');
+
+        /*PaymentPromos endpoints*/
+        Route::get('/paymentpromos', 'Api\PaymentPromoController@index');
+        Route::get('/paymentpromo/{id}', 'Api\PaymentPromoController@show');
+        Route::post('/paymentpromo', 'Api\PaymentPromoController@store');
+        Route::put('/paymentpromo/{id}', 'Api\PaymentPromoController@update');
+        Route::delete('/paymentpromo/{id}', 'Api\PaymentPromoController@destroy');
+
+        /*PaymentDeals endpoints*/
+        Route::get('/paymentdeals', 'Api\PaymentDealController@index');
+        Route::get('/paymentdeal/{id}', 'Api\PaymentDealController@show');
+        Route::post('/paymentdeal', 'Api\PaymentDealController@store');
+        Route::put('/paymentdeal/{id}', 'Api\PaymentDealController@update');
+        Route::delete('/paymentdeal/{id}', 'Api\PaymentDealController@destroy');
+
+        /*PaymentSubscriptions endpoints*/
+        Route::get('/paymentsubscriptions', 'Api\PaymentSubscriptionController@index');
+        Route::get('/paymentsubscription/{id}', 'Api\PaymentSubscriptionController@show');
+        Route::post('/paymentsubscription', 'Api\PaymentSubscriptionController@store');
+        Route::put('/paymentsubscription/{id}', 'Api\PaymentSubscriptionController@update');
+        Route::delete('/paymentsubscription/{id}', 'Api\PaymentSubscriptionController@destroy');
     });
 
 });

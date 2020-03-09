@@ -55,6 +55,21 @@ Route::post('/card-subscription', 'Auth\AccountController@cardSubscription');
 Route::post('/mobile-subscription', 'Auth\AccountController@phoneSubscription'); 
 Route::get('/sign-out', 'Auth\AccountController@logout'); 
 
+/*Seller Routes*/
+Route::get('/catalogue', 'Seller\SellerController@displayCatalogueView');  
+Route::get('/manage-ordernows', 'Seller\SellerController@displayOrderNowView'); 
+Route::get('/manage-promos', 'Seller\SellerController@displayPromoView');  
+Route::get('/manage-deals', 'Seller\SellerController@displayDealView');   
+Route::get('/offers', 'Seller\SellerController@displayTableView'); 
+Route::get('/manage/offers', 'Seller\SellerController@displayOfferView');
+Route::post('/manage/offers/{action}', 'Seller\SellerController@displayOfferView');
+Route::get('/manage/offers/{action}/{id}', 'Seller\SellerController@displayOfferView');
+Route::post('/manage/offers/{action}/{id}', 'Seller\SellerController@displayOfferView');
+Route::get('/stocks', 'Seller\SellerController@displayBalancesTableView');
+Route::get('/stock-transactions', 'Seller\SellerController@displayTransactionView');
+Route::post('/save-transactions', 'Seller\SellerController@saveTransactions');
+Route::get('/bin-card/{product}', 'Seller\SellerController@displayBinCardView');
+
 /*Admin Routes*/
 Route::get('/dashboard', 'Admin\AdminController@displayDashboardView'); 
 Route::get('/organizationtypes', 'Admin\AdminController@displayTableView'); 
@@ -73,11 +88,3 @@ Route::post('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayMa
 Route::get('/search', 'Buyer\BuyerController@displaySearchView'); 
 Route::get('/deals', 'Buyer\BuyerController@displayDealView'); 
 Route::get('/promos', 'Buyer\BuyerController@displayPromoView'); 
-
-/*Seller Routes*/
-Route::get('/catalogue', 'Seller\SellerController@displayCatalogueView');  
-Route::get('/offers', 'Seller\SellerController@displayTableView'); 
-Route::get('/stocks', 'Seller\SellerController@displayBalancesTableView');
-Route::get('/stock-transactions', 'Seller\SellerController@displayTransactionView');
-Route::post('/save-transactions', 'Seller\SellerController@saveTransactions');
-Route::get('/bin-card/{product}', 'Seller\SellerController@displayBinCardView');

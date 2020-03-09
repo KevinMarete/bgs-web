@@ -12,12 +12,24 @@ class SellerController extends MyController
     
     public function displayCatalogueView()
     {   
+        $resources = ['productnows', 'productpromos', 'productdeals'];
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [];
+
+        foreach($resources as $resource){
+            $view_data[$resource] = [
+                'resource_name' => $resource,
+                'table_headers' => $this->getResourceKeys($resource),
+                'table_data' => $this->getResourceData($token, 'organization/'.$organization_id.'/'.$resource)
+            ];
+        }
+
         $data = [
             'page_title' => 'Catalogue', 
             'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.catalogue')
+            'content_view' => View::make('seller.catalogue', $view_data)
         ];
 
         return view('template.main', $data);
@@ -87,7 +99,10 @@ class SellerController extends MyController
         if($resource != null){
             $headers = [
                 'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
-                'stockbalances' => ['molecular_name', 'brand_name', 'pack_size', 'balance']
+                'stockbalances' => ['molecular_name', 'brand_name', 'pack_size', 'balance'],
+                'productnows' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'is_published'],
+                'productpromos' => ['id', 'molecular_name', 'brand_name', 'coupon_code', 'unit_price', 'discount', 'max_amount'],
+                'productdeals' => ['id', 'molecular_name', 'brand_name', 'min_quantity', 'unit_price', 'discount', 'max_amount']
             ];
             $header_data = $headers[$resource];
         }
@@ -95,9 +110,9 @@ class SellerController extends MyController
         return $header_data;
     }
 
-    public function displayManageView(Request $request)
+    public function displayOfferView(Request $request)
     {   
-        $resource_name = $request->resource;
+        $resource_name = 'offers';
         $singular_resource_name = Str::singular($resource_name);
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
@@ -303,5 +318,58 @@ class SellerController extends MyController
             $response_data = json_decode($response->getBody(), true);   
         }
         return $response_data;
+    }
+
+    public function displayOrderNowView(Request $request)
+    {   
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'organization/'.$organization_id.'/stockbalances')
+        ];
+        $data = [
+            'page_title' => 'catalogue', 
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.manage.productnows', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayPromoView(Request $request)
+    {   
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'offers' => $this->getResourceData($token, 'organization/'.$organization_id.'/offers'),
+            'productnows' => $this->getResourceData($token, 'organization/'.$organization_id.'/productnows')
+        ];
+        $data = [
+            'page_title' => 'catalogue', 
+            'content_view' => View::make('seller.manage.promos', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayDealView(Request $request)
+    {   
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'offers' => $this->getResourceData($token, 'organization/'.$organization_id.'/offers'),
+            'productnows' => $this->getResourceData($token, 'organization/'.$organization_id.'/productnows')
+        ];
+        $data = [
+            'page_title' => 'catalogue', 
+            'content_view' => View::make('seller.manage.deals', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
     }
 }

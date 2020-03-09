@@ -7,6 +7,9 @@ use App\Offer;
 use App\OrganizationPaymentType;
 use App\Stock;
 use App\StockBalance;
+use App\ProductNow;
+use App\ProductPromo;
+use App\ProductDeal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -165,5 +168,45 @@ class OrganizationController extends Controller
     {
         $stockbalances = StockBalance::with('organization', 'product')->where('organization_id', $id)->where('product_id', $product)->orderBy('id', 'DESC')->get();
         return response()->json($stockbalances);
+    }
+
+    /**
+     * Display the specified Organization's productnows.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationProductNows($id)
+    {
+        $productnows = ProductNow::with('product', 'organization', 'user')->where('organization_id', $id)->get();
+        return response()->json($productnows);
+    }
+
+    /**
+     * Display the specified Organization's product promos.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationProductPromos($id)
+    {   
+        $productpromos = ProductPromo::with(['product_now' => function($query) use ($id) {
+            $query->where('organization_id', $id);
+          }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
+        return response()->json($productpromos);
+    }
+
+    /**
+     * Display the specified Organization's product deals.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationProductDeals($id)
+    {
+        $productdeals = ProductDeal::with(['product_now' => function($query) use ($id) {
+            $query->where('organization_id', $id);
+          }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
+        return response()->json($productdeals);
     }
 }

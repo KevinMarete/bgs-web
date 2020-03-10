@@ -24,8 +24,6 @@ class CreateProductNowsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['product_id', 'organization_id']);
-
             $table->foreign('product_id')->references('id')->on('tbl_product')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('organization_id')->references('id')->on('tbl_organization')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('tbl_user')->onUpdate('cascade')->onDelete('cascade');

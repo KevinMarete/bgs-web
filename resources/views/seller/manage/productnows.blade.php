@@ -12,7 +12,7 @@
     <div class="card mb-4">
         <div class="card-header"> </div>
         <div class="card-body">
-            <form role="form" action="/save-ordernow" method="POST">
+            <form role="form" action="/save-ordernows" method="POST">
                 @csrf
                 <div class="container-fluid">
                     <div class="row">

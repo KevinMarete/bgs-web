@@ -12,7 +12,7 @@
     <div class="card mb-4">
         <div class="card-header"> </div>
         <div class="card-body">
-            <form role="form" action="/save-transactions" method="POST">
+            <form role="form" action="/save-productpromos" method="POST">
                 @csrf
                 <div class="container-fluid">
                     <div class="row">
@@ -38,10 +38,10 @@
                                     <tbody>
                                         <tr class="tr_clone">
                                             <td >
-                                                <select class="product col-md-12" size="0" name="product_id[]" required>
+                                                <select class="product col-md-12" size="0" name="product_now_id[]" required>
                                                     <option value="">Select Product</option>
                                                     @foreach ($productnows as $productnow)
-                                                        <option value="{{ $productnow['product']['id'] }}">{{ $productnow['product']['molecular_name']  }}</option>
+                                                        <option value="{{ $productnow['id'] }}">{{ $productnow['product']['molecular_name']  }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>

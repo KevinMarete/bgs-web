@@ -11,9 +11,10 @@ class ProductDeal extends Model
 
     protected $table = 'tbl_product_deal';
 
-    protected $fillable = ['product_now_id', 'offer_id'];
+    protected $fillable = ['minimum_order_quantity', 'product_now_id', 'offer_id'];
 
     public static $rules = [
+        "minimum_order_quantity" => "required|numeric",
         "product_now_id" => "required|numeric",
         "offer_id" => "required|numeric"
 	];

@@ -9,6 +9,9 @@
     </div>
 </div>
 <div class="container-fluid mt-n10">
+    @if (Session::has('bgs_msg'))
+        {!! session('bgs_msg') !!}
+    @endif
     <div class="card mb-4">
         <div class="card-header"> </div>
         <div class="card-body">
@@ -62,8 +65,11 @@
                                                     <td>{{ $row['product']['pack_size'] }}</td> 
                                                     <td>{{ ($row['is_published'] ? 'Yes' : 'No') }}</td> 
                                                     <td>
-                                                        <a href="/manage/ordernow/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                                        <a href="/manage/productnows/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                                                             <i data-feather="more-vertical"></i>
+                                                        </a>
+                                                        <a href="/manage/productnows/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
+                                                            <i data-feather="trash-2"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -113,8 +119,11 @@
                                                     <td>{{ $row['offer']['discount'] }}</td>
                                                     <td>{{ $row['offer']['max_discount_amount'] }}</td>  
                                                     <td>
-                                                        <a href="/manage/productpromos/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                                        <a href="/manage/productpromos/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                                                             <i data-feather="more-vertical"></i>
+                                                        </a>
+                                                        <a href="/manage/productpromos/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
+                                                            <i data-feather="trash-2"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -164,8 +173,11 @@
                                                     <td>{{ $row['offer']['discount'] }}</td>
                                                     <td>{{ $row['offer']['max_discount_amount'] }}</td>
                                                     <td>
-                                                        <a href="/manage/productdeals/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                                        <a href="/manage/productdeals/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                                                             <i data-feather="more-vertical"></i>
+                                                        </a>
+                                                        <a href="/manage/productdeals/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
+                                                            <i data-feather="trash-2"></i>
                                                         </a>
                                                     </td>
                                                 </tr>

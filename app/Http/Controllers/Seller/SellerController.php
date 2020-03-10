@@ -100,7 +100,7 @@ class SellerController extends MyController
             $headers = [
                 'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
                 'stockbalances' => ['molecular_name', 'brand_name', 'pack_size', 'balance'],
-                'productnows' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'is_published'],
+                'productnows' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'published'],
                 'productpromos' => ['id', 'molecular_name', 'brand_name', 'coupon_code', 'unit_price', 'discount', 'max_amount'],
                 'productdeals' => ['id', 'molecular_name', 'brand_name', 'min_quantity', 'unit_price', 'discount', 'max_amount']
             ];
@@ -371,5 +371,382 @@ class SellerController extends MyController
         ];
 
         return view('template.main', $data);
+    }
+
+    public function displayProductNowView(Request $request)
+    {   
+        $resource_name = 'productnows';
+        $singular_resource_name = Str::singular($resource_name);
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'organization/'.$organization_id.'/stockbalances')
+        ];
+        $view_data['manage_label'] = 'new';
+
+        if($request->action){
+            if($request->action == 'edit'){
+                $view_data['manage_label'] = 'update';
+                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name.'/'.$request->id);
+            }else{
+                if($request->action == 'new'){
+                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
+                }else if($request->action == 'update'){
+                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name.'/'.$request->id, $request->except('_token'));
+                }else if($request->action == 'delete'){
+                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name.'/'.$request->id, $request->except('_token'));
+                }
+
+                //Handle response
+                if(isset($response['error'])){
+                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> '.$response["error"].'
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }else{
+                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> '.ucwords($singular_resource_name).' was managed successfully
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }
+                $request->session()->flash('bgs_msg', $flash_msg);
+                return redirect('/catalogue');
+            }
+        }
+
+        $data = [
+            'page_title' => 'catalogue', 
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.manage.edit_'.$resource_name, $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayProductPromoView(Request $request)
+    {   
+        $resource_name = 'productpromos';
+        $singular_resource_name = Str::singular($resource_name);
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'productnows' => $this->getResourceData($token, 'organization/'.$organization_id.'/productnows'),
+            'offers' => $this->getResourceData($token, 'organization/'.$organization_id.'/offers')
+        ];
+        $view_data['manage_label'] = 'new';
+
+        if($request->action){
+            if($request->action == 'edit'){
+                $view_data['manage_label'] = 'update';
+                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name.'/'.$request->id);
+            }else{
+                if($request->action == 'new'){
+                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
+                }else if($request->action == 'update'){
+                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name.'/'.$request->id, $request->except('_token'));
+                }else if($request->action == 'delete'){
+                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name.'/'.$request->id, $request->except('_token'));
+                }
+
+                //Handle response
+                if(isset($response['error'])){
+                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> '.$response["error"].'
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }else{
+                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> '.ucwords($singular_resource_name).' was managed successfully
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }
+                $request->session()->flash('bgs_msg', $flash_msg);
+                return redirect('/catalogue');
+            }
+        }
+
+        $data = [
+            'page_title' => 'catalogue', 
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.manage.edit_'.$resource_name, $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayProductDealView(Request $request)
+    {   
+        $resource_name = 'productdeals';
+        $singular_resource_name = Str::singular($resource_name);
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'productnows' => $this->getResourceData($token, 'organization/'.$organization_id.'/productnows'),
+            'offers' => $this->getResourceData($token, 'organization/'.$organization_id.'/offers')
+        ];
+        $view_data['manage_label'] = 'new';
+
+        if($request->action){
+            if($request->action == 'edit'){
+                $view_data['manage_label'] = 'update';
+                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name.'/'.$request->id);
+            }else{
+                if($request->action == 'new'){
+                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
+                }else if($request->action == 'update'){
+                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name.'/'.$request->id, $request->except('_token'));
+                }else if($request->action == 'delete'){
+                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name.'/'.$request->id, $request->except('_token'));
+                }
+
+                //Handle response
+                if(isset($response['error'])){
+                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> '.$response["error"].'
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }else{
+                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> '.ucwords($singular_resource_name).' was managed successfully
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }
+                $request->session()->flash('bgs_msg', $flash_msg);
+                return redirect('/catalogue');
+            }
+        }
+
+        $data = [
+            'page_title' => 'catalogue', 
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.manage.edit_'.$resource_name, $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function saveOrderNows(Request $request)
+    {   
+        $token = session()->get('token');
+        $post_data = $request->all();
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+        $errors = 0;
+        $cost_per_product = env('ORDER_NOW_COST');
+
+        //Make payment
+        $amount = ($cost_per_product * sizeof($post_data['product_id']));
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_id = $payment_response['id'];
+        
+        foreach($post_data['product_id'] as $key=> $product_id)
+        {   
+            //Build request object
+            $request_data = [
+                'unit_price' => $post_data['unit_price'][$key],
+                'delivery_cost' => $post_data['delivery_cost'][$key],
+                'is_published' => $post_data['is_published'][$key],
+                'product_id' => $product_id,
+                'organization_id' => $organization_id,
+                'user_id' => $user_id,
+            ];
+            
+            //Send request data to Api
+            $response = $this->client->post("productnow", [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
+                ],
+                'json' => $request_data
+            ]);
+            
+            $response = json_decode($response->getBody(), true);
+
+            //Check success
+            if(isset($response['error'])){
+                $errors += 1;
+            }else{
+                $product_now_id = $response['id'];
+                //Send request data to Api for payment
+                $response = $this->client->post("paymentnow", [
+                    'headers' => [
+                        'Authorization' => 'Bearer '.session()->get('token')
+                    ],
+                    'json' => ['payment_id' => $payment_id, 'product_now_id' => $product_now_id]
+                ]);
+            }
+        }
+
+        if($errors > 0){
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong> '.$errors.' transactions were not added successfully
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>';
+        }else{
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your transactions were added successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/catalogue');
+    }
+
+    public function saveProductPromos(Request $request)
+    {   
+        $token = session()->get('token');
+        $post_data = $request->all();
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+        $errors = 0;
+        $cost_per_product = env('PROMO_COST');
+
+        //Make payment
+        $amount = ($cost_per_product * sizeof($post_data['product_now_id']));
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_id = $payment_response['id'];
+
+        foreach($post_data['product_now_id'] as $key=> $product_now_id)
+        {   
+            //Build request object
+            $request_data = [
+                'coupon_code' => $post_data['coupon_code'][$key],
+                'offer_id' => $post_data['offer_id'][$key],
+                'product_now_id' => $product_now_id
+            ];
+            
+            //Send request data to Api
+            $response = $this->client->post("productpromo", [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
+                ],
+                'json' => $request_data
+            ]);
+            
+            $response = json_decode($response->getBody(), true);
+
+            //Check success
+            if(isset($response['error'])){
+                $errors += 1;
+            }else{
+                $product_now_id = $response['id'];
+                //Send request data to Api for payment
+                $response = $this->client->post("paymentpromo", [
+                    'headers' => [
+                        'Authorization' => 'Bearer '.session()->get('token')
+                    ],
+                    'json' => ['payment_id' => $payment_id, 'product_promo_id' => $product_now_id]
+                ]);
+            }
+        }
+
+        if($errors > 0){
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong> '.$errors.' transactions were not added successfully
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>';
+        }else{
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your transactions were added successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/catalogue');
+    }
+
+    public function saveProductDeals(Request $request)
+    {   
+        $token = session()->get('token');
+        $post_data = $request->all();
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+        $errors = 0;
+        $cost_per_product = env('DEAL_COST');
+
+        //Make payment
+        $amount = ($cost_per_product * sizeof($post_data['product_now_id']));
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_id = $payment_response['id'];
+
+        foreach($post_data['product_now_id'] as $key=> $product_now_id)
+        {   
+            //Build request object
+            $request_data = [
+                'minimum_order_quantity' => $post_data['minimum_order_quantity'][$key],
+                'offer_id' => $post_data['offer_id'][$key],
+                'product_now_id' => $product_now_id
+            ];
+            
+            //Send request data to Api
+            $response = $this->client->post("productdeal", [
+                'headers' => [
+                    'Authorization' => 'Bearer '.session()->get('token')
+                ],
+                'json' => $request_data
+            ]);
+            
+            $response = json_decode($response->getBody(), true);
+
+            //Check success
+            if(isset($response['error'])){
+                $errors += 1;
+            }else{
+                $product_now_id = $response['id'];
+                //Send request data to Api for payment
+                $response = $this->client->post("paymentdeal", [
+                    'headers' => [
+                        'Authorization' => 'Bearer '.session()->get('token')
+                    ],
+                    'json' => ['payment_id' => $payment_id, 'product_deal_id' => $product_now_id]
+                ]);
+            }
+        }
+
+        if($errors > 0){
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong> '.$errors.' transactions were not added successfully
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>';
+        }else{
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your transactions were added successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/catalogue');
     }
 }

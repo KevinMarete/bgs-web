@@ -28,7 +28,10 @@ class ProductNowController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, ProductNow::$rules);
-        $productnow = ProductNow::firstOrCreate($request->all(), $request->all());
+        $productnow = ProductNow::firstOrCreate([
+            'product_id' => $request->product_id,
+            'organization_id' => $request->organization_id,
+        ], $request->all());
         return response()->json($productnow);
     }
 

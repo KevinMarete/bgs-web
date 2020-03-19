@@ -94,12 +94,16 @@ Route::get('/product-categories', 'Admin\AdminController@displayTableView');
 Route::get('/stocktypes', 'Admin\AdminController@displayTableView'); 
 Route::get('/payment-types', 'Admin\AdminController@displayTableView'); 
 Route::get('/products', 'Admin\AdminController@displayTableView'); 
+Route::get('/menus', 'Admin\AdminController@displayTableView'); 
+Route::get('/menu-roles', 'Admin\AdminController@displayTableView'); 
 Route::get('/manage/{resource}', 'Admin\AdminController@displayManageView');
 Route::post('/manage/{resource}/{action}', 'Admin\AdminController@displayManageView');
 Route::get('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
 Route::post('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
 
 /*Buyer Routes*/
-Route::get('/search', 'Buyer\BuyerController@displaySearchView'); 
+Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView'); 
 Route::get('/deals', 'Buyer\BuyerController@displayDealView'); 
 Route::get('/promos', 'Buyer\BuyerController@displayPromoView'); 
+Route::get('/cart', 'Buyer\BuyerController@displayCartView'); 
+Route::get('/checkout', 'Buyer\BuyerController@displayCheckoutView'); 

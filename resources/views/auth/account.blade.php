@@ -26,9 +26,11 @@
                             <li class="nav-item">
                                 <a href="" data-target="#password" data-toggle="tab" class="nav-link">Password</a>
                             </li>
+                            @if(strtolower(session()->get('organization.organization_type.role.name')) == 'buyer')
                             <li class="nav-item">
                                 <a href="" data-target="#subscription" data-toggle="tab" class="nav-link">Subscription</a>
                             </li>
+                            @endif
                         </ul>
                         <div class="tab-content py-4">
                             <div class="tab-pane active" id="profile">
@@ -146,107 +148,107 @@
                                 </div>  
                                 <!--payment options-->
                                 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Payment Options</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <article class="card">
-                                                <div class="card-body p-5">
-                                                    <ul class="nav bg-light nav-pills rounded nav-fill mb-3" role="tablist">
-                                                        <li class="nav-item">
-                                                            <a class="nav-link active show" data-toggle="pill" href="#nav-tab-card">
-                                                            <i class="fa fa-credit-card"></i> Debit/Credit Card</a></li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link" data-toggle="pill" href="#nav-tab-mobile">
-                                                            <i class="fa fa-university"></i>  Mobile Money</a></li>
-                                                    </ul>
-                                                    <div class="tab-content">
-                                                        <div class="tab-pane fade active show" id="nav-tab-card">
-                                                            <form role="form" action="/card-subscription" method="POST">
-                                                                @csrf
-                                                                <div class="form-group">
-                                                                    <label for="username">Full name (on the card)</label>
-                                                                    <input type="hidden" class="form-control" name="start_date" value="{{ date('Y-m-d') }}">
-                                                                    <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
-                                                                    <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
-                                                                    <input type="hidden" class="form-control subscription-package" name="package_id">
-                                                                    <input type="hidden" class="form-control subscription-price" name="price">
-                                                                    <input type="text" class="form-control" name="card_name" required>
-                                                                </div> <!-- form-group.// -->
-
-                                                                <div class="form-group">
-                                                                    <label for="cardNumber">Card number</label>
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" name="card_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text text-muted">
-                                                                                <i class="fab fa-cc-visa"></i> &nbsp; <i class="fab fa-cc-amex"></i> &nbsp; 
-                                                                                <i class="fab fa-cc-mastercard"></i> 
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> <!-- form-group.// -->
-
-                                                                <div class="row">
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-group">
-                                                                            <label><span class="hidden-xs">Expiration</span> </label>
-                                                                            <div class="input-group">
-                                                                                <input type="text" class="form-control" placeholder="MM" name="expiry_month" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                                                                <input type="text" class="form-control" placeholder="YY" name="expiry_year" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-4">
-                                                                        <div class="form-group">
-                                                                            <label data-toggle="tooltip" title="" data-original-title="3 digits code on back side of the card">CVV <i class="fa fa-question-circle"></i></label>
-                                                                            <input type="text" class="form-control" name="cvv_code" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                                                        </div> <!-- form-group.// -->
-                                                                    </div>
-                                                                </div> <!-- row.// -->
-                                                                <button class="subscribe btn btn-primary btn-block" type="submit"> Confirm  </button>
-                                                            </form>
-                                                        </div> <!-- tab-pane.// -->
-                                                        <div class="tab-pane fade" id="nav-tab-mobile">
-                                                            <form role="form" action="/mobile-subscription" method="POST">
-                                                                @csrf
-                                                                <p>Mobile Money Details</p>
-                                                                <dl class="param">
-                                                                    <dt>Paybill Number: </dt>
-                                                                    <dd> {{ $payment['paybill_number'] }}</dd>
-                                                                </dl>
-                                                                <dl class="param">
-                                                                    <dt>Account number: </dt>
-                                                                    <dd> {{ $payment['account_number'] }}</dd>
-                                                                </dl>
-                                                                <dl class="param">
-                                                                    <dt>Phone number: </dt>
-                                                                    <dd> 
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Payment Options</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <article class="card">
+                                                    <div class="card-body p-5">
+                                                        <ul class="nav bg-light nav-pills rounded nav-fill mb-3" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active show" data-toggle="pill" href="#nav-tab-card">
+                                                                <i class="fa fa-credit-card"></i> Debit/Credit Card</a></li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-toggle="pill" href="#nav-tab-mobile">
+                                                                <i class="fa fa-university"></i>  Mobile Money</a></li>
+                                                        </ul>
+                                                        <div class="tab-content">
+                                                            <div class="tab-pane fade active show" id="nav-tab-card">
+                                                                <form role="form" action="/card-subscription" method="POST">
+                                                                    @csrf
+                                                                    <div class="form-group">
+                                                                        <label for="username">Full name (on the card)</label>
                                                                         <input type="hidden" class="form-control" name="start_date" value="{{ date('Y-m-d') }}">
                                                                         <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
                                                                         <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
                                                                         <input type="hidden" class="form-control subscription-package" name="package_id">
-                                                                        <input type="hidden" class="form-control" name="paybill_number" value="{{ $payment['paybill_number'] }}">
-                                                                        <input type="hidden" class="form-control" name="account_number" value="{{ $payment['account_number'] }}">
                                                                         <input type="hidden" class="form-control subscription-price" name="price">
-                                                                        <input type="text" name="phone" value="{{ $profile['phone'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
-                                                                    </dd>
-                                                                </dl>
-                                                                <p><strong>Note:</strong> Additional transaction costs will be charged</p>
-                                                                <button class="subscribe btn btn-primary btn-block" type="submit">Pay Now</button>
-                                                            </form>
-                                                        </div> <!-- tab-pane.// -->
-                                                    </div> <!-- tab-content .// -->
-                                                </div> <!-- card-body.// -->
-                                            </article>
+                                                                        <input type="text" class="form-control" name="card_name" required>
+                                                                    </div> <!-- form-group.// -->
+
+                                                                    <div class="form-group">
+                                                                        <label for="cardNumber">Card number</label>
+                                                                        <div class="input-group">
+                                                                            <input type="text" class="form-control" name="card_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text text-muted">
+                                                                                    <i class="fab fa-cc-visa"></i> &nbsp; <i class="fab fa-cc-amex"></i> &nbsp; 
+                                                                                    <i class="fab fa-cc-mastercard"></i> 
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!-- form-group.// -->
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-8">
+                                                                            <div class="form-group">
+                                                                                <label><span class="hidden-xs">Expiration</span> </label>
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" placeholder="MM" name="expiry_month" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                                    <input type="text" class="form-control" placeholder="YY" name="expiry_year" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label data-toggle="tooltip" title="" data-original-title="3 digits code on back side of the card">CVV <i class="fa fa-question-circle"></i></label>
+                                                                                <input type="text" class="form-control" name="cvv_code" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                            </div> <!-- form-group.// -->
+                                                                        </div>
+                                                                    </div> <!-- row.// -->
+                                                                    <button class="subscribe btn btn-primary btn-block" type="submit"> Confirm  </button>
+                                                                </form>
+                                                            </div> <!-- tab-pane.// -->
+                                                            <div class="tab-pane fade" id="nav-tab-mobile">
+                                                                <form role="form" action="/mobile-subscription" method="POST">
+                                                                    @csrf
+                                                                    <p>Mobile Money Details</p>
+                                                                    <dl class="param">
+                                                                        <dt>Paybill Number: </dt>
+                                                                        <dd> {{ $payment['paybill_number'] }}</dd>
+                                                                    </dl>
+                                                                    <dl class="param">
+                                                                        <dt>Account number: </dt>
+                                                                        <dd> {{ $payment['account_number'] }}</dd>
+                                                                    </dl>
+                                                                    <dl class="param">
+                                                                        <dt>Phone number: </dt>
+                                                                        <dd> 
+                                                                            <input type="hidden" class="form-control" name="start_date" value="{{ date('Y-m-d') }}">
+                                                                            <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
+                                                                            <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
+                                                                            <input type="hidden" class="form-control subscription-package" name="package_id">
+                                                                            <input type="hidden" class="form-control" name="paybill_number" value="{{ $payment['paybill_number'] }}">
+                                                                            <input type="hidden" class="form-control" name="account_number" value="{{ $payment['account_number'] }}">
+                                                                            <input type="hidden" class="form-control subscription-price" name="price">
+                                                                            <input type="text" name="phone" value="{{ $profile['phone'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
+                                                                        </dd>
+                                                                    </dl>
+                                                                    <p><strong>Note:</strong> Additional transaction costs will be charged</p>
+                                                                    <button class="subscribe btn btn-primary btn-block" type="submit">Pay Now</button>
+                                                                </form>
+                                                            </div> <!-- tab-pane.// -->
+                                                        </div> <!-- tab-content .// -->
+                                                    </div> <!-- card-body.// -->
+                                                </article>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>  
                         </div>

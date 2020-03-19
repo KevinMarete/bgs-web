@@ -26,7 +26,7 @@ class SignInController extends Controller
     {   
         $redirect_url = [
             'admin' => '/dashboard',
-            'buyer' => '/search',
+            'buyer' => '/ordernow',
             'seller' => '/catalogue'
         ];
         //Send request data to Api

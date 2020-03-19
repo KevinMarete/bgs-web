@@ -71,6 +71,8 @@ class AdminController extends MyController
                 'stocktypes' => ['id', 'name', 'effect'],
                 'payment-types' => ['id', 'name', 'details'],
                 'products' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'strength', 'product_category', 'unit_price', 'delivery_cost'],
+                'menus' => ['id', 'name'],
+                'menu-roles' => ['id', 'menu', 'role'],
             ];
             $header_data = $headers[$resource];
         }
@@ -140,7 +142,9 @@ class AdminController extends MyController
             'product-categories' => [],
             'stocktypes' => [],
             'payment-types' => [],
-            'products' => ['product-categories']
+            'products' => ['product-categories'],
+            'menus' => [],
+            'menu-roles' => ['menus', 'roles']
         ];
 
         if ($token !== null && $resource !== null){   

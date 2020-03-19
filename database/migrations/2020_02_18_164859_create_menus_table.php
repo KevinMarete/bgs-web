@@ -38,9 +38,12 @@ class CreateMenusTable extends Migration
                 ['name' => 'Products', 'link' => '/products', 'icon' => 'package', 'created_at' => now()],
                 ['name' => 'Offers', 'link' => '/offers', 'icon' => 'activity', 'created_at' => now()],
                 ['name' => 'Stocks', 'link' => '/stocks', 'icon' => 'package', 'created_at' => now()],
-                ['name' => 'Search', 'link' => '/search', 'icon' => 'filter', 'created_at' => now()],
+                ['name' => 'OrderNow', 'link' => '/ordernow', 'icon' => 'filter', 'created_at' => now()],
                 ['name' => 'Deals', 'link' => '/deals', 'icon' => 'activity', 'created_at' => now()],
-                ['name' => 'Promos', 'link' => '/promos', 'icon' => 'bar-chart', 'created_at' => now()]
+                ['name' => 'Promos', 'link' => '/promos', 'icon' => 'bar-chart', 'created_at' => now()],
+                ['name' => 'Orders', 'link' => '/orders', 'icon' => 'package', 'created_at' => now()],
+                ['name' => 'Menus', 'link' => '/menus', 'icon' => 'tablet', 'created_at' => now()],
+                ['name' => 'MenuRoles', 'link' => '/menus', 'icon' => 'tablet', 'created_at' => now()],
             )
         );
     }

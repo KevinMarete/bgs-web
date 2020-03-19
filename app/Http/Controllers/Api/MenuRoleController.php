@@ -15,7 +15,7 @@ class MenuRoleController extends Controller
      */
     public function index()
     {
-        $menuroles = MenuRole::all();
+        $menuroles = MenuRole::with('menu', 'role')->get();
         return response()->json($menuroles);
     }
 
@@ -43,7 +43,7 @@ class MenuRoleController extends Controller
      */
     public function show($id)
     {
-        $menurole = MenuRole::find($id);
+        $menurole = MenuRole::with('menu', 'role')->find($id);
         if(is_null($menurole)){
             return response()->json(['error' => 'not_found']);
         }

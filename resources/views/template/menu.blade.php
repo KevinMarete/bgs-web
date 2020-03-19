@@ -1,11 +1,12 @@
 <nav class="sb-topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
     <a class="navbar-brand d-none d-sm-block" href="/dashboard">
-        <h5>BGS<sub class="text-muted">MEDS</sub></h5>
+        <h5>BGS<sub class="text-muted"><small>MEDS</small></sub></h5>
     </a>
+    
     <button class="btn sb-btn-icon sb-btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#">
         <i data-feather="menu"></i>
     </button>
-    <form class="form-inline mr-auto d-none d-lg-block"><input class="form-control sb-form-control-solid mr-sm-2" type="search" placeholder="Search" aria-label="Search" /></form>
+    <form class="form-inline mr-auto d-none d-lg-block"></form>
     <ul class="navbar-nav align-items-center">
         <li class="nav-item dropdown no-caret mr-3 sb-dropdown-user">
             <a class="btn sb-btn-icon sb-btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

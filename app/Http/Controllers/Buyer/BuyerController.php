@@ -13,10 +13,13 @@ class BuyerController extends MyController
     {   
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'productnows')
+        ];
         $data = [
             'page_title' => 'Ordernow', 
             'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.ordernow')
+            'content_view' => View::make('buyer.ordernow', $view_data)
         ];
 
         return view('template.main', $data);
@@ -26,10 +29,13 @@ class BuyerController extends MyController
     {   
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'productdeals')
+        ];
         $data = [
             'page_title' => 'Deals', 
             'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.deal')
+            'content_view' => View::make('buyer.deal', $view_data)
         ];
 
         return view('template.main', $data);
@@ -39,10 +45,13 @@ class BuyerController extends MyController
     {   
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'productpromos')
+        ];
         $data = [
             'page_title' => 'Promos', 
             'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.promo')
+            'content_view' => View::make('buyer.promo', $view_data)
         ];
 
         return view('template.main', $data);
@@ -72,5 +81,21 @@ class BuyerController extends MyController
         ];
 
         return view('template.main', $data);
+    }
+
+    public function getResourceData($token=null, $resource=null)
+    {   
+        $resource_data = [];
+        if($token !== null && $resource != null){
+            $request = $this->client->get($resource, [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
+                ]
+            ]);
+            $response = $request->getBody();
+            $resource_data = json_decode($response, true);
+        }
+
+        return $resource_data;
     }
 }

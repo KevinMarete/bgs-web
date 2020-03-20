@@ -15,7 +15,7 @@ class ProductDealController extends Controller
      */
     public function index()
     {
-        $productdeals = ProductDeal::with('product_now', 'offer')->get();
+        $productdeals = ProductDeal::with('product_now', 'offer', 'product_now.product')->get();
         return response()->json($productdeals);
     }
 
@@ -40,7 +40,7 @@ class ProductDealController extends Controller
      */
     public function show($id)
     {
-        $productdeal = ProductDeal::with('product_now', 'offer')->find($id);
+        $productdeal = ProductDeal::with('product_now', 'offer', 'product_now.product')->find($id);
         if(is_null($productdeal)){
             return response()->json(['error' => 'not_found']);
         }

@@ -15,7 +15,7 @@ class ProductPromoController extends Controller
      */
     public function index()
     {
-        $productpromos = ProductPromo::with('product_now', 'offer')->get();
+        $productpromos = ProductPromo::with('product_now', 'offer', 'product_now.product')->get();
         return response()->json($productpromos);
     }
 
@@ -40,7 +40,7 @@ class ProductPromoController extends Controller
      */
     public function show($id)
     {
-        $productpromo = ProductPromo::with('product_now', 'offer')->find($id);
+        $productpromo = ProductPromo::with('product_now', 'offer', 'product_now.product')->find($id);
         if(is_null($productpromo)){
             return response()->json(['error' => 'not_found']);
         }

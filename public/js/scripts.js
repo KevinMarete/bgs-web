@@ -130,4 +130,12 @@
     }
   });
 
+  //Product search filter
+  var $search = $(".search").on('input',function(){
+      var matcher = new RegExp($(this).val(), 'gi');
+      $('.box').show().not(function(){
+          return matcher.test($(this).find('.molecular_name, .brand_name').text())
+      }).hide();
+  })
+
 })(jQuery);

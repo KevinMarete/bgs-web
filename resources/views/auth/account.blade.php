@@ -169,7 +169,7 @@
                                                         </ul>
                                                         <div class="tab-content">
                                                             <div class="tab-pane fade active show" id="nav-tab-card">
-                                                                <form role="form" action="/card-subscription" method="POST">
+                                                                <form role="form" action="/save-subscription/card" method="POST">
                                                                     @csrf
                                                                     <div class="form-group">
                                                                         <label for="username">Full name (on the card)</label>
@@ -215,7 +215,7 @@
                                                                 </form>
                                                             </div> <!-- tab-pane.// -->
                                                             <div class="tab-pane fade" id="nav-tab-mobile">
-                                                                <form role="form" action="/mobile-subscription" method="POST">
+                                                                <form role="form" action="/save-subscription/mobile" method="POST">
                                                                     @csrf
                                                                     <p>Mobile Money Details</p>
                                                                     <dl class="param">

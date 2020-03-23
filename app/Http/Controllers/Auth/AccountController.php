@@ -92,16 +92,35 @@ class AccountController extends MyController
         return redirect('/account');
     }
 
-    public function cardSubscription(Request $request)
-    {
+    public function saveSubscription(Request $request)
+    {   
+        $transaction_type = $request->type;
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+
         //Send request data to Api
         $response = $this->client->post("subscription", [
             'headers' => [
-                'Authorization' => 'Bearer '.session()->get('token')
+                'Authorization' => 'Bearer '.$token
             ],
             'json' => $request->all()
         ]);
-        $response = json_decode($response->getBody(), true);
+        $subscription_response = json_decode($response->getBody(), true);
+        $subscription_id = $subscription_response['id'];
+        
+        //Make payment
+        $amount = $request->price;
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_id = $payment_response['id'];
+
+        //Send request data to Api for payment
+        $response = $this->client->post("paymentsubscription", [
+            'headers' => [
+                'Authorization' => 'Bearer '.session()->get('token')
+            ],
+            'json' => ['payment_id' => $payment_id, 'subscription_id' => $subscription_id]
+        ]);
 
         $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong>Success!</strong> Your subscription has been updated.
@@ -114,30 +133,7 @@ class AccountController extends MyController
 
         return redirect('/account');
     }
-
-    public function phoneSubscription(Request $request)
-    {
-        //Send request data to Api
-        $response = $this->client->post("subscription", [
-            'headers' => [
-                'Authorization' => 'Bearer '.session()->get('token')
-            ],
-            'json' => $request->all()
-        ]);
-        $response = json_decode($response->getBody(), true);
-
-        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your subscription has been updated.
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-
-        $request->session()->flash('bgs_msg', $flash_msg);
-
-        return redirect('/account');
-    }
-
+    
     public function getProfile($token=null)
     {   
         $profile = [];

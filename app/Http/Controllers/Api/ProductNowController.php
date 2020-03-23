@@ -14,8 +14,12 @@ class ProductNowController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $productnows = ProductNow::with('product', 'organization', 'user')->get();
+    {   
+        $order = 'ASC';
+        $productnows = ProductNow::with(['product' => function ($q) use ($order) {
+            $q->orderBy('molecular_name', $order)->orderBy('unit_price', $order);
+        }, 'organization', 'user'])->get();
+
         return response()->json($productnows);
     }
 

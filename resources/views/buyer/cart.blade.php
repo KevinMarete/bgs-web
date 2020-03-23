@@ -9,6 +9,9 @@
     </div>
 </div>
 <div class="container-fluid mt-n10">
+    @if (Session::has('bgs_msg'))
+        {!! session('bgs_msg') !!}
+    @endif
     <div class="card mb-4">
         <div class="card-header"> </div>
         <div class="card-body">
@@ -24,30 +27,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td data-th="Product">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <h4 class="nomargin">Product 1</h4>
-                                        <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+                        @foreach ($cart_items as $cart_item)
+                            <tr>
+                                <form role="form" action="/update-cart/{{ $cart_item['product_id'] }}" method="POST">
+                                @csrf
+                                <td data-th="Product">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h4 class="nomargin">{{ $cart_item['product_name'] }}</h4>
+                                            <p>
+                                                {{ $cart_item['product_description'] }} <br/>
+                                                {{ 'Organization: '.$cart_item['organization_name'] }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td data-th="Price">$150.00</td>
-                            <td data-th="Quantity">
-                                <input type="number" class="form-control text-center" value="1">
-                            </td>
-                            <td data-th="Subtotal" class="text-center">150.00</td>
-                            <td class="actions" data-th="">
-                                <button class="btn btn-danger btn-sm"><i data-feather="trash"></i></button>								
-                            </td>
-                        </tr>
+                                </td>
+                                <td data-th="Price">KES {{ number_format($cart_item['price']) }}</td>
+                                <td data-th="Quantity">
+                                    <input type="text" class="form-control text-center" name="quantity" value="{{ number_format($cart_item['quantity']) }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                </td>
+                                <td data-th="Subtotal" class="text-center">KES {{ number_format($cart_item['sub_total']) }}</td>
+                                <td class="actions" data-th="">
+                                    <input type="hidden" name="price" value="{{ $cart_item['price'] }}"/>
+                                    <input type="hidden" value="{{ $total += $cart_item['sub_total'] }}"/>
+                                    <button type="submit" class="btn btn-info btn-sm"><i data-feather="edit"></i></button>								
+                                    <a href="remove-cart/{{ $cart_item['product_id'] }}" class="btn btn-danger btn-sm delete"><i data-feather="trash"></i></button>								
+                                </td>
+                                </form>
+                            </tr>
+                        @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td><a href="/ordernow" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+                            <td><a href="/{{ $back_to_link }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
                             <td colspan="2" class="hidden-xs"></td>
-                            <td class="hidden-xs text-center"><strong>Total $150.00</strong></td>
+                            <td class="hidden-xs text-center"><strong> KES {{ number_format($total) }} </strong></td>
                             <td><a href="/checkout" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
                         </tr>
                     </tfoot>

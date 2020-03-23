@@ -15,7 +15,11 @@ class ProductPromoController extends Controller
      */
     public function index()
     {
-        $productpromos = ProductPromo::with('product_now', 'offer', 'product_now.product')->get();
+        $order = 'ASC';
+        $productpromos = ProductPromo::with(['product_now.product' => function ($q) use ($order) {
+            $q->orderBy('molecular_name', $order)->orderBy('unit_price', $order);
+        }, 'offer', 'product_now', 'product_now.organization'])->get();
+
         return response()->json($productpromos);
     }
 

@@ -9,20 +9,10 @@
     </div>
 </div>
 <div class="container-fluid mt-n10">
+    @if (Session::has('bgs_msg'))
+        {!! session('bgs_msg') !!}
+    @endif
     <div class="card mb-4">
-        <!--
-        <div class="card-header"> 
-            <div class="row mx-auto justify-content-center text-center">
-                <nav aria-label="breadcrumb" class="second ">
-                    <ol class="breadcrumb indigo lighten-6 first ">
-                        <li class="breadcrumb-item font-weight-bold "><a class="black-text text-uppercase " href="/ordernow"><span class="mr-md-3 mr-1">BACK TO SHOPPING</span></a><i class="fa fa-angle-double-right " aria-hidden="true"></i></li>
-                        <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase" href="/cart"><span class="mr-md-3 mr-1">SHOPPING CART</span></a><i class="fa fa-angle-double-right text-uppercase " aria-hidden="true"></i></li>
-                        <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase active-2" href="#"><span class="mr-md-3 mr-1">CHECKOUT</span></a></li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-        -->
         <div class="card-body">
             <div class="row justify-content-center">
                 <div class="col-md-12">
@@ -31,7 +21,7 @@
                             <div class="col-12 mt-3">
                                 <nav aria-label="breadcrumb" class="second ">
                                     <ol class="breadcrumb indigo lighten-6 first ">
-                                        <li class="breadcrumb-item font-weight-bold "><a class="black-text text-uppercase " href="/ordernow"><span class="mr-md-3 mr-1">BACK TO SHOPPING</span></a><i class="fa fa-angle-double-right " aria-hidden="true"></i></li>
+                                        <li class="breadcrumb-item font-weight-bold "><a class="black-text text-uppercase " href="/{{ $back_to_link }}"><span class="mr-md-3 mr-1">BACK TO SHOPPING</span></a><i class="fa fa-angle-double-right " aria-hidden="true"></i></li>
                                         <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase" href="/cart"><span class="mr-md-3 mr-1">SHOPPING CART</span></a><i class="fa fa-angle-double-right text-uppercase " aria-hidden="true"></i></li>
                                         <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase active-2" href="#"><span class="mr-md-3 mr-1">CHECKOUT</span></a></li>
                                     </ol>
@@ -49,11 +39,11 @@
                                         <div class="row justify-content-between">
                                             <div class="col-auto mt-0">
                                                 <address>
-                                                    <strong>Malibu Chemist</strong><br>
-                                                    4th Floor Lonrho House<br>
-                                                    Kenyatta Avenue, Nairobi, Kenya<br>
-                                                    <abbr title="Phone">Phone:</abbr> (+254) 722123456
-                                                    <abbr title="email">Email:</abbr> malibu@gmail.com
+                                                    <strong>{{ session()->get('organization.name') }}</strong><br>
+                                                    {{ session()->get('organization.building') }}<br>
+                                                    {{ session()->get('organization.road') }}, {{ session()->get('organization.town') }}, Kenya<br>
+                                                    <abbr title="Phone">Phone:</abbr> (+254) {{ session()->get('phone') }}
+                                                    <abbr title="email">Email:</abbr> {{ session()->get('email') }}
                                                 </address>
                                             </div>
                                         </div>
@@ -73,12 +63,10 @@
                                         </ul>
                                         <div class="tab-content">
                                             <div class="tab-pane fade active show" id="nav-tab-card">
-                                                <form role="form" action="/card-subscription" method="POST">
+                                                <form role="form" action="/save-order/card" method="POST">
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="username">Full name (on the card)</label>
-                                                        <input type="hidden" class="form-control subscription-package" name="package_id">
-                                                        <input type="hidden" class="form-control subscription-price" name="price">
                                                         <input type="text" class="form-control" name="card_name" required>
                                                     </div> <!-- form-group.// -->
 
@@ -112,27 +100,31 @@
                                                             </div> <!-- form-group.// -->
                                                         </div>
                                                     </div> <!-- row.// -->
-                                                    <button type="submit" name="" id="" class="btn btn-lg btn-block btn-primary">PURCHASE 37 KES</button>
+                                                    <button type="submit" name="" id="" class="btn btn-lg btn-block btn-primary">PURCHASE</button>
                                                 </form>
                                             </div> <!-- tab-pane.// -->
                                             <div class="tab-pane fade" id="nav-tab-mobile">
-                                                <form role="form" action="/mobile-subscription" method="POST">
+                                                <form role="form" action="/save-order/mobile" method="POST">
                                                     @csrf
                                                     <p>Mobile Money Details</p>
                                                     <dl class="param">
                                                         <dt>Paybill Number: </dt>
-                                                        <dd> </dd>
+                                                        <dd>{{ $paybill_number }}</dd>
                                                     </dl>
                                                     <dl class="param">
                                                         <dt>Account number: </dt>
-                                                        <dd> </dd>
+                                                        <dd>{{ $account_number }}</dd>
                                                     </dl>
                                                     <dl class="param">
                                                         <dt>Phone number: </dt>
-                                                        <dd> </dd>
+                                                        <dd> 
+                                                            <input type="hidden" class="form-control" name="paybill_number" value="{{ $paybill_number }}">
+                                                            <input type="hidden" class="form-control" name="account_number" value="{{ $account_number }}">
+                                                            <input type="text" name="phone" value="{{ session()->get('phone') }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
+                                                        </dd>
                                                     </dl>
                                                     <p><strong>Note:</strong> Additional transaction costs will be charged</p>
-                                                    <button class="btn btn-lg btn-primary btn-block" type="submit">Pay Now 37 KES</button>
+                                                    <button class="btn btn-lg btn-primary btn-block" type="submit">Pay Now</button>
                                                 </form>
                                             </div> <!-- tab-pane.// -->
                                         </div>
@@ -147,66 +139,30 @@
                                         <hr class="my-2">
                                     </div>
                                     <div class="card-body pt-0">
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto col-md-7">
-                                                <div class="media flex-column flex-sm-row"> <img class=" img-fluid" src="https://i.imgur.com/6oHix28.jpg" width="62" height="62">
-                                                    <div class="media-body my-auto">
-                                                        <div class="row ">
-                                                            <div class="col-auto">
-                                                                <p class="mb-0"><b>EC-GO Bag Standard</b></p><small class="text-muted">1 Week Subscription</small>
+                                        @foreach ($cart_items as $cart_item)
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto col-md-7">
+                                                    <div class="media flex-column flex-sm-row"> <img class="img-fluid" src="/assets/img/medicine.png" width="50" height="50">
+                                                        <div class="media-body my-auto">
+                                                            <div class="row ">
+                                                                <div class="col-auto">
+                                                                    <p class="mb-0"><b>{{ $cart_item['product_name'] }}</b></p><small class="text-muted">{{ $cart_item['product_description'] }}</small>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class=" pl-0 flex-sm-col col-auto my-auto">
-                                                <p class="boxed-1">2</p>
-                                            </div>
-                                            <div class=" pl-0 flex-sm-col col-auto my-auto ">
-                                                <p><b>179 KES</b></p>
-                                            </div>
-                                        </div>
-                                        <hr class="my-2">
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto col-md-7">
-                                                <div class="media flex-column flex-sm-row"> <img class=" img-fluid " src="https://i.imgur.com/9MHvALb.jpg" width="62" height="62">
-                                                    <div class="media-body my-auto">
-                                                        <div class="row ">
-                                                            <div class="col">
-                                                                <p class="mb-0"><b>EC-GO Bag Standard</b></p><small class="text-muted">2 Week Subscription</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class=" pl-0 flex-sm-col col-auto my-auto">
+                                                    <p class="boxed-1">{{ number_format($cart_item['quantity']) }}</p>
+                                                </div>
+                                                <div class=" pl-0 flex-sm-col col-auto my-auto ">
+                                                    <p><b>{{ number_format($cart_item['sub_total']) }} KES</b></p>
+                                                    <input type="hidden" value="{{ $total += $cart_item['sub_total'] }}"/>
+                                                    <input type="hidden" value="{{ $shipping += ($cart_item['delivery']*$cart_item['quantity']) }}"/>
                                                 </div>
                                             </div>
-                                            <div class="pl-0 flex-sm-col col-auto my-auto">
-                                                <p class="boxed">3</p>
-                                            </div>
-                                            <div class="pl-0 flex-sm-col col-auto my-auto">
-                                                <p><b>179 KES</b></p>
-                                            </div>
-                                        </div>
-                                        <hr class="my-2">
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto col-md-7">
-                                                <div class="media flex-column flex-sm-row"> <img class=" img-fluid " src="https://i.imgur.com/6oHix28.jpg" width="62" height="62">
-                                                    <div class="media-body my-auto">
-                                                        <div class="row ">
-                                                            <div class="col">
-                                                                <p class="mb-0"><b>EC-GO Bag Standard</b></p><small class="text-muted">2 Week Subscription</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="pl-0 flex-sm-col col-auto my-auto">
-                                                <p class="boxed-1">2</p>
-                                            </div>
-                                            <div class="pl-0 flex-sm-col col-auto my-auto">
-                                                <p><b>179 KES</b></p>
-                                            </div>
-                                        </div>
-                                        <hr class="my-2">
+                                            <hr class="my-2">
+                                        @endforeach
                                         <div class="row ">
                                             <div class="col">
                                                 <div class="row justify-content-between">
@@ -214,7 +170,7 @@
                                                         <p class="mb-1"><b>Subtotal</b></p>
                                                     </div>
                                                     <div class="flex-sm-col col-auto">
-                                                        <p class="mb-1"><b>179 KES</b></p>
+                                                        <p class="mb-1"><b>{{ number_format($total) }} KES</b></p>
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-between">
@@ -222,7 +178,7 @@
                                                         <p class="mb-1"><b>Shipping</b></p>
                                                     </div>
                                                     <div class="flex-sm-col col-auto">
-                                                        <p class="mb-1"><b>0 KES</b></p>
+                                                        <p class="mb-1"><b>{{ number_format($shipping) }} KES</b></p>
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-between">
@@ -230,7 +186,7 @@
                                                         <p><b>Total</b></p>
                                                     </div>
                                                     <div class="flex-sm-col col-auto">
-                                                        <p class="mb-1"><b>537 KES</b></p>
+                                                        <p class="mb-1"><b>{{ number_format($total + $shipping) }} KES</b></p>
                                                     </div>
                                                 </div>
                                                 <hr class="my-0">

@@ -51,8 +51,7 @@ Route::post('/reset-account', 'Auth\ForgotPasswordController@resetAccount');
 Route::get('/account', 'Auth\AccountController@displayView');
 Route::post('/update-account', 'Auth\AccountController@updateAccount');
 Route::post('/change-password', 'Auth\AccountController@changePassword');
-Route::post('/card-subscription', 'Auth\AccountController@cardSubscription'); 
-Route::post('/mobile-subscription', 'Auth\AccountController@phoneSubscription'); 
+Route::post('/save-subscription/{type}', 'Auth\AccountController@saveSubscription'); 
 Route::get('/sign-out', 'Auth\AccountController@logout'); 
 
 /*Seller Routes*/
@@ -105,5 +104,9 @@ Route::post('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayMa
 Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView'); 
 Route::get('/deals', 'Buyer\BuyerController@displayDealView'); 
 Route::get('/promos', 'Buyer\BuyerController@displayPromoView'); 
+Route::post('/add-cart', 'Buyer\BuyerController@addCart'); 
 Route::get('/cart', 'Buyer\BuyerController@displayCartView'); 
+Route::post('/update-cart/{id}', 'Buyer\BuyerController@updateCart'); 
+Route::get('/remove-cart/{id}', 'Buyer\BuyerController@removeCart'); 
 Route::get('/checkout', 'Buyer\BuyerController@displayCheckoutView'); 
+Route::post('/save-order/{type}', 'Auth\AccountController@saveOrder'); 

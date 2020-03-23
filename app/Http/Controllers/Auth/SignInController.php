@@ -57,6 +57,7 @@ class SignInController extends Controller
             session()->put('token', $token);
             session($this->getProfile($token));
             $fullname = session()->get('firstname').' '.session()->get('lastname');
+            session()->put('cart', []);
 
             //Set flash message to View
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">

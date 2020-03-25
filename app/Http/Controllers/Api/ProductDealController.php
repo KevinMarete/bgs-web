@@ -18,7 +18,7 @@ class ProductDealController extends Controller
         $order = 'ASC';
         $productdeals = ProductDeal::with(['product_now.product' => function ($q) use ($order) {
             $q->orderBy('molecular_name', $order)->orderBy('unit_price', $order);
-        }, 'offer', 'product_now', 'product_now.organization'])->get();
+        }, 'offer', 'product_now', 'product_now.organization', 'product_now.user'])->get();
         return response()->json($productdeals);
     }
 

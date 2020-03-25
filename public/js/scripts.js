@@ -137,5 +137,10 @@
           return matcher.test($(this).find('.molecular_name, .brand_name').text())
       }).hide();
   })
+  
+  $("form").submit(function () {
+    // prevent duplicate form submissions
+    $(this).find(":submit").attr('disabled', 'disabled');
+  });
 
 })(jQuery);

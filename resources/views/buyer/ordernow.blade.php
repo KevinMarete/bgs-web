@@ -59,11 +59,13 @@
                                                     <input type="hidden" class="form-control" name="quantity" value="1">
                                                     <input type="hidden" class="form-control" name="price" value="{{ $product['unit_price'] }}">
                                                     <input type="hidden" class="form-control" name="delivery" value="{{ $product['delivery_cost'] }}">
+                                                    <input type="hidden" class="form-control" name="discount" value="0">
                                                     <input type="hidden" class="form-control" name="sub_total" value="{{ $product['unit_price']*1 }}">
                                                     <input type="hidden" class="form-control" name="product_name" value="{{ $product['product']['molecular_name'] }}">
                                                     <input type="hidden" class="form-control" name="product_description" value="{{ $product['product']['brand_name'].' Packsize:'.$product['product']['pack_size'].' Strength:'.$product['product']['strength'] }}">
                                                     <input type="hidden" class="form-control" name="organization_id" value="{{ $product['organization_id'] }}">
                                                     <input type="hidden" class="form-control" name="organization_name" value="{{ $product['organization']['name'] }}">
+                                                    <input type="hidden" class="form-control" name="organization_email" value="{{ $product['user']['email'] }}">
                                                     <button type="submit" class="btn btn-success btn-block">Add to cart</button>
                                                 </form>
                                             </div>

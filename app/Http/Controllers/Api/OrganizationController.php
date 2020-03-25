@@ -10,6 +10,7 @@ use App\StockBalance;
 use App\ProductNow;
 use App\ProductPromo;
 use App\ProductDeal;
+use App\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -208,5 +209,17 @@ class OrganizationController extends Controller
             $query->where('organization_id', $id);
           }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
         return response()->json($productdeals);
+    }
+
+    /**
+     * Display the specified Organization's productnows.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationOrders($id)
+    {
+        $orders = Order::with('organization')->where('organization_id', $id)->get();
+        return response()->json($orders);
     }
 }

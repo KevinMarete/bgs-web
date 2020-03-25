@@ -19,7 +19,9 @@ class AccountController extends MyController
             'organizations' => $this->getOrganizations(),
             'packages' => $this->getPackages($token),
             'payment' => $this->getPaymentDetails(),
-            'subscription' => $this->getUserSubscription($token, $user_id)
+            'subscription' => $this->getUserSubscription($token, $user_id),
+            'loyalty' => $this->getUserPoints($token, $user_id),
+            'min_redeem' => env('MIN_REDEEM_POINTS')
         ];
         $data = [
             'page_title' => 'Manage Account', 
@@ -183,6 +185,28 @@ class AccountController extends MyController
         }
 
         return $subscription;
+    }
+
+    public function getUserPoints($token=null, $user_id=null)
+    {   
+        $points = [
+            'points' => 0,
+            'loyalty_logs' => []
+        ];
+
+        if($token !== null){
+            $request = $this->client->get('user/'.$user_id.'/loyalty', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
+                ]
+            ]);
+            $response = json_decode($request->getBody(), true);
+            if($response){
+                $points = $response;
+            }
+        }
+
+        return $points;
     }
 
     public function getOrganizations()

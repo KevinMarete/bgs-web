@@ -100,7 +100,7 @@
                                                             </div> <!-- form-group.// -->
                                                         </div>
                                                     </div> <!-- row.// -->
-                                                    <button type="submit" name="" id="" class="btn btn-lg btn-block btn-primary">PURCHASE</button>
+                                                    <button type="submit" class="btn btn-lg btn-block btn-primary checkout">PURCHASE</button>
                                                 </form>
                                             </div> <!-- tab-pane.// -->
                                             <div class="tab-pane fade" id="nav-tab-mobile">
@@ -124,7 +124,7 @@
                                                         </dd>
                                                     </dl>
                                                     <p><strong>Note:</strong> Additional transaction costs will be charged</p>
-                                                    <button class="btn btn-lg btn-primary btn-block" type="submit">Pay Now</button>
+                                                    <button class="btn btn-lg btn-primary btn-block checkout" type="submit">Pay Now</button>
                                                 </form>
                                             </div> <!-- tab-pane.// -->
                                         </div>
@@ -171,6 +171,8 @@
                                                     </div>
                                                     <div class="flex-sm-col col-auto">
                                                         <p class="mb-1"><b>{{ number_format($total) }} KES</b></p>
+                                                        {{ session()->put('product_total', $total) }}
+                                                        {{ session()->put('shipping_total', $shipping) }}
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-between">

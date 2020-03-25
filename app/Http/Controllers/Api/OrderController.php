@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
+use App\Order;
+use App\OrderItem;
+use App\OrderLog;
 use App\Http\Controllers\Controller;
-use App\Loyalty;
-use App\Subscription;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return response()->json($users);
+        $orders = Order::with('organization', 'order_items', 'order_items.product_now.product', 'order_logs', 'order_logs.user')->get();
+        return response()->json($orders);
     }
 
     /**
@@ -29,12 +29,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, User::$rules);
-        $user = User::firstOrCreate([
-            'email' => $request->email,
-            'organization_id' => $request->organization_id,
-        ], $request->all());
-        return response()->json($user);
+        $this->validate($request, Order::$rules);
+        $order = Order::firstOrCreate($request->all(), $request->all());
+        return response()->json($order);
     }
 
     /**
@@ -45,11 +42,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        if(is_null($user)){
+        $order = Order::with('organization', 'order_items', 'order_items.product_now.product', 'order_logs', 'order_logs.user')->find($id);
+        if(is_null($order)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($user);
+        return response()->json($order);
     }
 
     /**
@@ -61,13 +58,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, User::$rules);
-        $user  = User::find($id);
-        if(is_null($user)){
+        $this->validate($request, Order::$rules);
+        $order  = Order::find($id);
+        if(is_null($order)){
             return response()->json(['error' => 'not_found']);
         }
-        $user->update($request->all());
-        return response()->json($user);
+        $order->update($request->all());
+        return response()->json($order);
     }
 
     /**
@@ -78,35 +75,35 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        if(is_null($user)){
+        $order = Order::find($id);
+        if(is_null($order)){
             return response()->json(['error' => 'not_found']);
         }
-        $user->delete();
+        $order->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 
     /**
-     * Display the specified user's subscription.
+     * Display the specified Order's Items.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getUserSubscription($id)
+    public function getOrderItems($id)
     {
-        $subscription = Subscription::with('user', 'package')->where('user_id', $id)->first();
-        return response()->json($subscription);
+        $orderitems = OrderItem::with('order', 'organization', 'product_now')->where('order_id', $id)->get();
+        return response()->json($orderitems);
     }
 
     /**
-     * Display the specified user's loyalty points.
+     * Display the specified Order's Logs.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getUserPoints($id)
+    public function getOrderLogs($id)
     {
-        $points = Loyalty::with(['loyalty_logs', 'loyalty_logs.order', 'user'])->where('user_id', $id)->first();
-        return response()->json($points);
+        $orderlogs = OrderLog::with('order', 'organization', 'user')->where('order_id', $id)->get();
+        return response()->json($orderlogs);
     }
 }

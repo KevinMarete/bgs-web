@@ -62,6 +62,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/productnows', 'Api\OrganizationController@getOrganizationProductNows');
         Route::get('/organization/{id}/productpromos', 'Api\OrganizationController@getOrganizationProductPromos');
         Route::get('/organization/{id}/productdeals', 'Api\OrganizationController@getOrganizationProductDeals');
+        Route::get('/organization/{id}/orders', 'Api\OrganizationController@getOrganizationOrders');
 
         /*Package endpoints*/
         Route::get('/packages', 'Api\PackageController@index');
@@ -75,6 +76,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/users', 'Api\UserController@index');
         Route::get('/user/{id}', 'Api\UserController@show');
         Route::get('/user/{id}/subscription', 'Api\UserController@getUserSubscription');
+        Route::get('/user/{id}/loyalty', 'Api\UserController@getUserPoints');
 
         /*Subscription endpoints*/
         Route::get('/subscriptions', 'Api\SubscriptionController@index');
@@ -219,6 +221,50 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/paymentsubscription', 'Api\PaymentSubscriptionController@store');
         Route::put('/paymentsubscription/{id}', 'Api\PaymentSubscriptionController@update');
         Route::delete('/paymentsubscription/{id}', 'Api\PaymentSubscriptionController@destroy');
+
+        /*Orders endpoints*/
+        Route::get('/orders', 'Api\OrderController@index');
+        Route::get('/order/{id}', 'Api\OrderController@show');
+        Route::post('/order', 'Api\OrderController@store');
+        Route::put('/order/{id}', 'Api\OrderController@update');
+        Route::delete('/order/{id}', 'Api\OrderController@destroy');
+        Route::get('/order/{id}/orderitems', 'Api\OrderController@getOrderItems');
+        Route::get('/order/{id}/orderlogs', 'Api\OrderController@getOrderLogs');
+
+        /*OrderItems endpoints*/
+        Route::get('/orderitems', 'Api\OrderItemController@index');
+        Route::get('/orderitem/{id}', 'Api\OrderItemController@show');
+        Route::post('/orderitem', 'Api\OrderItemController@store');
+        Route::put('/orderitem/{id}', 'Api\OrderItemController@update');
+        Route::delete('/orderitem/{id}', 'Api\OrderItemController@destroy');
+
+        /*OrderLogs endpoints*/
+        Route::get('/orderlogs', 'Api\OrderLogController@index');
+        Route::get('/orderlog/{id}', 'Api\OrderLogController@show');
+        Route::post('/orderlog', 'Api\OrderLogController@store');
+        Route::put('/orderlog/{id}', 'Api\OrderLogController@update');
+        Route::delete('/orderlog/{id}', 'Api\OrderLogController@destroy');
+
+        /*PaymentOrders endpoints*/
+        Route::get('/paymentorders', 'Api\PaymentOrderController@index');
+        Route::get('/paymentorder/{id}', 'Api\PaymentOrderController@show');
+        Route::post('/paymentorder', 'Api\PaymentOrderController@store');
+        Route::put('/paymentorder/{id}', 'Api\PaymentOrderController@update');
+        Route::delete('/paymentorder/{id}', 'Api\PaymentOrderController@destroy');
+
+        /*Loyalties endpoints*/
+        Route::get('/loyalties', 'Api\LoyaltyController@index');
+        Route::get('/loyalty/{id}', 'Api\LoyaltyController@show');
+        Route::post('/loyalty', 'Api\LoyaltyController@store');
+        Route::put('/loyalty/{id}', 'Api\LoyaltyController@update');
+        Route::delete('/loyalty/{id}', 'Api\LoyaltyController@destroy');
+
+        /*LoyaltyLog endpoints*/
+        Route::get('/loyaltylogs', 'Api\LoyaltyLogController@index');
+        Route::get('/loyaltylog/{id}', 'Api\LoyaltyLogController@show');
+        Route::post('/loyaltylog', 'Api\LoyaltyLogController@store');
+        Route::put('/loyaltylog/{id}', 'Api\LoyaltyLogController@update');
+        Route::delete('/loyaltylog/{id}', 'Api\LoyaltyLogController@destroy');
     });
 
 });

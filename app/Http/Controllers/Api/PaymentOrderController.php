@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Product;
+use App\PaymentOrder;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class PaymentOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('product_category')->orderBy('molecular_name', 'ASC')->limit(1000)->get();
-        return response()->json($products);
+        $paymentorders = PaymentOrder::with('organization')->get();
+        return response()->json($paymentorders);
     }
 
     /**
@@ -27,9 +27,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Product::$rules);
-        $product = Product::firstOrCreate($request->all(), $request->all());
-        return response()->json($product);
+        $this->validate($request, PaymentOrder::$rules);
+        $paymentorder = PaymentOrder::firstOrCreate($request->all(), $request->all());
+        return response()->json($paymentorder);
     }
 
     /**
@@ -40,11 +40,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('product_category')->find($id);
-        if(is_null($product)){
+        $paymentorder = PaymentOrder::with('organization')->find($id);
+        if(is_null($paymentorder)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($product);
+        return response()->json($paymentorder);
     }
 
     /**
@@ -56,13 +56,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Product::$rules);
-        $product  = Product::find($id);
-        if(is_null($product)){
+        $this->validate($request, PaymentOrder::$rules);
+        $paymentorder  = PaymentOrder::find($id);
+        if(is_null($paymentorder)){
             return response()->json(['error' => 'not_found']);
         }
-        $product->update($request->all());
-        return response()->json($product);
+        $paymentorder->update($request->all());
+        return response()->json($paymentorder);
     }
 
     /**
@@ -73,11 +73,11 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
-        if(is_null($product)){
+        $paymentorder = PaymentOrder::find($id);
+        if(is_null($paymentorder)){
             return response()->json(['error' => 'not_found']);
         }
-        $product->delete();
+        $paymentorder->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 }

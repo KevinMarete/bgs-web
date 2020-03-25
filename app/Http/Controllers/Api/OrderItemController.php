@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Product;
+use App\OrderItem;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class OrderItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('product_category')->orderBy('molecular_name', 'ASC')->limit(1000)->get();
-        return response()->json($products);
+        $orderitems = OrderItem::with('product_now', 'organization', 'order')->get();
+        return response()->json($orderitems);
     }
 
     /**
@@ -27,9 +27,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Product::$rules);
-        $product = Product::firstOrCreate($request->all(), $request->all());
-        return response()->json($product);
+        $this->validate($request, OrderItem::$rules);
+        $orderitem = OrderItem::firstOrCreate($request->all(), $request->all());
+        return response()->json($orderitem);
     }
 
     /**
@@ -40,11 +40,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('product_category')->find($id);
-        if(is_null($product)){
+        $orderitem = OrderItem::with('product_now', 'organization', 'order')->find($id);
+        if(is_null($orderitem)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($product);
+        return response()->json($orderitem);
     }
 
     /**
@@ -56,13 +56,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Product::$rules);
-        $product  = Product::find($id);
-        if(is_null($product)){
+        $this->validate($request, OrderItem::$rules);
+        $orderitem  = OrderItem::find($id);
+        if(is_null($orderitem)){
             return response()->json(['error' => 'not_found']);
         }
-        $product->update($request->all());
-        return response()->json($product);
+        $orderitem->update($request->all());
+        return response()->json($orderitem);
     }
 
     /**
@@ -73,11 +73,11 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
-        if(is_null($product)){
+        $orderitem = OrderItem::find($id);
+        if(is_null($orderitem)){
             return response()->json(['error' => 'not_found']);
         }
-        $product->delete();
+        $orderitem->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 }

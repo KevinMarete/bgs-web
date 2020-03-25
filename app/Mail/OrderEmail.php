@@ -5,23 +5,20 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\User;
-use Config;
 
-class ActivateAccountEmail extends Mailable
+class OrderEmail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $user;
-    
+    public $order;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct($order)
     {
-        $this->user = $user;
+        $this->order = $order;
     }
 
     /**
@@ -31,8 +28,9 @@ class ActivateAccountEmail extends Mailable
      */
     public function build()
     {
-        $this->view('emails/activateaccount');
-        return $this->to($this->user->email)
-                ->subject('Account activation');
+        $this->view('emails/order_notification');
+        return $this->to($this->order->user->email)
+                    ->cc($this->order->supplier_emails)
+                    ->subject('Order #'.$this->order->id.' Notification');
     }
 }

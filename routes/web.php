@@ -109,4 +109,6 @@ Route::get('/cart', 'Buyer\BuyerController@displayCartView');
 Route::post('/update-cart/{id}', 'Buyer\BuyerController@updateCart'); 
 Route::get('/remove-cart/{id}', 'Buyer\BuyerController@removeCart'); 
 Route::get('/checkout', 'Buyer\BuyerController@displayCheckoutView'); 
-Route::post('/save-order/{type}', 'Auth\AccountController@saveOrder'); 
+Route::post('/save-order/{type}', 'Buyer\BuyerController@saveOrder'); 
+Route::get('/orders', 'Buyer\BuyerController@displayOrderView'); 
+Route::get('/view-order/{id}', 'Buyer\BuyerController@displayViewOrder'); 

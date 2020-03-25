@@ -5,7 +5,7 @@
                 <div class="sb-page-header-icon"><i data-feather="user"></i></div>
                 <span>Account</span>
             </h1>
-            <div class="sb-page-header-subtitle">Manage User Account, Password and Subscription</div>
+            <div class="sb-page-header-subtitle">Manage User Account</div>
         </div>
     </div>
 </div>
@@ -27,9 +27,12 @@
                                 <a href="" data-target="#password" data-toggle="tab" class="nav-link">Password</a>
                             </li>
                             @if(strtolower(session()->get('organization.organization_type.role.name')) == 'buyer')
-                            <li class="nav-item">
-                                <a href="" data-target="#subscription" data-toggle="tab" class="nav-link">Subscription</a>
-                            </li>
+                                <li class="nav-item">
+                                    <a href="" data-target="#subscription" data-toggle="tab" class="nav-link">Subscription</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" data-target="#loyalty" data-toggle="tab" class="nav-link">Loyalty</a>
+                                </li>
                             @endif
                         </ul>
                         <div class="tab-content py-4">
@@ -250,7 +253,61 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>  
+                            </div> 
+                            <div class="tab-pane" id="loyalty">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card-deck mb-3 text-center">
+                                                <div class="card mb-4 box-shadow">
+                                                    <div class="card-header">
+                                                        <h4 class="my-0 font-weight-normal">My Points</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <form>
+                                                            <div class="form-group">
+                                                                <label for="redeem_points">                                                        
+                                                                    <h1 class="card-title pricing-card-title"> {{ $loyalty['points'] }} </h1>
+                                                                </label>
+                                                                <input type="number" class="form-control" id="redeem_points" aria-describedby="pointsHelp"  min="{{ $min_redeem }}" max="{{ $loyalty['points'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                <small id="pointsHelp" class="form-text text-muted">Redeem a minimum of {{ number_format($min_redeem) }} points.</small>
+                                                            </div>
+                                                            <button class="btn btn-lg btn-block btn-primary">Redeem</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <table class="table table-condensed table-hover table-bordered table-sm">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>How Earned</th>
+                                                        <th>Points</th>
+                                                        <th>When</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($loyalty['loyalty_logs'] as $point)
+                                                        <tr>
+                                                            <td>{{ $point['status'] }}</td>
+                                                            <td>{{ $point['points'] }}</td>
+                                                            <td>{{ $point['created_at'] }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                                <tfoot class="thead-light">
+                                                    <tr>
+                                                        <th>How Earned</th>
+                                                        <th>Points</th>
+                                                        <th>When</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
                         </div>
                     </div>
                 </div>

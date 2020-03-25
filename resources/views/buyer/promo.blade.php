@@ -38,7 +38,7 @@
                         @if ($product['offer']['valid_until'] >= now())
                             <div class="col-12 col-md-6 col-lg-4 box">
                                 <div class="card">
-                                    <img class="card-img-top img-thumbnail" src="/assets/img/medicine.png" alt="Card image cap">
+                                    <img class="card-img-top img-thumbnail" src="/assets/img/medicine.png" alt="Card image cap" width="300" height="200">
                                     <div class="card-body">
                                         <h4 class="card-title"><a href="product.html" title="View Product" class="molecular_name">{{ $product['product_now']['product']['molecular_name'] }}</a></h4>
                                         <p class="card-text">

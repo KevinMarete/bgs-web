@@ -24,11 +24,11 @@
                 <div class="form-group row">
                     <label class="col-lg-3 col-form-label form-control-label">ValidFrom</label>
                     <div class="col-lg-3">
-                        <input class="form-control" type="date" value="{{ isset($edit['valid_from']) ? $edit['valid_from'] : '' }}" name="valid_from" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                        <input class="form-control" type="date" value="{{ isset($edit['valid_from']) ? date('Y-m-d', strtotime($edit['valid_from'])) : '' }}" name="valid_from" required>
                     </div>
                     <label class="col-lg-3 col-form-label form-control-label">ValidUntil</label>
                     <div class="col-lg-3">
-                        <input class="form-control" type="date" value="{{ isset($edit['valid_until']) ? $edit['valid_until'] : '' }}" name="valid_until" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                        <input class="form-control" type="date" value="{{ isset($edit['valid_until']) ? date('Y-m-d', strtotime($edit['valid_until'])) : '' }}" name="valid_until" required>
                     </div>
                 </div>
                 <div class="form-group row">

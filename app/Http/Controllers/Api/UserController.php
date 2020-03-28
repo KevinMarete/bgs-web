@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\User;
 use App\Http\Controllers\Controller;
 use App\Loyalty;
+use App\Credit;
 use App\Subscription;
 use Illuminate\Http\Request;
 
@@ -107,6 +108,18 @@ class UserController extends Controller
     public function getUserPoints($id)
     {
         $points = Loyalty::with(['loyalty_logs', 'loyalty_logs.order', 'user'])->where('user_id', $id)->first();
+        return response()->json($points);
+    }
+
+    /**
+     * Display the specified user's credits.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getUserCredits($id)
+    {
+        $points = Credit::with(['credit_logs', 'user'])->where('user_id', $id)->first();
         return response()->json($points);
     }
 }

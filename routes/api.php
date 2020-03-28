@@ -77,6 +77,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/user/{id}', 'Api\UserController@show');
         Route::get('/user/{id}/subscription', 'Api\UserController@getUserSubscription');
         Route::get('/user/{id}/loyalty', 'Api\UserController@getUserPoints');
+        Route::get('/user/{id}/credit', 'Api\UserController@getUserCredits');
 
         /*Subscription endpoints*/
         Route::get('/subscriptions', 'Api\SubscriptionController@index');
@@ -265,6 +266,20 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/loyaltylog', 'Api\LoyaltyLogController@store');
         Route::put('/loyaltylog/{id}', 'Api\LoyaltyLogController@update');
         Route::delete('/loyaltylog/{id}', 'Api\LoyaltyLogController@destroy');
-    });
 
+        /*Credits endpoints*/
+        Route::get('/credits', 'Api\CreditController@index');
+        Route::get('/credit/{id}', 'Api\CreditController@show');
+        Route::post('/credit', 'Api\CreditController@store');
+        Route::put('/credit/{id}', 'Api\CreditController@update');
+        Route::delete('/credit/{id}', 'Api\CreditController@destroy');
+
+        /*CreditLog endpoints*/
+        Route::get('/creditlogs', 'Api\CreditLogController@index');
+        Route::get('/creditlog/{id}', 'Api\CreditLogController@show');
+        Route::post('/creditlog', 'Api\CreditLogController@store');
+        Route::put('/creditlog/{id}', 'Api\CreditLogController@update');
+        Route::delete('/creditlog/{id}', 'Api\CreditLogController@destroy');
+    });
+    
 });

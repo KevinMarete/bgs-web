@@ -16,14 +16,15 @@ class AccountController extends MyController
         $role_id = session()->get('organization.organization_type.role_id');
         $organization_id = session()->get('organization_id');
         $view_data = [
-            'profile' => $this->getResourceData($token, 'me'),
-            'organizations' => $this->getResourceData($token, 'organizations'),
-            'packages' => $this->getResourceData($token, 'packages'),
+            'profile' => $this->manageResourceData($token, 'GET', 'me'),
+            'organizations' => $this->manageResourceData($token, 'GET', 'organizations'),
+            'packages' => $this->manageResourceData($token, 'GET', 'packages'),
             'payment' => $this->getPaymentDetails(),
             'subscription' => $this->getUserSubscription($token, $user_id),
-            'payment_types' => $this->getResourceData($token, 'payment-types'),
+            'payment_types' => $this->manageResourceData($token, 'GET', 'payment-types'),
             'organization_payment_type' => $this->getOrganizationPaymentType($token, $organization_id),
             'loyalty' => $this->getUserPoints($token, $user_id),
+            'credit' => $this->getUserCredits($token, $user_id),
             'min_redeem' => env('MIN_REDEEM_POINTS')
         ];
         $data = [
@@ -143,22 +144,6 @@ class AccountController extends MyController
         return redirect('/account');
     }
 
-    public function getResourceData($token=null, $resource=null)
-    {   
-        $resource_data = [];
-        if($token !== null & $resource !== null){
-            $request = $this->client->get($resource, [
-                'headers' => [
-                    'Authorization' => 'Bearer '.$token
-                ]
-            ]);
-            $response = $request->getBody();
-            $resource_data = json_decode($response, true);
-        }
-
-        return $resource_data;
-    }
-    
     public function getUserSubscription($token=null, $user_id=null)
     {   
         $subscription = [
@@ -216,6 +201,28 @@ class AccountController extends MyController
         return $points;
     }
 
+    public function getUserCredits($token=null, $user_id=null)
+    {   
+        $credits = [
+            'amount' => 0,
+            'credit_logs' => []
+        ];
+
+        if($token !== null){
+            $request = $this->client->get('user/'.$user_id.'/credit', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$token
+                ]
+            ]);
+            $response = json_decode($request->getBody(), true);
+            if($response){
+                $credits = $response;
+            }
+        }
+
+        return $credits;
+    }
+
     public function getOrganizationPaymentType($token=null, $organization_id=null)
     {
         $organization_payment_type = [
@@ -269,6 +276,49 @@ class AccountController extends MyController
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>';
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/account');
+    }
+
+    public function redeemPoints(Request $request)
+    {   
+        $token = session()->get('token');
+        $user_id = session()->get('id');
+        $user_points = $this->getUserPoints($token, $user_id)['points'];
+        $user_credits = $this->getUserCredits($token, $user_id)['amount'];
+        $redeemed_points = $request->points;
+        $credits_per_order = env('CREDITS_PER_POINT');
+
+        //Update Loyalty 
+        $loyalty_data = [
+            'points' => ($user_points - $redeemed_points),
+            'user_id' => $user_id
+        ];
+        $this->manageResourceData($token, "POST", "loyalty", $loyalty_data);
+
+        //Update Credit 
+        $credit_data = [
+            'amount' => ($user_credits + ($credits_per_order * $redeemed_points)),
+            'user_id' => $user_id
+        ];
+        $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
+        $credit_id = $credit_response['id'];
+
+        //Update CreditLog
+        $credit_log_data = [
+            'status' => 'redeemed_from_loyalty', 
+            'amount' => ($credits_per_order * $redeemed_points),
+            'credit_id' => $credit_id
+        ];
+        $this->manageResourceData($token, "POST", "creditlog", $credit_log_data);
+
+        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> Your points were redeemed successfully
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>';
         $request->session()->flash('bgs_msg', $flash_msg);
 
         return redirect('/account');

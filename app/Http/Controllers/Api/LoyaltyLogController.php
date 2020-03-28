@@ -15,7 +15,7 @@ class LoyaltyLogController extends Controller
      */
     public function index()
     {
-        $loyaltylogs = LoyaltyLog::with('organization')->get();
+        $loyaltylogs = LoyaltyLog::with('order', 'loyalty')->get();
         return response()->json($loyaltylogs);
     }
 
@@ -40,7 +40,7 @@ class LoyaltyLogController extends Controller
      */
     public function show($id)
     {
-        $loyaltylog = LoyaltyLog::with('organization')->find($id);
+        $loyaltylog = LoyaltyLog::with('order', 'loyalty')->find($id);
         if(is_null($loyaltylog)){
             return response()->json(['error' => 'not_found']);
         }

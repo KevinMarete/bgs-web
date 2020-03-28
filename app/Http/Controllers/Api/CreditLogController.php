@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Loyalty;
+use App\CreditLog;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class LoyaltyController extends Controller
+class CreditLogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class LoyaltyController extends Controller
      */
     public function index()
     {
-        $loyalties = Loyalty::with('user')->get();
-        return response()->json($loyalties);
+        $creditlogs = CreditLog::with('credit')->get();
+        return response()->json($creditlogs);
     }
 
     /**
@@ -27,11 +27,9 @@ class LoyaltyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Loyalty::$rules);
-        $loyalty = Loyalty::updateOrCreate([
-            'user_id' => $request->user_id
-        ], $request->all());
-        return response()->json($loyalty);
+        $this->validate($request, CreditLog::$rules);
+        $creditlog = CreditLog::create($request->all());
+        return response()->json($creditlog);
     }
 
     /**
@@ -42,11 +40,11 @@ class LoyaltyController extends Controller
      */
     public function show($id)
     {
-        $loyalty = Loyalty::with('user')->find($id);
-        if(is_null($loyalty)){
+        $creditlog = CreditLog::with('credit')->find($id);
+        if(is_null($creditlog)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($loyalty);
+        return response()->json($creditlog);
     }
 
     /**
@@ -58,13 +56,13 @@ class LoyaltyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Loyalty::$rules);
-        $loyalty  = Loyalty::find($id);
-        if(is_null($loyalty)){
+        $this->validate($request, CreditLog::$rules);
+        $creditlog  = CreditLog::find($id);
+        if(is_null($creditlog)){
             return response()->json(['error' => 'not_found']);
         }
-        $loyalty->update($request->all());
-        return response()->json($loyalty);
+        $creditlog->update($request->all());
+        return response()->json($creditlog);
     }
 
     /**
@@ -75,11 +73,11 @@ class LoyaltyController extends Controller
      */
     public function destroy($id)
     {
-        $loyalty = Loyalty::find($id);
-        if(is_null($loyalty)){
+        $creditlog = CreditLog::find($id);
+        if(is_null($creditlog)){
             return response()->json(['error' => 'not_found']);
         }
-        $loyalty->delete();
+        $creditlog->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 }

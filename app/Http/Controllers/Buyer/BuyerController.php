@@ -84,13 +84,17 @@ class BuyerController extends MyController
     public function displayCheckoutView()
     {   
         $token = session()->get('token');
+        $user_id = session()->get('id');
         $role_id = session()->get('organization.organization_type.role_id');
         $cart_title = session()->get('cart_title');
+        $credit_response = $this->getResourceData($token, 'user/'.$user_id.'/credit');
+        
         $view_data = [
             'cart_items' => session()->get('cart'),
             'back_to_link' => strtolower($cart_title),
             'total' => 0,
             'shipping' => 0,
+            'credits' => (empty($credit_response) ? 0 : $credit_response['amount']),
             'paybill_number' => env('PAYBILL_NUMBER'),
             'account_number' => env('ACCOUNT_NUMBER')
         ];
@@ -189,7 +193,9 @@ class BuyerController extends MyController
         $product_total = session()->get('product_total');
         $shipping_total = session()->get('shipping_total');
         $cart_items = session()->get('cart');
-        $total_amount = ($product_total + $shipping_total);
+        $credit_response = $this->getResourceData($token, 'user/'.$user_id.'/credit');
+        $credits = (empty($credit_response) ? 0 : $credit_response['amount']);
+        $total_amount = ($product_total + $shipping_total - $credits);
         $points_per_order = env('POINTS_PER_ORDER');
         $orderitems = []; 
         $supplier_emails = []; 
@@ -198,7 +204,7 @@ class BuyerController extends MyController
         //Add Order 
         $order_data = [
             'status' => $status,
-            'product_total' => $product_total,
+            'product_total' => $product_total - $credits,
             'shipping_total' => $shipping_total,
             'organization_id' => $organization_id
         ];
@@ -214,17 +220,20 @@ class BuyerController extends MyController
         ];
         $this->manageResourceData($token, "POST", "orderlog", $orderlog_data);
 
+        $cart_size = sizeof($cart_items); 
+        $credit_per_item = round(($credits/$cart_size), 2);
+
         //Add OrderItems
         foreach($cart_items as $cart_item)
-        {
+        {   
             $orderitem_data = [
                 'quantity' => $cart_item['quantity'],
                 'unit_price' => $cart_item['price'],
                 'shipping_price' => $cart_item['delivery'],
-                'sub_total' => $cart_item['sub_total'],
+                'sub_total' => $cart_item['sub_total'] - $credit_per_item,
                 'shipping_total' => ($cart_item['delivery']*$cart_item['quantity']),
                 'discount' => $cart_item['discount'],
-                'total_cost' => ($cart_item['sub_total'] + ($cart_item['delivery']*$cart_item['quantity'])),
+                'total_cost' => (($cart_item['sub_total']- $credit_per_item) + ($cart_item['delivery']*$cart_item['quantity'])),
                 'product_now_id' => $cart_item['product_id'],
                 'organization_id' => $cart_item['organization_id'],
                 'order_id' => $order_id
@@ -236,7 +245,7 @@ class BuyerController extends MyController
                 'product_name' => $cart_item['product_name'], 
                 'quantity' => $cart_item['quantity'], 
                 'unit_price'=> $cart_item['price'], 
-                'sub_total'=> $cart_item['sub_total'], 
+                'sub_total'=> ($cart_item['sub_total'] - $credit_per_item), 
             ];
 
             //Add supplier emails
@@ -278,13 +287,29 @@ class BuyerController extends MyController
         ];
         $this->manageResourceData($token, "POST", "loyaltylog", $loyaltylog_data);
 
+        //Update Credits if credits > 0
+        if($credits > 0)
+        {
+            $credit_data = ['amount' => 0, 'user_id' => $user_id];
+            $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
+            $credit_id = $credit_response['id'];
+
+            //Add Credit Log
+            $creditlog_data = [
+                'status' => 'used_on_order_#'.$order_id,
+                'amount' => $credits,
+                'credit_id' => $credit_id
+            ];
+            $this->manageResourceData($token, "POST", "creditlog", $creditlog_data);
+        }
+
         //Clear cart
         session()->put('cart', []);
 
         //Send Order Email to Buyer Copy BGS, bcc Sellers
         $email_data = [
             'id' => $order_id,
-            'product_total' => $product_total,
+            'product_total' => ($product_total - $credits),
             'shipping_total' => $shipping_total,
             'orderitems' => $orderitems,
             'user' => ['firstname' => session()->get('firstname'), 'email' => session()->get('email')],
@@ -304,20 +329,6 @@ class BuyerController extends MyController
         $request->session()->flash('bgs_msg', $flash_msg);
 
         return redirect('/orders');
-    }
-
-    public function manageResourceData($token=null, $rest_method=null, $resource=null, $request_data=null)
-    {   
-        $response = $this->client->request($rest_method, $resource, [
-            'headers' => [
-                'Authorization' => 'Bearer '.$token
-            ],
-            'json' => $request_data
-        ]);
-
-        $response = json_decode($response->getBody(), true);
-
-        return $response;
     }
 
     public function send_mail($order)

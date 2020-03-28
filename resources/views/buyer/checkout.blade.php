@@ -186,11 +186,19 @@
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-between">
+                                                    <div class="col">
+                                                        <p class="mb-1"><b>Credits</b></p>
+                                                    </div>
+                                                    <div class="flex-sm-col col-auto">
+                                                        <p class="mb-1"><b>({{ number_format($credits) }} KES)</b></p>
+                                                    </div>
+                                                </div>
+                                                <div class="row justify-content-between">
                                                     <div class="col-4">
                                                         <p><b>Total</b></p>
                                                     </div>
                                                     <div class="flex-sm-col col-auto">
-                                                        <p class="mb-1"><b>{{ number_format($total + $shipping) }} KES</b></p>
+                                                        <p class="mb-1"><b>{{ number_format($total + $shipping - $credits) }} KES</b></p>
                                                     </div>
                                                 </div>
                                                 <hr class="my-0">

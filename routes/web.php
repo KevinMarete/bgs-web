@@ -53,6 +53,7 @@ Route::post('/update-account', 'Auth\AccountController@updateAccount');
 Route::post('/change-password', 'Auth\AccountController@changePassword');
 Route::post('/save-subscription/{type}', 'Auth\AccountController@saveSubscription'); 
 Route::post('/manage-payment', 'Auth\AccountController@manageAccountPayment');
+Route::post('/redeem-points', 'Auth\AccountController@redeemPoints'); 
 Route::get('/sign-out', 'Auth\AccountController@logout'); 
 
 /*Seller Routes*/

@@ -33,6 +33,9 @@
                                 <li class="nav-item">
                                     <a href="" data-target="#loyalty" data-toggle="tab" class="nav-link">Loyalty</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="" data-target="#credits" data-toggle="tab" class="nav-link">Credits</a>
+                                </li>
                             @elseif(strtolower(session()->get('organization.organization_type.role.name')) == 'seller')
                                 <li class="nav-item">
                                     <a href="" data-target="#payment" data-toggle="tab" class="nav-link">Payment</a>
@@ -271,12 +274,13 @@
                                                         <h4 class="my-0 font-weight-normal">My Points</h4>
                                                     </div>
                                                     <div class="card-body">
-                                                        <form>
+                                                        <form role="form" action="/redeem-points" method="POST">
+                                                            @csrf
                                                             <div class="form-group">
                                                                 <label for="redeem_points">                                                        
                                                                     <h1 class="card-title pricing-card-title"> {{ $loyalty['points'] }} </h1>
                                                                 </label>
-                                                                <input type="number" class="form-control" id="redeem_points" aria-describedby="pointsHelp"  min="{{ $min_redeem }}" max="{{ $loyalty['points'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                <input type="number" class="form-control" id="redeem_points" name="points" aria-describedby="pointsHelp"  min="{{ $min_redeem }}" max="{{ $loyalty['points'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                 <small id="pointsHelp" class="form-text text-muted">Redeem a minimum of {{ number_format($min_redeem) }} points.</small>
                                                             </div>
                                                             <button class="btn btn-lg btn-block btn-primary">Redeem</button>
@@ -315,6 +319,55 @@
                                     </div>
                                 </div>
                             </div> 
+                            <div class="tab-pane" id="credits">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card-deck mb-3 text-center">
+                                                <div class="card mb-4 box-shadow">
+                                                    <div class="card-header">
+                                                        <h4 class="my-0 font-weight-normal">My Credits</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <label for="credit_amount">                                                        
+                                                                <h1 class="card-title pricing-card-title"> {{ $credit['amount'] }} </h1>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <table class="table table-condensed table-hover table-bordered table-sm">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>Status</th>
+                                                        <th>Credits</th>
+                                                        <th>When</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($credit['credit_logs'] as $credit)
+                                                        <tr>
+                                                            <td>{{ $credit['status'] }}</td>
+                                                            <td>{{ $credit['amount'] }}</td>
+                                                            <td>{{ $credit['created_at'] }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                                <tfoot class="thead-light">
+                                                    <tr>
+                                                        <th>Status</th>
+                                                        <th>Credits</th>
+                                                        <th>When</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="tab-pane" id="payment">
                                 <form role="form" action="/manage-payment" method="POST">
                                     @csrf

@@ -37,6 +37,20 @@ class MyController extends Controller
         return $menus;
     }
 
+    public function manageResourceData($token=null, $rest_method=null, $resource=null, $request_data=null)
+    {   
+        $response = $this->client->request($rest_method, $resource, [
+            'headers' => [
+                'Authorization' => 'Bearer '.$token
+            ],
+            'json' => $request_data
+        ]);
+
+        $response = json_decode($response->getBody(), true);
+
+        return $response;
+    }
+
     public function process_payment($token=null, $organization_id, $user_id=null, $payment_data=[])
     {   
         $response = [];

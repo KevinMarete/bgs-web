@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Loyalty;
+use App\Credit;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class LoyaltyController extends Controller
+class CreditController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class LoyaltyController extends Controller
      */
     public function index()
     {
-        $loyalties = Loyalty::with('user')->get();
-        return response()->json($loyalties);
+        $credits = Credit::with('user')->get();
+        return response()->json($credits);
     }
 
     /**
@@ -27,11 +27,11 @@ class LoyaltyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Loyalty::$rules);
-        $loyalty = Loyalty::updateOrCreate([
+        $this->validate($request, Credit::$rules);
+        $credit = Credit::updateOrCreate([
             'user_id' => $request->user_id
         ], $request->all());
-        return response()->json($loyalty);
+        return response()->json($credit);
     }
 
     /**
@@ -42,11 +42,11 @@ class LoyaltyController extends Controller
      */
     public function show($id)
     {
-        $loyalty = Loyalty::with('user')->find($id);
-        if(is_null($loyalty)){
+        $credit = Credit::with('user')->find($id);
+        if(is_null($credit)){
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($loyalty);
+        return response()->json($credit);
     }
 
     /**
@@ -58,13 +58,13 @@ class LoyaltyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Loyalty::$rules);
-        $loyalty  = Loyalty::find($id);
-        if(is_null($loyalty)){
+        $this->validate($request, Credit::$rules);
+        $credit  = Credit::find($id);
+        if(is_null($credit)){
             return response()->json(['error' => 'not_found']);
         }
-        $loyalty->update($request->all());
-        return response()->json($loyalty);
+        $credit->update($request->all());
+        return response()->json($credit);
     }
 
     /**
@@ -75,11 +75,11 @@ class LoyaltyController extends Controller
      */
     public function destroy($id)
     {
-        $loyalty = Loyalty::find($id);
-        if(is_null($loyalty)){
+        $credit = Credit::find($id);
+        if(is_null($credit)){
             return response()->json(['error' => 'not_found']);
         }
-        $loyalty->delete();
+        $credit->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 }

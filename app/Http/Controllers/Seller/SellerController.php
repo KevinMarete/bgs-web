@@ -179,20 +179,6 @@ class SellerController extends MyController
         return $dropdown_data;
     }
 
-    public function manageResourceData($token=null, $rest_method=null, $resource=null, $request_data=null)
-    {   
-        $response = $this->client->request($rest_method, $resource, [
-            'headers' => [
-                'Authorization' => 'Bearer '.$token
-            ],
-            'json' => $request_data
-        ]);
-
-        $response = json_decode($response->getBody(), true);
-
-        return $response;
-    }
-
     public function displayTransactionView(Request $request)
     {   
         $resource_name = 'stockbalances';

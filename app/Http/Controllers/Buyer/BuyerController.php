@@ -244,7 +244,13 @@ class BuyerController extends MyController
         }
 
         //Add payment
-        $payment_response = $this->process_payment($token, $organization_id, $user_id, $total_amount);
+        $payment_data = [
+            'method' => $transaction_type,
+            'amount' => $total_amount,
+            'source' => $request->source,
+            'destination' => $request->destination
+        ];
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
 
         //Add payment order

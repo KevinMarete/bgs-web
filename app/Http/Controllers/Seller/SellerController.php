@@ -549,9 +549,21 @@ class SellerController extends MyController
         $errors = 0;
         $cost_per_product = env('ORDER_NOW_COST');
 
+        //Get organization payment_type
+        $source_url = 'organization/'.$organization_id.'/payment-type';
+        $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
+
         //Make payment
-        $amount = ($cost_per_product * sizeof($post_data['product_id']));
-        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_data = [
+            'method' => $source_response['payment_type']['name'],
+            'amount' => ($cost_per_product * sizeof($post_data['product_id'])),
+            'source' => $source_response['payment_type']['details'],
+            'destination' => [
+                'paybill_number' => env('PAYBILL_NUMBER'), 
+                'account_number' => env('ACCOUNT_NUMBER')
+            ]
+        ];
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
         
         foreach($post_data['product_id'] as $key=> $product_id)
@@ -621,9 +633,21 @@ class SellerController extends MyController
         $errors = 0;
         $cost_per_product = env('PROMO_COST');
 
+        //Get organization payment_type
+        $source_url = 'organization/'.$organization_id.'/payment-type';
+        $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
+
         //Make payment
-        $amount = ($cost_per_product * sizeof($post_data['product_now_id']));
-        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_data = [
+            'method' => $source_response['payment_type']['name'],
+            'amount' => ($cost_per_product * sizeof($post_data['product_now_id'])),
+            'source' => $source_response['payment_type']['details'],
+            'destination' => [
+                'paybill_number' => env('PAYBILL_NUMBER'), 
+                'account_number' => env('ACCOUNT_NUMBER')
+            ]
+        ];
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
 
         foreach($post_data['product_now_id'] as $key=> $product_now_id)
@@ -690,9 +714,21 @@ class SellerController extends MyController
         $errors = 0;
         $cost_per_product = env('DEAL_COST');
 
+        //Get organization payment_type
+        $source_url = 'organization/'.$organization_id.'/payment-type';
+        $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
+
         //Make payment
-        $amount = ($cost_per_product * sizeof($post_data['product_now_id']));
-        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_data = [
+            'method' => $source_response['payment_type']['name'],
+            'amount' => ($cost_per_product * sizeof($post_data['product_now_id'])),
+            'source' => $source_response['payment_type']['details'],
+            'destination' => [
+                'paybill_number' => env('PAYBILL_NUMBER'), 
+                'account_number' => env('ACCOUNT_NUMBER')
+            ]
+        ];
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
 
         foreach($post_data['product_now_id'] as $key=> $product_now_id)

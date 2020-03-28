@@ -33,7 +33,12 @@
                                 <li class="nav-item">
                                     <a href="" data-target="#loyalty" data-toggle="tab" class="nav-link">Loyalty</a>
                                 </li>
+                            @elseif(strtolower(session()->get('organization.organization_type.role.name')) == 'seller')
+                                <li class="nav-item">
+                                    <a href="" data-target="#payment" data-toggle="tab" class="nav-link">Payment</a>
+                                </li>
                             @endif
+                            
                         </ul>
                         <div class="tab-content py-4">
                             <div class="tab-pane active" id="profile">
@@ -181,13 +186,15 @@
                                                                         <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
                                                                         <input type="hidden" class="form-control subscription-package" name="package_id">
                                                                         <input type="hidden" class="form-control subscription-price" name="price">
-                                                                        <input type="text" class="form-control" name="card_name" required>
+                                                                        <input type="hidden" class="form-control" name="destination[paybill_number]" value="{{ $payment['paybill_number'] }}">
+                                                                        <input type="hidden" class="form-control" name="destination[account_number]" value="{{ $payment['account_number'] }}">
+                                                                        <input type="text" class="form-control" name="source[card_name]" required>
                                                                     </div> <!-- form-group.// -->
 
                                                                     <div class="form-group">
                                                                         <label for="cardNumber">Card number</label>
                                                                         <div class="input-group">
-                                                                            <input type="text" class="form-control" name="card_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                            <input type="text" class="form-control" name="source[card_number]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                             <div class="input-group-append">
                                                                                 <span class="input-group-text text-muted">
                                                                                     <i class="fab fa-cc-visa"></i> &nbsp; <i class="fab fa-cc-amex"></i> &nbsp; 
@@ -202,15 +209,15 @@
                                                                             <div class="form-group">
                                                                                 <label><span class="hidden-xs">Expiration</span> </label>
                                                                                 <div class="input-group">
-                                                                                    <input type="text" class="form-control" placeholder="MM" name="expiry_month" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                                                                    <input type="text" class="form-control" placeholder="YY" name="expiry_year" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                                    <input type="text" class="form-control" placeholder="MM" name="source[expiry_month]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                                    <input type="text" class="form-control" placeholder="YY" name="source[expiry_year]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group">
                                                                                 <label data-toggle="tooltip" title="" data-original-title="3 digits code on back side of the card">CVV <i class="fa fa-question-circle"></i></label>
-                                                                                <input type="text" class="form-control" name="cvv_code" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                                <input type="text" class="form-control" name="source[cvv_code]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                             </div> <!-- form-group.// -->
                                                                         </div>
                                                                     </div> <!-- row.// -->
@@ -236,10 +243,10 @@
                                                                             <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
                                                                             <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
                                                                             <input type="hidden" class="form-control subscription-package" name="package_id">
-                                                                            <input type="hidden" class="form-control" name="paybill_number" value="{{ $payment['paybill_number'] }}">
-                                                                            <input type="hidden" class="form-control" name="account_number" value="{{ $payment['account_number'] }}">
+                                                                            <input type="hidden" class="form-control" name="destination[paybill_number]" value="{{ $payment['paybill_number'] }}">
+                                                                            <input type="hidden" class="form-control" name="destination[account_number]" value="{{ $payment['account_number'] }}">
                                                                             <input type="hidden" class="form-control subscription-price" name="price">
-                                                                            <input type="text" name="phone" value="{{ $profile['phone'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
+                                                                            <input type="text" name="source[phone]" value="{{ $profile['phone'] }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
                                                                         </dd>
                                                                     </dl>
                                                                     <p><strong>Note:</strong> Additional transaction costs will be charged</p>
@@ -308,6 +315,40 @@
                                     </div>
                                 </div>
                             </div> 
+                            <div class="tab-pane" id="payment">
+                                <form role="form" action="/manage-payment" method="POST">
+                                    @csrf
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">PaymentType</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-control payment_types" size="0" name="payment_type_id" required>
+                                                <option value="">Select PaymentType</option>
+                                                @foreach ($payment_types as $payment_type)
+                                                    @if ($payment_type['id'] === $organization_payment_type['id'])
+                                                        <option value="{{ $payment_type['id'] }}" data-details="{{ $payment_type['details'] }}" selected>{{ $payment_type['name'] }}</option>
+                                                    @else
+                                                        <option value="{{ $payment_type['id'] }}" data-details="{{ $payment_type['details'] }}">{{ $payment_type['name'] }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Details</label>
+                                        <div class="col-lg-9">
+                                            <input type="hidden" id="default_payment_type_id" value="{{ (isset($organization_payment_type['id']) ? $organization_payment_type['id'] : '') }}"/>
+                                            <input type="hidden" id="default_payment_type_details" value="{{ (isset($organization_payment_type['details']) ? $organization_payment_type['details'] : '') }}"/>
+                                            <textarea class="form-control" id="payment_details" name="details" rows="7">{{ json_encode(json_decode($organization_payment_type['details']), JSON_PRETTY_PRINT) }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <button type="submit" class="btn btn-primary">Save Details</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -37,18 +37,25 @@ class MyController extends Controller
         return $menus;
     }
 
-    public function process_payment($token=null, $organization_id, $user_id=null, $amount=null)
+    public function process_payment($token=null, $organization_id, $user_id=null, $payment_data=[])
     {   
         $response = [];
-        if($amount != null && $token != null && $organization_id != null && $user_id != null)
-        {
+        if(!empty($payment_data) && $token != null && $organization_id != null && $user_id != null)
+        {   
+            
+            //ADD PAYMENT INTEGRATION HERE
+
             $response = $this->client->request('POST', 'payment', [
                 'headers' => [
                     'Authorization' => 'Bearer '.$token
                 ],
                 'json' => [
-                    'amount' => $amount,
-                    'details' => json_encode(['transaction_code' => strtoupper(Str::random(8)), 'transaction_time' => date('Y:m:d H:i:s'), 'transaction_status' => 'successful']),
+                    'amount' => $payment_data['amount'],
+                    'details' => json_encode([
+                        'transaction_code' => strtoupper(Str::random(8)), 
+                        'transaction_time' => date('Y:m:d H:i:s'), 
+                        'transaction_status' => 'successful'
+                    ]),
                     'organization_id' => $organization_id,
                     'user_id' => $user_id
                 ]

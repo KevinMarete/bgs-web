@@ -67,13 +67,15 @@
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="username">Full name (on the card)</label>
-                                                        <input type="text" class="form-control" name="card_name" required>
+                                                        <input type="text" class="form-control" name="source[card_name]" required>
+                                                        <input type="hidden" class="form-control" name="destination[paybill_number]" value="{{ $paybill_number }}">
+                                                        <input type="hidden" class="form-control" name="destination[account_number]" value="{{ $account_number }}">  
                                                     </div> <!-- form-group.// -->
 
                                                     <div class="form-group">
                                                         <label for="cardNumber">Card number</label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" name="card_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                            <input type="text" class="form-control" name="source[card_number]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text text-muted">
                                                                     <i class="fab fa-cc-visa"></i> &nbsp; <i class="fab fa-cc-amex"></i> &nbsp; 
@@ -88,15 +90,15 @@
                                                             <div class="form-group">
                                                                 <label><span class="hidden-xs">Expiration</span> </label>
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control" placeholder="MM" name="expiry_month" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                                                    <input type="text" class="form-control" placeholder="YY" name="expiry_year" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                    <input type="text" class="form-control" placeholder="MM" name="source[expiry_month]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                    <input type="text" class="form-control" placeholder="YY" name="source[expiry_year]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label data-toggle="tooltip" title="" data-original-title="3 digits code on back side of the card">CVV <i class="fa fa-question-circle"></i></label>
-                                                                <input type="text" class="form-control" name="cvv_code" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                                                                <input type="text" class="form-control" name="source[cvv_code]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                                             </div> <!-- form-group.// -->
                                                         </div>
                                                     </div> <!-- row.// -->
@@ -118,9 +120,9 @@
                                                     <dl class="param">
                                                         <dt>Phone number: </dt>
                                                         <dd> 
-                                                            <input type="hidden" class="form-control" name="paybill_number" value="{{ $paybill_number }}">
-                                                            <input type="hidden" class="form-control" name="account_number" value="{{ $account_number }}">
-                                                            <input type="text" name="phone" value="{{ session()->get('phone') }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
+                                                            <input type="hidden" class="form-control" name="destination[paybill_number]" value="{{ $paybill_number }}">
+                                                            <input type="hidden" class="form-control" name="destination[account_number]" value="{{ $account_number }}">
+                                                            <input type="text" name="source[phone]" value="{{ session()->get('phone') }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/> 
                                                         </dd>
                                                     </dl>
                                                     <p><strong>Note:</strong> Additional transaction costs will be charged</p>

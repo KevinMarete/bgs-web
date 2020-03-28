@@ -143,4 +143,20 @@
     $(this).find(":submit").attr('disabled', 'disabled');
   });
 
+  
+  $(document).on('change', '.payment_types', function () {
+    let selected_id = $(this).find(':selected').val()
+    let selected_details = $(this).find(':selected').attr('data-details')
+    let default_id = $('#default_payment_type_id').val()
+    let default_details = $('#default_payment_type_details').val()
+    let pretty_details = ''
+    
+    if (selected_id === default_id){
+      pretty_details = JSON.stringify(JSON.parse(default_details), undefined, 4);
+    }else{
+      pretty_details = JSON.stringify(JSON.parse(selected_details), undefined, 4);
+    }
+    $('#payment_details').val(pretty_details)
+  });
+
 })(jQuery);

@@ -106,14 +106,14 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Display the specified Organization's PaymentTypes.
+     * Display the specified Organization's PaymentType.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getOrganizationPaymentTypes($id)
+    public function getOrganizationPaymentType($id)
     {
-        $payment_types = OrganizationPaymentType::with('organization')->where('organization_id', $id)->get();
+        $payment_types = OrganizationPaymentType::with('organization', 'payment_type')->where('organization_id', $id)->first();
         return response()->json($payment_types);
     }
 

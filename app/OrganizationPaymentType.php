@@ -26,7 +26,7 @@ class OrganizationPaymentType extends Model
 
     public function payment_type()
     {
-        return $this->hasMany('App\PaymentType');
+        return $this->belongsTo('App\PaymentType');
     }
 
 }

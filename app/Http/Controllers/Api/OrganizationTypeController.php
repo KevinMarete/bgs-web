@@ -15,7 +15,7 @@ class OrganizationTypeController extends Controller
      */
     public function index()
     {
-        $organizationtypes = OrganizationType::with('role')->get();
+        $organizationtypes = OrganizationType::with('role')->where('name','NOT ILIKE','%admin%')->get(); //Hide Admin Type
         return response()->json($organizationtypes);
     }
 

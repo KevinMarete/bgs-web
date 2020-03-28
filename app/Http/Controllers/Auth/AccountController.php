@@ -14,12 +14,15 @@ class AccountController extends MyController
         $token = session()->get('token');
         $user_id = session()->get('id');
         $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
         $view_data = [
-            'profile' => $this->getProfile($token),
-            'organizations' => $this->getOrganizations(),
-            'packages' => $this->getPackages($token),
+            'profile' => $this->getResourceData($token, 'me'),
+            'organizations' => $this->getResourceData($token, 'organizations'),
+            'packages' => $this->getResourceData($token, 'packages'),
             'payment' => $this->getPaymentDetails(),
             'subscription' => $this->getUserSubscription($token, $user_id),
+            'payment_types' => $this->getResourceData($token, 'payment-types'),
+            'organization_payment_type' => $this->getOrganizationPaymentType($token, $organization_id),
             'loyalty' => $this->getUserPoints($token, $user_id),
             'min_redeem' => env('MIN_REDEEM_POINTS')
         ];
@@ -96,10 +99,15 @@ class AccountController extends MyController
 
     public function saveSubscription(Request $request)
     {   
-        $transaction_type = $request->type;
         $token = session()->get('token');
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
+        $payment_data = [
+            'method' => $request->type,
+            'amount' => $request->price,
+            'source' => $request->source,
+            'destination' => $request->destination
+        ];
 
         //Send request data to Api
         $response = $this->client->post("subscription", [
@@ -112,8 +120,7 @@ class AccountController extends MyController
         $subscription_id = $subscription_response['id'];
         
         //Make payment
-        $amount = $request->price;
-        $payment_response = $this->process_payment($token, $organization_id, $user_id, $amount);
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
 
         //Send request data to Api for payment
@@ -135,21 +142,21 @@ class AccountController extends MyController
 
         return redirect('/account');
     }
-    
-    public function getProfile($token=null)
+
+    public function getResourceData($token=null, $resource=null)
     {   
-        $profile = [];
-        if($token !== null){
-            $request = $this->client->get('me', [
+        $resource_data = [];
+        if($token !== null & $resource !== null){
+            $request = $this->client->get($resource, [
                 'headers' => [
                     'Authorization' => 'Bearer '.$token
                 ]
             ]);
             $response = $request->getBody();
-            $profile = json_decode($response, true);
+            $resource_data = json_decode($response, true);
         }
 
-        return $profile;
+        return $resource_data;
     }
     
     public function getUserSubscription($token=null, $user_id=null)
@@ -209,27 +216,26 @@ class AccountController extends MyController
         return $points;
     }
 
-    public function getOrganizations()
-    {   
-        $request = $this->client->get('organizations');
-        $response = $request->getBody();
-        $types = json_decode($response, true);
-        return $types;
-    }
+    public function getOrganizationPaymentType($token=null, $organization_id=null)
+    {
+        $organization_payment_type = [
+            'id' => '',
+            'details' => json_encode([])
+        ];
 
-    public function getPackages($token=null)
-    {   
-        $packages = [];
-        if($token !== null){
-            $request = $this->client->get('packages', [
+        if($token !== null & $organization_id !== null){
+            $request = $this->client->get('organization/'.$organization_id.'/payment-type', [
                 'headers' => [
                     'Authorization' => 'Bearer '.$token
                 ]
             ]);
-            $response = $request->getBody();
-            $packages = json_decode($response, true);
+            $response = json_decode($request->getBody(), true);
+            if($response){
+                $organization_payment_type = $response;
+            }
         }
-        return $packages;
+
+        return $organization_payment_type;
     }
 
     public function getPaymentDetails()
@@ -239,6 +245,33 @@ class AccountController extends MyController
             'account_number' => env('ACCOUNT_NUMBER')
         ];
         return $payment;
+    }
+
+    public function manageAccountPayment(Request $request)
+    {   
+        $post_data = [
+            'details' => json_encode(json_decode($request->details)),
+            'organization_id' => session()->get('organization_id'),
+            'payment_type_id' => $request->payment_type_id
+        ];
+
+        //Send request data to Api
+        $response = $this->client->post("organization-payment-type", [
+            'headers' => [
+                'Authorization' => 'Bearer '.session()->get('token')
+            ],
+            'json' => $post_data
+        ]);
+
+        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your payment details were updated successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/account');
     }
 
     public function logout(Request $request)

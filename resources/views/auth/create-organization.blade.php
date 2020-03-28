@@ -47,6 +47,9 @@
                                             <button class="btn btn-block btn-primary" type="submit">Create organization</button>
                                         </form>
                                     </div>
+                                    <div class="card-footer text-center">
+                                        <div class="small"><a href="/registration">Have an organization? Go to Registration</a></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

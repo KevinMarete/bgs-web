@@ -15,7 +15,7 @@ class OrganizationPaymentTypeController extends Controller
      */
     public function index()
     {
-        $organization_payment_types = OrganizationPaymentType::all();
+        $organization_payment_types = OrganizationPaymentType::with('organization', 'payment_type')->get();
         return response()->json($organization_payment_types);
     }
 
@@ -28,9 +28,8 @@ class OrganizationPaymentTypeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, OrganizationPaymentType::$rules);
-        $organization_payment_type = OrganizationPaymentType::firstOrCreate([
-            'organization_id' => $request->organization_id,
-            'payment_type_id' => $request->payment_type_id
+        $organization_payment_type = OrganizationPaymentType::updateOrCreate([
+            'organization_id' => $request->organization_id
         ], $request->all());
         return response()->json($organization_payment_type);
     }

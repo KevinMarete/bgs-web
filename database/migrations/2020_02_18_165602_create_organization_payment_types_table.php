@@ -21,7 +21,7 @@ class CreateOrganizationPaymentTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['organization_id', 'payment_type_id']);
+            $table->unique(['organization_id']);
 
             $table->foreign('organization_id')->references('id')->on('tbl_organization')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('payment_type_id')->references('id')->on('tbl_payment_type')->onUpdate('cascade')->onDelete('cascade');

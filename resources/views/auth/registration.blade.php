@@ -25,7 +25,7 @@
                         @endif
                         <div class="row justify-content-center">
                             <!-- Create Organization-->
-                            <div class="col-xl-4 col-lg-6 col-md-8 col-sm-11">
+                            <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12">
                                 <div class="card mt-5">
                                     <div class="card-body px-5 pt-5 text-center">
                                         <div class="h3 text-primary font-weight-300">Create</div>
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <!-- Join Organization-->
-                            <div class="col-xl-4 col-lg-6 col-md-8 col-sm-11">
+                            <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12">
                                 <div class="card mt-5">
                                     <div class="card-body px-5 pt-5 text-center">
                                         <div class="h3 text-secondary font-weight-300">Join</div>
@@ -52,6 +52,16 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-footer text-center">
+                                        <div class="small"><a href="/sign-in">Have an account? Go to login</a></div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </main>

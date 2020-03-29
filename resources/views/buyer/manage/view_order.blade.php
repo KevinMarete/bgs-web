@@ -9,8 +9,18 @@
     </div>
 </div>
 <div class="container-fluid mt-n10">
+    @if (Session::has('bgs_msg'))
+        {!! session('bgs_msg') !!}
+    @endif
     <div class="card mb-4">
-        <div class="card-header"> </div>
+        <div class="card-header"> 
+            @if($role_name !== 'buyer')
+                <a href="/action-order/{{ $order['id'] }}" class="btn btn-primary ml-auto">
+                    <i data-feather="plus"></i> 
+                    Manage Order
+                </a>
+            @endif
+        </div>
         <div class="card-body">
             <div class="container-fluid">
                 <div class="row">
@@ -79,6 +89,7 @@
                                 <caption style="caption-side: top">OrderItems</caption>
                                 <thead>
                                     <tr>
+                                        <th>Organization</th>
                                         <th>ProductName</th>
                                         <th>Quantity</th>
                                         <th>UnitPrice</th>
@@ -89,6 +100,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
+                                        <th>Supplier</th>
                                         <th>ProductName</th>
                                         <th>Quantity</th>
                                         <th>UnitPrice</th>
@@ -100,6 +112,7 @@
                                 <tbody>
                                     @foreach ($order['order_items'] as $order_item)
                                         <tr>
+                                            <td>{{ $order_item['organization']['name'] }}</td>
                                             <td>{{ $order_item['product_now']['product']['molecular_name'] }}</td>
                                             <td>{{ number_format($order_item['quantity']) }}</td>
                                             <td>KES {{ number_format($order_item['unit_price']) }}</td>

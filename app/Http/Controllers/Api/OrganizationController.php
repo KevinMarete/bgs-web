@@ -212,7 +212,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Display the specified Organization's productnows.
+     * Display the specified Organization's orders.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -221,5 +221,19 @@ class OrganizationController extends Controller
     {
         $orders = Order::with('organization')->where('organization_id', $id)->get();
         return response()->json($orders);
+    }
+
+    /**
+     * Display the specified Organization's Seller Orders.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationSellerOrders($id)
+    {   
+        $seller_orders = Order::with(['organization', 'order_items', 'order_logs'])->whereHas('order_items', function($query) use ($id) {
+            $query->where('organization_id', $id);
+          })->get();
+        return response()->json($seller_orders);
     }
 }

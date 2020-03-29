@@ -6,7 +6,8 @@
       Dear {{ $order->user->firstname }},
       <br />
       <br />
-      The below are details of your order {{ '#'.$order->id }}.
+      The current status for your order is <b>{{ $order->status }}</b> <br/><br/>
+      See below are details of the order {{ '#'.$order->id }}. 
     </div>
     <table style="width: 100%;font-size: smaller;border: 1px solid #c0c0c0;" cellspacing="0">
       <tbody>
@@ -20,7 +21,7 @@
         <tr>
           <td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">
             <strong>
-              <span style="color: #7c7c7c;">{{ $orderitem->product_name }}</span>
+              <span style="color: #7c7c7c;">{{ $orderitem->product_now->product->molecular_name }}</span>
             </strong>
           </td>
           <td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">
@@ -54,6 +55,7 @@
             </strong>
           </td>
         </tr>
+
         <tr>
           <td></td>
           <td></td>
@@ -68,6 +70,7 @@
             </strong>
           </td>
         </tr>
+
         <tr>
           <td></td>
           <td></td>
@@ -79,20 +82,6 @@
           <td style="text-align: left; border-bottom: 1px dotted #ccbcbc;" bgcolor="#ffffff" colspan="2">
             <strong>
               <span style="color: #092d50;text-decoration: underline double;">{{ number_format($order->product_total + $order->shipping_total) }}</span>
-            </strong>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">
-            <strong>
-              <span style="color: #092d50;">Payment Method:</span>
-            </strong>
-          </td>
-          <td style="text-align: left; border-bottom: 1px dotted #ccbcbc;" bgcolor="#ffffff" colspan="2">
-            <strong>
-              <span style="color: #092d50;">{{ strtoupper($order->payment_type) }}</span>
             </strong>
           </td>
         </tr>

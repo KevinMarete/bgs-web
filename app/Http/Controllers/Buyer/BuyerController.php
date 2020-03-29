@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderEmail;
+use App\Mail\CourierEmail;
+use App\Mail\NotificationEmail;
 
 class BuyerController extends MyController
 {   
@@ -306,7 +308,7 @@ class BuyerController extends MyController
         //Clear cart
         session()->put('cart', []);
 
-        //Send Order Email to Buyer Copy BGS, bcc Sellers
+        //Send Order Email to Buyer Copy Sellers
         $email_data = [
             'id' => $order_id,
             'product_total' => ($product_total - $credits),
@@ -344,11 +346,14 @@ class BuyerController extends MyController
         $resource_name = ucwords(str_replace('-', ' ', $resource));
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
         $organization_id = session()->get('organization_id');
+        $resource_url = $this->getOrderUrl($role_name, $organization_id);
         $view_data = [
+            'role_name' => $role_name,
             'resource_name' => $resource_name,
-            'table_headers' => ['id', 'status', 'created_at', 'product_total', 'shipping_total', 'total'],
-            'table_data' => $this->getResourceData($token, 'organization/'.$organization_id.'/'.$resource)
+            'table_headers' => $this->getOrderHeaders($role_name),
+            'table_data' => $this->getResourceData($token, $resource_url)
         ];
         $data = [
             'page_title' => $resource_name, 
@@ -359,13 +364,43 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
+    public function getOrderHeaders($role=null)
+    {   
+        $headers = [];
+        if ($role !== null){
+            $data = [
+                'admin' => ['id', 'organization', 'status', 'created_at', 'product_total', 'shipping_total', 'total'],
+                'buyer' => ['id', 'status', 'created_at', 'product_total', 'shipping_total', 'total'],
+                'seller' => ['id', 'organization', 'status', 'created_at', 'product_total', 'shipping_total', 'total']
+            ];
+            $headers = $data[$role];
+        }
+        return $headers;
+    }
+
+    public function getOrderUrl($role=null, $id=null)
+    {   
+        $url = '';
+        if ($role !== null){
+            $role_url = [
+                'admin' => 'orders',
+                'buyer' => 'organization/'.$id.'/orders',
+                'seller' => 'organization/'.$id.'/seller-orders'
+            ];
+            $url = $role_url[$role];
+        }
+        return $url;
+    }
+
     public function displayViewOrder(Request $request)
     {   
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
         $order_id = $request->id;
 
         $view_data = [
+            'role_name' => $role_name,
             'order' => $this->getResourceData($token, 'order/'.$order_id)
         ];
         $data = [
@@ -375,5 +410,306 @@ class BuyerController extends MyController
         ];
 
         return view('template.main', $data);
+    }
+
+    public function displayActionOrder(Request $request)
+    {   
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $order_id = $request->id;
+        $order = $this->getResourceData($token, 'order/'.$order_id);
+
+        $view_data = [
+            'couriers' => $this->manageResourceData($token, "GET", "couriers", []),
+            'actions' => $this->getOrderActions($role_name, $order['status']),
+            'organization_id' => $organization_id,
+            'role_name' => $role_name,
+            'order' => $order
+        ];
+        $data = [
+            'page_title' => 'orders', 
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.manage.action_order', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function getOrderActions($role=null, $status=null)
+    {   
+        $status_actions = [];
+        if($role !== null & $status !== null ){
+            $actions = [
+                'admin' => [
+                    'paid, awaiting_confirmation' => [],
+                    'cancelled, awaiting_refund' => [
+                        'refund' => 'refunded, order_cancelled'
+                    ],
+                    'refunded, order_cancelled' => [],
+                    'confirmed, awaiting_dispatch' => [
+                        'dispatch' => 'dispatched, awaiting_pickup'
+                    ],
+                    'dispatched, awaiting_pickup' => [],
+                    'picked_up, awaiting_delivery' => [
+                        'delivered' => 'delivered, order_closed'
+                    ],
+                    'delivered, order_closed' => []
+                ],
+                'seller' => [
+                    'paid, awaiting_confirmation' => [
+                        'cancel' => 'cancelled, awaiting_refund',
+                        'confirm' => 'confirmed, awaiting_dispatch'
+                    ],
+                    'cancelled, awaiting_refund' => [],
+                    'refunded, order_cancelled' => [],
+                    'confirmed, awaiting_dispatch' => [],
+                    'dispatched, awaiting_pickup' => [
+                        'picked-up' => 'picked_up, awaiting_delivery'
+                    ],
+                    'picked_up, awaiting_delivery' => [],
+                    'delivered, order_closed' => []
+                ],
+                'buyer' => [
+                    'paid, awaiting_confirmation' => [],
+                    'cancelled, awaiting_refund' => [],
+                    'refunded, order_cancelled' => [],
+                    'confirmed, awaiting_dispatch' => [],
+                    'dispatched, awaiting_pickup' => [],
+                    'picked_up, awaiting_delivery' => [],
+                    'delivered, order_closed' => []
+                ]
+            ];
+            $status_actions = $actions[$role][$status];
+        }
+        return $status_actions;
+    }
+
+    public function actionOrder(Request $request)
+    {   
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $order_organization_id = $request->organization_id;
+        $user_id = session()->get('id');
+        $order_id = $request->id;
+        $status = $request->status;
+
+        //Trigger Actions based on status
+        $trigger_response = $this->triggerStatusAction($status, $request->all());
+        if($trigger_response['status'] == 'success')
+        {
+            //Update Order 
+            $order_data = [
+                'status' => $status,
+                'product_total' => $request->product_total,
+                'shipping_total' => $request->shipping_total,
+                'organization_id' => $order_organization_id
+            ];
+            $order_response = $this->manageResourceData($token, "PUT", "order/".$order_id, $order_data);
+            $order_id = $order_response['id'];
+
+            //Add OrderLog
+            $orderlog_data = [
+                'status' => $status,
+                'user_id' => $user_id,
+                'organization_id' => $organization_id,
+                'order_id' => $order_id
+            ];
+            $this->manageResourceData($token, "POST", "orderlog", $orderlog_data);
+
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your action was successful on Order#'.$order_id.'
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+        else
+        {
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> '.$trigger_response['message'].'
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/view-order/'.$order_id);
+    }
+
+    public function triggerStatusAction($status=null, $request_data)
+    {   
+        $response = [];
+        $order_id = $request_data['id'];
+        if($status !== null)
+        {
+            if($status == 'refunded, order_cancelled'){
+                //Trigger Refund
+                $response = $this->refundOrder($order_id);
+            }else if($status == 'dispatched, awaiting_pickup'){
+                //Trigger Courier Dispatch
+                $response = $this->sendOrderCourier($order_id, $request_data['courier_id']);
+            }else if($status == 'delivered, order_closed'){
+                //Trigger Payout
+                $response = $this->payoutOrder($order_id);
+            }else{
+                $response = ['status' => 'success', 'message' => 'Action was successful!'];
+            }
+
+            //Notify Buyer
+            if($response['status'] = 'success'){
+                $this->sendNotification($order_id, $status);
+            }
+        }
+        return $response;
+    }
+
+    public function refundOrder($order_id)
+    {   
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+        $response = ['status' => 'error', 'message' => 'Refund was unsuccessful'];
+
+        //Get Order 
+        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+
+        //Get Organization PaymentType
+        $payment_type = $order['order_logs'][0]['user'];
+
+        if(!empty($payment_type))
+        {
+            //Add refund
+            $refund_data = ['status' => 'order_cancelled', 'order_id' => $order_id];
+            $refund_response = $this->manageResourceData($token, "POST", "refund", $refund_data);
+            $refund_id = $refund_response['id'];
+
+            //Add payment
+            $payment_data = [
+                'method' => 'mobile',
+                'amount' => ($order['product_total'] + $order['shipping_total'] - env('REFUND_FEE')),
+                'source' => [
+                    'paybill_number' => env('PAYBILL_NUMBER'), 
+                    'account_number' => env('ACCOUNT_NUMBER')
+                ],
+                'destination' => ['phone' => $payment_type['phone']]
+            ];
+            $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
+            $payment_id = $payment_response['id'];
+
+            //Add payment refund
+            $paymentrefund_data = ['payment_id' => $payment_id, 'refund_id' => $refund_id];
+            $this->manageResourceData($token, "POST", "paymentrefund", $paymentrefund_data);
+
+            $response = ['status' => 'success', 'message' => 'Refund#'.$refund_id.' was successful'];
+        }
+
+        return $response;
+    }
+
+    public function sendOrderCourier($order_id, $courier_id)
+    {
+        $token = session()->get('token');
+        $response = ['status' => 'error', 'message' => 'Courier was not assigned'];
+
+        //Get Order 
+        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+
+        //Add Order Courier 
+        $order_courier_data = ['order_id' => $order_id, 'courier_id' => $courier_id];
+        $order_courier_response = $this->manageResourceData($token, "POST", "ordercourier", $order_courier_data);
+
+        if(!empty($order_courier_response))
+        {    
+            //Get Courier
+            $courier = $this->manageResourceData($token, "GET", "courier/".$courier_id, []);
+
+            //Send email to courier
+            $email_data = [
+                'id' => $order_id,
+                'product_total' => ($order['product_total']),
+                'shipping_total' => $order['shipping_total'],
+                'orderitems' => $order['order_items'],
+                'courier' => ['contact' => $courier['contact'], 'email' => $courier['email']],
+                'seller' => $order['order_items'][0]['organization'],
+                'buyer' => $order['organization']
+            ];
+            $email_dataobj = json_decode(json_encode($email_data));
+    
+            Mail::send(new CourierEmail($email_dataobj));
+
+            $response = ['status' => 'success', 'message' => 'Courier was assigned successfully!'];
+        }
+        return $response;
+    }
+
+    public function payoutOrder($order_id)
+    {
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+        $response = ['status' => 'error', 'message' => 'Payout was unsuccessful'];
+
+        //Get Order 
+        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+
+        //Get Organization PaymentType
+        $seller_id = $order['order_items'][0]['organization']['id'];
+        $payment_type = $this->manageResourceData($token, "GET", "organization/".$seller_id."/payment-type", []);
+
+        if(!empty($payment_type))
+        {
+            //Add Payout
+            $payout_data = ['order_id' => $order_id, 'organization_id' => $seller_id];
+            $payout_response = $this->manageResourceData($token, "POST", "payout", $payout_data);
+            $payout_id = $payout_response['id'];
+
+            //Add payment
+            $payment_data = [
+                'method' => 'mobile',
+                'amount' => ($order['product_total'] + $order['shipping_total']),
+                'source' => [
+                    'paybill_number' => env('PAYBILL_NUMBER'), 
+                    'account_number' => env('ACCOUNT_NUMBER')
+                ],
+                'destination' => json_decode($payment_type['details'], true)
+            ];
+            $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
+            $payment_id = $payment_response['id'];
+
+            //Add payment payout
+            $paymentpayout_data = ['payment_id' => $payment_id, 'payout_id' => $payout_id];
+            $this->manageResourceData($token, "POST", "paymentpayout", $paymentpayout_data);
+
+            $response = ['status' => 'success', 'message' => 'Payout#'.$payout_id.' was successful'];
+        }
+
+        return $response;
+    }
+
+    public function sendNotification($order_id, $status)
+    {   
+        $token = session()->get('token');
+
+        //Get Order 
+        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+
+        //Send notification to buyer
+        $buyer = $order['order_logs'][0]['user'];
+        $email_data = [
+            'id' => $order_id,
+            'product_total' => $order['product_total'],
+            'shipping_total' => $order['shipping_total'],
+            'orderitems' => $order['order_items'],
+            'user' => ['firstname' => $buyer['firstname'], 'email' => $buyer['email']],
+            'status' => $status
+        ];
+        $email_dataobj = json_decode(json_encode($email_data));
+
+        Mail::send(new NotificationEmail($email_dataobj));
+        
+        return ['status' => 'success', 'message'=> 'Notification sent'];
     }
 }

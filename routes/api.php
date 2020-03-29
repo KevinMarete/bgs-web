@@ -63,6 +63,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/productpromos', 'Api\OrganizationController@getOrganizationProductPromos');
         Route::get('/organization/{id}/productdeals', 'Api\OrganizationController@getOrganizationProductDeals');
         Route::get('/organization/{id}/orders', 'Api\OrganizationController@getOrganizationOrders');
+        Route::get('/organization/{id}/seller-orders', 'Api\OrganizationController@getOrganizationSellerOrders');
 
         /*Package endpoints*/
         Route::get('/packages', 'Api\PackageController@index');
@@ -280,6 +281,49 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/creditlog', 'Api\CreditLogController@store');
         Route::put('/creditlog/{id}', 'Api\CreditLogController@update');
         Route::delete('/creditlog/{id}', 'Api\CreditLogController@destroy');
+
+        /*Refunds endpoints*/
+        Route::get('/refunds', 'Api\RefundController@index');
+        Route::get('/refund/{id}', 'Api\RefundController@show');
+        Route::post('/refund', 'Api\RefundController@store');
+        Route::put('/refund/{id}', 'Api\RefundController@update');
+        Route::delete('/refund/{id}', 'Api\RefundController@destroy');
+
+        /*PaymentRefunds endpoints*/
+        Route::get('/paymentrefunds', 'Api\PaymentRefundController@index');
+        Route::get('/paymentrefund/{id}', 'Api\PaymentRefundController@show');
+        Route::post('/paymentrefund', 'Api\PaymentRefundController@store');
+        Route::put('/paymentrefund/{id}', 'Api\PaymentRefundController@update');
+        Route::delete('/paymentrefund/{id}', 'Api\PaymentRefundController@destroy');
+
+        /*Couriers endpoints*/
+        Route::get('/couriers', 'Api\CourierController@index');
+        Route::get('/courier/{id}', 'Api\CourierController@show');
+        Route::post('/courier', 'Api\CourierController@store');
+        Route::put('/courier/{id}', 'Api\CourierController@update');
+        Route::delete('/courier/{id}', 'Api\CourierController@destroy');
+
+        /*OrderCouriers endpoints*/
+        Route::get('/ordercouriers', 'Api\OrderCourierController@index');
+        Route::get('/ordercourier/{id}', 'Api\OrderCourierController@show');
+        Route::post('/ordercourier', 'Api\OrderCourierController@store');
+        Route::put('/ordercourier/{id}', 'Api\OrderCourierController@update');
+        Route::delete('/ordercourier/{id}', 'Api\OrderCourierController@destroy');
+
+        /*Payouts endpoints*/
+        Route::get('/payouts', 'Api\PayoutController@index');
+        Route::get('/payout/{id}', 'Api\PayoutController@show');
+        Route::post('/payout', 'Api\PayoutController@store');
+        Route::put('/payout/{id}', 'Api\PayoutController@update');
+        Route::delete('/payout/{id}', 'Api\PayoutController@destroy');
+
+        /*Credits endpoints*/
+        Route::get('/paymentpayouts', 'Api\PaymentPayoutController@index');
+        Route::get('/paymentpayout/{id}', 'Api\PaymentPayoutController@show');
+        Route::post('/paymentpayout', 'Api\PaymentPayoutController@store');
+        Route::put('/paymentpayout/{id}', 'Api\PaymentPayoutController@update');
+        Route::delete('/paymentpayout/{id}', 'Api\PaymentPayoutController@destroy');
+
     });
     
 });

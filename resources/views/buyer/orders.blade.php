@@ -38,6 +38,9 @@
                         @foreach ($table_data as $row)
                             <tr>
                                 <td>{{ $row['id'] }}</td>
+                                @if($role_name !== 'buyer')
+                                <td>{{ $row['organization']['name'] }}</td>
+                                @endif
                                 <td>{{ $row['status'] }}</td>
                                 <td>{{ $row['created_at'] }}</td>
                                 <td>KES {{ number_format($row['product_total']) }}</td>

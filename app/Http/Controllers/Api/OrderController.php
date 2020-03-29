@@ -17,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('organization', 'order_items', 'order_items.product_now.product', 'order_logs', 'order_logs.user')->get();
+        $orders = Order::with('organization', 'order_items', 'order_items.organization', 'order_items.product_now.product', 'order_logs', 'order_logs.user')->get();
         return response()->json($orders);
     }
 
@@ -42,7 +42,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::with('organization', 'order_items', 'order_items.product_now.product', 'order_logs', 'order_logs.user')->find($id);
+        $order = Order::with('organization', 'order_items', 'order_items.organization', 'order_items.product_now.product', 'order_logs', 'order_logs.user')->find($id);
         if(is_null($order)){
             return response()->json(['error' => 'not_found']);
         }

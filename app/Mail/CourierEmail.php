@@ -29,7 +29,7 @@ class CourierEmail extends Mailable
     public function build()
     {
         $this->view('emails/courier_notification');
-        return $this->to($this->courier->email)
+        return $this->to($this->order->courier->email)
                     ->subject('BGS Order #'.$this->order->id.' Pickup and Delivery');
     }
 }

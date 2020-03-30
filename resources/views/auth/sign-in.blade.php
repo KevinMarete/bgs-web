@@ -9,7 +9,7 @@
         <meta name="author" content />
         <title>BGS | Sign-In</title>
         <link href="css/styles.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <script data-search-pseudo-elements defer src="libs/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <script src="libs/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap" rel="stylesheet" />
@@ -26,7 +26,14 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header justify-content-center"><h3 class="font-weight-light my-4">Login</h3></div>
+                                    <div class="card-header justify-content-center">
+                                        <div class="logo">
+                                            <img src="/assets/img/logo.jpeg" class="img-responsive" alt="" width="200" height="150"/>
+                                            <div class="col-md-12 text-center">
+                                                <h4 class="font-weight-light my-4">Login</h4>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
                                         <form action="/authenticate" method="POST">
                                             @csrf

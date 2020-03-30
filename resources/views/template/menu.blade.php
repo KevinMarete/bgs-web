@@ -1,6 +1,11 @@
 <nav class="sb-topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
     <a class="navbar-brand d-none d-sm-block" href="/dashboard">
-        <h5>BGS<sub class="text-muted"><small>MEDS</small></sub></h5>
+        <!-- Logo Image -->
+        <img src="/assets/img/logo.jpeg" width="45" alt="" class="d-inline-block align-middle mr-2">
+        <!-- Logo Text -->
+        <span class="text-uppercase font-weight-bold">
+            BGS<sub class="text-muted"><small>MEDS</small></sub>
+        </span>
     </a>
     
     <button class="btn sb-btn-icon sb-btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#">

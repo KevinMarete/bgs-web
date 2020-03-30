@@ -16137,9 +16137,9 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.sb-topnav .navbar-brand img {
+/*.sb-topnav .navbar-brand img {
   height: 1rem;
-}
+}*/
 
 .sb-nav-sticky {
   top: 5.125rem;

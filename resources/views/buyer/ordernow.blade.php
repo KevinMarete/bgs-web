@@ -19,7 +19,7 @@
                     <div class="input-group input-group-md col-md-11">
                         <input type="text" class="form-control search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Search...">
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary btn-number">
+                            <button type="button" class="btn btn-success btn-number">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>

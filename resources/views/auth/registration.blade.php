@@ -42,13 +42,13 @@
                             <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12">
                                 <div class="card mt-5">
                                     <div class="card-body px-5 pt-5 text-center">
-                                        <div class="h3 text-secondary font-weight-300">Join</div>
+                                        <div class="h3 text-warning font-weight-300">Join</div>
                                         <p class="text-muted">Create an account linked to an existing organization</p>
                                         <div class="sb-icons-org-join align-items-center mx-auto"><i class="sb-icon-user" data-feather="user"></i><i class="sb-icon-arrow fas fa-long-arrow-alt-right"></i><i class="sb-icon-users" data-feather="users"></i></div>
                                     </div>
                                     <hr class="my-0" />
                                     <div class="card-body px-5 py-4">
-                                        <div class="small text-center"><a class="btn btn-block btn-secondary" href="/sign-up">Join an organization</a></div>
+                                        <div class="small text-center"><a class="btn btn-block btn-warning" href="/sign-up">Join an organization</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -80,8 +80,10 @@
         <script src="libs/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
 
+        <!--
         <script src="js/sb-customizer.js"></script>
         <sb-customizer project="sb-admin-pro"></sb-customizer>
+        -->
     </body>
 
 </html>

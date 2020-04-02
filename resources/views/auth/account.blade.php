@@ -144,7 +144,7 @@
                                                         @endforeach
                                                     </ul>
                                                     @if ($package['id'] === $subscription['package']['id'] && $subscription['status'] === 'active')
-                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-success" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Current Package</button>
+                                                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-warning" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Current Package</button>
                                                         <strong><small>Expires on: {{ $subscription['end_date'] }}  </small></strong>
                                                     @elseif ($package['id'] === $subscription['package']['id'] && $subscription['status'] !== 'active')
                                                         <button type="button" class="subscription-btn btn btn-lg btn-block btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Expired Package</button>

@@ -131,19 +131,20 @@
   });
 
   //Product search filter
-  var $search = $(".search").on('input',function(){
-      var matcher = new RegExp($(this).val(), 'gi');
-      $('.box').show().not(function(){
-          return matcher.test($(this).find('.molecular_name, .brand_name').text())
-      }).hide();
-  })
+  var $search = $(".search").on('input', function(){
+    var matcher = new RegExp($(this).val(), 'gi');
+    $('.box').show().not(function(){
+      /*$(".product_list").pagify(2, ".box");*/
+      return matcher.test($(this).find('.molecular_name, .brand_name').text())
+    }).hide();
+  });
   
+  //Prevent duplicate form submissions
   $("form").submit(function () {
-    // prevent duplicate form submissions
     $(this).find(":submit").attr('disabled', 'disabled');
   });
 
-  
+  //Payment-types change eventHandler
   $(document).on('change', '.payment_types', function () {
     let selected_id = $(this).find(':selected').val()
     let selected_details = $(this).find(':selected').attr('data-details')
@@ -158,5 +159,8 @@
     }
     $('#payment_details').val(pretty_details)
   });
+
+  //Add pagination to product listing pages
+  $(".product_list").pagify(2, ".box");
 
 })(jQuery);

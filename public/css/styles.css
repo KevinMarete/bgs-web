@@ -5619,7 +5619,8 @@ input[type=button].btn-block {
 .card-img-top {
   border-top-left-radius: 0.35rem;
   border-top-right-radius: 0.35rem;
-  max-height:200px;
+  max-height:100px;
+  max-width: 100px;
 }
 
 .card-img,
@@ -17178,4 +17179,12 @@ pre[class*=language-] {
 
 .token.variable {
   color: #ff6666;
+}
+
+.product-title {
+  font-size: 14px !important;
+}
+
+.product-description {
+  font-size: 11px !important;
 }

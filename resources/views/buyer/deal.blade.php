@@ -33,48 +33,54 @@
         </div>
         <div class="card-body">
             <div class="col">
-                <div class="row">
+                <div class="row product_list">
                     @foreach ($products as $product)
                         @if ($product['offer']['valid_until'] >= now())
-                            <div class="col-12 col-md-6 col-lg-4 box">
+                            <div class="col-12 col-md-4 col-lg-3  box">
                                 <div class="card">
-                                    <img class="card-img-top img-thumbnail" src="/assets/img/medicine.png" alt="Card image cap" width="300" height="200">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img class="card-img-top img-thumbnail" src="/assets/img/medicine.png" alt="Card image cap" width="300" height="200">
+                                        </div>
+                                        <div class="col">
+                                            <p class="btn btn-warning btn-block">KES 
+                                                <del>{{ number_format($product['product_now']['unit_price']) }}</del> 
+                                                {{ number_format($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100) }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <form role="form" action="/add-cart" method="POST">
+                                                @csrf
+                                                <input type="hidden" class="form-control" name="product_id" value="{{ $product['product_now']['id'] }}">
+                                                <input type="hidden" class="form-control" name="quantity" value="{{ $product['minimum_order_quantity'] }}">
+                                                <input type="hidden" class="form-control" name="price" value="{{ ($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100) }}">
+                                                <input type="hidden" class="form-control" name="delivery" value="{{ $product['product_now']['delivery_cost'] }}">
+                                                <input type="hidden" class="form-control" name="discount" value="{{ round(($product['offer']['discount']/100), 2) }}">
+                                                <input type="hidden" class="form-control" name="sub_total" value="{{ ($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100)*$product['minimum_order_quantity'] }}">
+                                                <input type="hidden" class="form-control" name="product_name" value="{{ $product['product_now']['product']['molecular_name'] }}">
+                                                <input type="hidden" class="form-control" name="product_description" value="{{ $product['product_now']['product']['brand_name'].' Packsize:'.$product['product_now']['product']['pack_size'].' Strength:'.$product['product_now']['product']['strength'] }}">
+                                                <input type="hidden" class="form-control" name="organization_id" value="{{ $product['product_now']['organization_id'] }}">
+                                                <input type="hidden" class="form-control" name="organization_name" value="{{ $product['product_now']['organization']['name'] }}">
+                                                <input type="hidden" class="form-control" name="organization_email" value="{{ $product['product_now']['user']['email'] }}">
+                                                <button type="submit" class="btn btn-success btn-block">Add to cart</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
-                                        <h4 class="card-title"><a href="product.html" title="View Product" class="molecular_name">{{ $product['product_now']['product']['molecular_name'] }}</a></h4>
-                                        <p class="card-text">
+                                        <h4 class="card-title product-title">
+                                            <a href="#" title="View Product" class="molecular_name">{{ $product['product_now']['product']['molecular_name'] }}</a>
+                                        </h4>
+                                        <hr/>
+                                        <p class="card-text product-description">
                                             <strong class="brand_name">{{ $product['product_now']['product']['brand_name'] }}</strong> <br/>
                                             <strong>Packsize:</strong> {{ $product['product_now']['product']['pack_size'] }} <br/>
                                             <strong>Strength:</strong> {{ $product['product_now']['product']['strength'] }} <br/>
                                             <strong>Discount:</strong> {{ $product['offer']['discount']. '%'}} <br/>
-                                            <strong>MinimumOrderQTY:</strong> {{ $product['minimum_order_quantity'] }}
-                                            <hr/>
-                                            <strong>Organization:</strong> {{ $product['product_now']['organization']['name'] }}
+                                            <strong>MinimumOrderQTY:</strong> {{ $product['minimum_order_quantity'] }} <br/>
+                                            <strong>Vendor:</strong> {{ $product['product_now']['organization']['name'] }}
                                         </p>
-                                        <div class="row">
-                                            <div class="col">
-                                                <p class="btn btn-danger btn-block">KES 
-                                                    <del>{{ number_format($product['product_now']['unit_price']) }}</del> 
-                                                    {{ number_format($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100) }}
-                                                </p>
-                                            </div>
-                                            <div class="col">
-                                                <form role="form" action="/add-cart" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" class="form-control" name="product_id" value="{{ $product['product_now']['id'] }}">
-                                                    <input type="hidden" class="form-control" name="quantity" value="{{ $product['minimum_order_quantity'] }}">
-                                                    <input type="hidden" class="form-control" name="price" value="{{ ($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100) }}">
-                                                    <input type="hidden" class="form-control" name="delivery" value="{{ $product['product_now']['delivery_cost'] }}">
-                                                    <input type="hidden" class="form-control" name="discount" value="{{ round(($product['offer']['discount']/100), 2) }}">
-                                                    <input type="hidden" class="form-control" name="sub_total" value="{{ ($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100)*$product['minimum_order_quantity'] }}">
-                                                    <input type="hidden" class="form-control" name="product_name" value="{{ $product['product_now']['product']['molecular_name'] }}">
-                                                    <input type="hidden" class="form-control" name="product_description" value="{{ $product['product_now']['product']['brand_name'].' Packsize:'.$product['product_now']['product']['pack_size'].' Strength:'.$product['product_now']['product']['strength'] }}">
-                                                    <input type="hidden" class="form-control" name="organization_id" value="{{ $product['product_now']['organization_id'] }}">
-                                                    <input type="hidden" class="form-control" name="organization_name" value="{{ $product['product_now']['organization']['name'] }}">
-                                                    <input type="hidden" class="form-control" name="organization_email" value="{{ $product['product_now']['user']['email'] }}">
-                                                    <button type="submit" class="btn btn-success btn-block">Add to cart</button>
-                                                </form>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

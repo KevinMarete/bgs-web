@@ -129,15 +129,6 @@
       alert('You cannot remove the last row!')
     }
   });
-
-  //Product search filter
-  var $search = $(".search").on('input', function(){
-    var matcher = new RegExp($(this).val(), 'gi');
-    $('.box').show().not(function(){
-      /*$(".product_list").pagify(2, ".box");*/
-      return matcher.test($(this).find('.molecular_name, .brand_name').text())
-    }).hide();
-  });
   
   //Prevent duplicate form submissions
   $("form").submit(function () {
@@ -160,7 +151,7 @@
     $('#payment_details').val(pretty_details)
   });
 
-  //Add pagination to product listing pages
-  $(".product_list").pagify(2, ".box");
+  //Add pagination and search to product listing pages
+  jplist.init();
 
 })(jQuery);

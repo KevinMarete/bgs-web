@@ -57,7 +57,6 @@
         </div>
         <script src="libs/jquery/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="libs/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="/js/isotope.pkgd.min.js"></script>
         <script src="/js/pagify.js"></script>
         <script src="js/scripts.js"></script>
         

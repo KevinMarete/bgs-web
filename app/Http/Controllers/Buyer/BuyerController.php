@@ -188,144 +188,197 @@ class BuyerController extends MyController
         return redirect('cart');  
     }
 
-    public function saveOrder(Request $request)
+    public function splitOrder($cart_items)
     {   
-        $transaction_type = $request->type;
-        $token = session()->get('token');
+        $orders = []; 
+        $status = 'paid, awaiting_confirmation';
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
-        $status = 'paid, awaiting_confirmation';
-        $product_total = session()->get('product_total');
-        $shipping_total = session()->get('shipping_total');
-        $cart_items = session()->get('cart');
-        $credit_response = $this->getResourceData($token, 'user/'.$user_id.'/credit');
-        $credits = (empty($credit_response) ? 0 : $credit_response['amount']);
-        $total_amount = ($product_total + $shipping_total - $credits);
-        $points_per_order = env('POINTS_PER_ORDER');
-        $orderitems = []; 
-        $supplier_emails = []; 
-        $user_points = 0;
 
-        //Add Order 
-        $order_data = [
-            'status' => $status,
-            'product_total' => $product_total - $credits,
-            'shipping_total' => $shipping_total,
-            'organization_id' => $organization_id
-        ];
-        $order_response = $this->manageResourceData($token, "POST", "order", $order_data);
-        $order_id = $order_response['id'];
-
-        //Add OrderLog
-        $orderlog_data = [
-            'status' => $status,
-            'user_id' => $user_id,
-            'organization_id' => $organization_id,
-            'order_id' => $order_id
-        ];
-        $this->manageResourceData($token, "POST", "orderlog", $orderlog_data);
-
-        $cart_size = sizeof($cart_items); 
-        $credit_per_item = round(($credits/$cart_size), 2);
-
-        //Add OrderItems
         foreach($cart_items as $cart_item)
         {   
-            $orderitem_data = [
+            $seller_id = $cart_item['organization_id'];
+            $sub_total = round($cart_item['sub_total'], 2);
+            $shipping_total = round(($cart_item['delivery'] * $cart_item['quantity']), 2);
+
+            if(!in_array($seller_id, array_keys($orders)))
+            {   
+                //Add new order and log
+                $orders[$seller_id] = [
+                    'status' => $status,
+                    'product_total' => $sub_total,
+                    'shipping_total' => $shipping_total,
+                    'organization_id' => $organization_id,
+                    'order_log' => [
+                        'status' => $status,
+                        'user_id' => $user_id,
+                        'organization_id' => $organization_id
+                    ]
+                ];
+            }else{
+                //Update existing order 
+                $orders[$seller_id]['product_total'] = round(($orders[$seller_id]['product_total'] + $sub_total), 2);
+                $orders[$seller_id]['shipping_total'] = round(($orders[$seller_id]['shipping_total'] + $shipping_total), 2);
+            }
+            //Add order_item
+            $orders[$seller_id]['order_items'][] = [
                 'quantity' => $cart_item['quantity'],
-                'unit_price' => $cart_item['price'],
-                'shipping_price' => $cart_item['delivery'],
-                'sub_total' => $cart_item['sub_total'] - $credit_per_item,
-                'shipping_total' => ($cart_item['delivery']*$cart_item['quantity']),
-                'discount' => $cart_item['discount'],
-                'total_cost' => (($cart_item['sub_total']- $credit_per_item) + ($cart_item['delivery']*$cart_item['quantity'])),
+                'unit_price' => round($cart_item['price'], 2),
+                'shipping_price' => round($cart_item['delivery'], 2),
+                'sub_total' => $sub_total,
+                'shipping_total' => round($shipping_total, 2),
+                'discount' => round($cart_item['discount'], 2),
+                'total_cost' => round(($sub_total + $shipping_total), 2),
                 'product_now_id' => $cart_item['product_id'],
-                'organization_id' => $cart_item['organization_id'],
-                'order_id' => $order_id
+                'organization_id' => $seller_id,
+                'organization_email' => $cart_item['organization_email'],
+                'product_name' => $cart_item['product_name']
             ];
-            $this->manageResourceData($token, "POST", "orderitem", $orderitem_data);
-
-            //Add mail orderitems
-            $orderitems[] = [
-                'product_name' => $cart_item['product_name'], 
-                'quantity' => $cart_item['quantity'], 
-                'unit_price'=> $cart_item['price'], 
-                'sub_total'=> ($cart_item['sub_total'] - $credit_per_item), 
-            ];
-
-            //Add supplier emails
-            $supplier_emails[] = $cart_item['organization_email'];
         }
 
-        //Add payment
-        $payment_data = [
-            'method' => $transaction_type,
-            'amount' => $total_amount,
-            'source' => $request->source,
-            'destination' => $request->destination
-        ];
-        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
-        $payment_id = $payment_response['id'];
+        return $orders;
+    }
 
-        //Add payment order
-        $paymentorder_data = ['payment_id' => $payment_id, 'order_id' => $order_id];
-        $this->manageResourceData($token, "POST", "paymentorder", $paymentorder_data);
+    public function saveOrder(Request $request)
+    {   
+        $cart_items = session()->get('cart');
+        $orders = $this->splitOrder($cart_items);
+        $token = session()->get('token');
+        $transaction_type = $request->type; 
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+        $user_points = 0;
+        $points_per_order = env('POINTS_PER_ORDER');
 
-        //Get user points
-        $loyalty_response = $this->manageResourceData($token, "GET", "user/".$user_id."/loyalty", []);
-        if($loyalty_response)
-        {
-            $user_points = $loyalty_response['points'];
-        }
+        //Get user credits
+        $credit_response = $this->getResourceData($token, 'user/'.$user_id.'/credit');
+        $credits = (empty($credit_response) ? 0 : $credit_response['amount']);
+        $order_size = sizeof($orders);
+        $cart_size = sizeof($cart_items); 
+        $credits_per_order = round(($credits/$order_size), 2);
+        $credits_per_item = round(($credits/$cart_size), 2);
+        $credits_balance = $credits;
 
-        //Add Loyalty Points
-        $loyalty_data = ['points' => ($user_points + $points_per_order), 'user_id' => $user_id];
-        $loyalty_response = $this->manageResourceData($token, "POST", "loyalty", $loyalty_data);
-        $loyalty_id = $loyalty_response['id'];
+        foreach($orders as $order)
+        {   
+            $orderitems = []; 
+            $supplier_emails = [];
+            $credits_balance = round(($credits_balance - $credits_per_order), 2);
 
-        //Add Loyalty Points Log
-        $loyaltylog_data = [
-            'status' => 'earned_from_order',
-            'points' => $points_per_order,
-            'order_id' => $order_id,
-            'loyalty_id' => $loyalty_id
-        ];
-        $this->manageResourceData($token, "POST", "loyaltylog", $loyaltylog_data);
-
-        //Update Credits if credits > 0
-        if($credits > 0)
-        {
-            $credit_data = ['amount' => 0, 'user_id' => $user_id];
-            $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
-            $credit_id = $credit_response['id'];
-
-            //Add Credit Log
-            $creditlog_data = [
-                'status' => 'used_on_order_#'.$order_id,
-                'amount' => $credits,
-                'credit_id' => $credit_id
+            //Add Order 
+            $order_data = [
+                'status' => $order['status'],
+                'product_total' => round(($order['product_total'] - $credits_per_order), 2),
+                'shipping_total' => $order['shipping_total'],
+                'organization_id' => $order['organization_id']
             ];
-            $this->manageResourceData($token, "POST", "creditlog", $creditlog_data);
+            $order_response = $this->manageResourceData($token, "POST", "order", $order_data);
+            $order_id = $order_response['id'];
+
+            //Add OrderLog
+            $orderlog_data = $order['order_log'];
+            $orderlog_data['order_id'] = $order_id;
+            $this->manageResourceData($token, "POST", "orderlog", $orderlog_data);
+
+            //Add OrderItems
+            foreach($order['order_items'] as $order_item)
+            {   
+                $orderitem_data = [
+                    'quantity' => $order_item['quantity'],
+                    'unit_price' => $order_item['unit_price'],
+                    'shipping_price' => $order_item['shipping_price'],
+                    'sub_total' => round(($order_item['sub_total'] - $credits_per_item), 2),
+                    'shipping_total' => $order_item['shipping_total'],
+                    'discount' => $order_item['discount'],
+                    'total_cost' => $order_item['total_cost'],
+                    'product_now_id' => $order_item['product_now_id'],
+                    'organization_id' => $order_item['organization_id'],
+                    'order_id' => $order_id
+                ];
+                $this->manageResourceData($token, "POST", "orderitem", $orderitem_data);
+
+                //Add mail orderitems
+                $orderitems[] = [
+                    'product_name' => $order_item['product_name'], 
+                    'quantity' => $order_item['quantity'], 
+                    'unit_price'=> $order_item['unit_price'], 
+                    'sub_total'=> round(($order_item['sub_total'] - $credits_per_item), 2), 
+                ];
+
+                //Add supplier emails
+                $supplier_emails[] = $order_item['organization_email'];
+            }
+
+            //Add payment
+            $payment_data = [
+                'method' => $transaction_type,
+                'amount' => round(($order['product_total'] + $order['shipping_total'] - $credits_per_order), 2),
+                'source' => $request->source,
+                'destination' => $request->destination
+            ];
+            $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
+            $payment_id = $payment_response['id'];
+
+            //Add payment order
+            $paymentorder_data = ['payment_id' => $payment_id, 'order_id' => $order_id];
+            $this->manageResourceData($token, "POST", "paymentorder", $paymentorder_data);
+
+            //Get user loyalty points
+            $loyalty_response = $this->manageResourceData($token, "GET", "user/".$user_id."/loyalty", []);
+            if($loyalty_response)
+            {
+                $user_points = $loyalty_response['points'];
+            }
+
+            //Add Loyalty Points
+            $loyalty_data = ['points' => ($user_points + $points_per_order), 'user_id' => $user_id];
+            $loyalty_response = $this->manageResourceData($token, "POST", "loyalty", $loyalty_data);
+            $loyalty_id = $loyalty_response['id'];
+
+            //Add Loyalty Points Log
+            $loyaltylog_data = [
+                'status' => 'earned_from_order',
+                'points' => $points_per_order,
+                'order_id' => $order_id,
+                'loyalty_id' => $loyalty_id
+            ];
+            $this->manageResourceData($token, "POST", "loyaltylog", $loyaltylog_data);
+
+            //Update Credits if credits_per_order > 0
+            if($credits_per_order > 0)
+            {
+                $credit_data = ['amount' => $credits_balance, 'user_id' => $user_id];
+                $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
+                $credit_id = $credit_response['id'];
+
+                //Add Credit Log
+                $creditlog_data = [
+                    'status' => 'used_on_order_#'.$order_id,
+                    'amount' => $credits_per_order,
+                    'credit_id' => $credit_id
+                ];
+                $this->manageResourceData($token, "POST", "creditlog", $creditlog_data);
+            }
+
+            //Send Order Email to Buyer Copy Sellers
+            $email_data = [
+                'id' => $order_id,
+                'product_total' => $order['product_total'],
+                'shipping_total' => $order['shipping_total'],
+                'orderitems' => $orderitems,
+                'user' => ['firstname' => session()->get('firstname'), 'email' => session()->get('email')],
+                'supplier_emails' => $supplier_emails,
+                'payment_type' => $transaction_type
+            ];
+            $email_dataobj = json_decode(json_encode($email_data));
+            $this->send_mail($email_dataobj);
         }
 
         //Clear cart
         session()->put('cart', []);
 
-        //Send Order Email to Buyer Copy Sellers
-        $email_data = [
-            'id' => $order_id,
-            'product_total' => ($product_total - $credits),
-            'shipping_total' => $shipping_total,
-            'orderitems' => $orderitems,
-            'user' => ['firstname' => session()->get('firstname'), 'email' => session()->get('email')],
-            'supplier_emails' => $supplier_emails,
-            'payment_type' => $transaction_type
-        ];
-        $email_dataobj = json_decode(json_encode($email_data));
-        $this->send_mail($email_dataobj);
-
         $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your Order has been created successfully.
+                            <strong>Success!</strong> Your Order(s) have been created successfully.
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -605,6 +658,55 @@ class BuyerController extends MyController
             //Add payment refund
             $paymentrefund_data = ['payment_id' => $payment_id, 'refund_id' => $refund_id];
             $this->manageResourceData($token, "POST", "paymentrefund", $paymentrefund_data);
+
+            //Get buyer loyalty points
+            $user_points = 0;
+            $buyer_id = $order['order_logs'][0]['user_id'];
+            $points_per_order = env('POINTS_PER_ORDER');
+            $loyalty_response = $this->manageResourceData($token, "GET", "user/".$buyer_id."/loyalty", []);
+            if($loyalty_response)
+            {
+                $user_points = $loyalty_response['points'];
+            }
+
+            //Return Loyalty Points
+            $loyalty_data = ['points' => ($user_points - $points_per_order), 'user_id' => $user_id];
+            $loyalty_response = $this->manageResourceData($token, "POST", "loyalty", $loyalty_data);
+            $loyalty_id = $loyalty_response['id'];
+
+            //Add Loyalty Points Log
+            $loyaltylog_data = [
+                'status' => 'order_refund',
+                'points' => $points_per_order,
+                'order_id' => $order_id,
+                'loyalty_id' => $loyalty_id
+            ];
+            $this->manageResourceData($token, "POST", "loyaltylog", $loyaltylog_data);
+
+            //Get buyer credits
+            $credit_response = $this->getResourceData($token, 'user/'.$buyer_id.'/credit');
+            $credits_balance = (empty($credit_response) ? 0 : $credit_response['amount']);
+            
+            //Get order credits
+            $credits_per_order = 0;
+            $creditlog_response = $this->manageResourceData($token, "GET", "order/".$order_id."/creditlog", []);
+            $credits_per_order = (empty($creditlog_response) ? 0 : $creditlog_response['amount']);
+            
+            //Return Credits if credits_per_order > 0
+            if($credits_per_order > 0)
+            {
+                $credit_data = ['amount' => round(($credits_balance + $credits_per_order), 2), 'user_id' => $buyer_id];
+                $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
+                $credit_id = $credit_response['id'];
+
+                //Add Credit Log
+                $creditlog_data = [
+                    'status' => 'refund_on_order_#'.$order_id,
+                    'amount' => round((-1 * abs($credits_per_order)), 2),
+                    'credit_id' => $credit_id
+                ];
+                $this->manageResourceData($token, "POST", "creditlog", $creditlog_data);
+            }
 
             $response = ['status' => 'success', 'message' => 'Refund#'.$refund_id.' was successful'];
         }

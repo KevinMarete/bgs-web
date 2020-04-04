@@ -232,6 +232,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::delete('/order/{id}', 'Api\OrderController@destroy');
         Route::get('/order/{id}/orderitems', 'Api\OrderController@getOrderItems');
         Route::get('/order/{id}/orderlogs', 'Api\OrderController@getOrderLogs');
+        Route::get('/order/{id}/creditlog', 'Api\OrderController@getCreditLog');
 
         /*OrderItems endpoints*/
         Route::get('/orderitems', 'Api\OrderItemController@index');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\CreditLog;
 use App\Order;
 use App\OrderItem;
 use App\OrderLog;
@@ -104,6 +105,18 @@ class OrderController extends Controller
     public function getOrderLogs($id)
     {
         $orderlogs = OrderLog::with('order', 'organization', 'user')->where('order_id', $id)->get();
+        return response()->json($orderlogs);
+    }
+
+    /**
+     * Display the specified Order's CreditLog.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getCreditLog($id)
+    {
+        $orderlogs = CreditLog::with('credit', 'credit.user')->where('status', 'used_on_order_#'.$id)->first();
         return response()->json($orderlogs);
     }
 }

@@ -290,7 +290,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <table class="table table-condensed table-hover table-bordered table-sm">
+                                            <table class="table table-condensed table-hover table-bordered table-sm dataTable">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>How Earned</th>
@@ -339,7 +339,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <table class="table table-condensed table-hover table-bordered table-sm">
+                                            <table class="table table-condensed table-hover table-bordered table-sm dataTable">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>Status</th>

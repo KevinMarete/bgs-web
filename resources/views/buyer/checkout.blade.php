@@ -55,14 +55,14 @@
                                         </div>
                                         <ul class="nav bg-light nav-pills rounded nav-fill mb-3" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active show" data-toggle="pill" href="#nav-tab-card">
+                                                <a class="nav-link" data-toggle="pill" href="#nav-tab-card">
                                                 <i class="fa fa-credit-card"></i> Debit/Credit Card</a></li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="pill" href="#nav-tab-mobile">
+                                                <a class="nav-link active show" data-toggle="pill" href="#nav-tab-mobile">
                                                 <i class="fa fa-university"></i>  Mobile Money</a></li>
                                         </ul>
                                         <div class="tab-content">
-                                            <div class="tab-pane fade active show" id="nav-tab-card">
+                                            <div class="tab-pane fade" id="nav-tab-card">
                                                 <form role="form" action="/save-order/card" method="POST">
                                                     @csrf
                                                     <div class="form-group">
@@ -105,7 +105,7 @@
                                                     <button type="submit" class="btn btn-lg btn-block btn-primary checkout">PURCHASE</button>
                                                 </form>
                                             </div> <!-- tab-pane.// -->
-                                            <div class="tab-pane fade" id="nav-tab-mobile">
+                                            <div class="tab-pane fade active show" id="nav-tab-mobile">
                                                 <form role="form" action="/save-order/mobile" method="POST">
                                                     @csrf
                                                     <p>Mobile Money Details</p>

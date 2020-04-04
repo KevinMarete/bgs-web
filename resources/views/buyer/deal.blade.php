@@ -119,7 +119,7 @@
                             class="mt-3"
                             data-jplist-control="pagination"
                             data-group="products"
-                            data-items-per-page="2"
+                            data-items-per-page="{{ $products_per_page }}"
                             data-current-page="0"
                             data-disabled-class="disabled"
                             data-selected-class="active"

@@ -18,6 +18,7 @@ class BuyerController extends MyController
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $view_data = [
+            'products_per_page' => env('PRODUCTS_PER_PAGE'),
             'products' => $this->getResourceData($token, 'productnows')
         ];
         $data = [
@@ -35,6 +36,7 @@ class BuyerController extends MyController
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $view_data = [
+            'products_per_page' => env('PRODUCTS_PER_PAGE'),
             'products' => $this->getResourceData($token, 'productdeals')
         ];
         $data = [
@@ -52,6 +54,7 @@ class BuyerController extends MyController
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $view_data = [
+            'products_per_page' => env('PRODUCTS_PER_PAGE'),
             'products' => $this->getResourceData($token, 'productpromos')
         ];
         $data = [

@@ -1,13 +1,15 @@
 <html>
+
 <head></head>
+
 <body style="font-family: monospace;">
   <main>
     <div>
       Dear {{ $order->user->firstname }},
       <br />
       <br />
-      The current status for your order is <b>{{ $order->status }}</b> <br/><br/>
-      See below are details of the order {{ '#'.$order->id }}. 
+      The current status for your order is <b>{{ $order->status }}</b> <br /><br />
+      See below are details of the order {{ '#'.$order->id }}.
     </div>
     <table style="width: 100%;font-size: smaller;border: 1px solid #c0c0c0;" cellspacing="0">
       <tbody>
@@ -89,4 +91,5 @@
     </table>
   </main>
 </body>
+
 </html>

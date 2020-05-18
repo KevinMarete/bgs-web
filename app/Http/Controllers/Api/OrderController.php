@@ -44,7 +44,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::with('organization', 'order_items', 'order_items.organization', 'order_items.product_now.product', 'order_logs', 'order_logs.user')->find($id);
-        if(is_null($order)){
+        if (is_null($order)) {
             return response()->json(['error' => 'not_found']);
         }
         return response()->json($order);
@@ -61,7 +61,7 @@ class OrderController extends Controller
     {
         $this->validate($request, Order::$rules);
         $order  = Order::find($id);
-        if(is_null($order)){
+        if (is_null($order)) {
             return response()->json(['error' => 'not_found']);
         }
         $order->update($request->all());
@@ -77,7 +77,7 @@ class OrderController extends Controller
     public function destroy($id)
     {
         $order = Order::find($id);
-        if(is_null($order)){
+        if (is_null($order)) {
             return response()->json(['error' => 'not_found']);
         }
         $order->delete();
@@ -116,7 +116,29 @@ class OrderController extends Controller
      */
     public function getCreditLog($id)
     {
-        $orderlogs = CreditLog::with('credit', 'credit.user')->where('status', 'used_on_order_#'.$id)->first();
+        $orderlogs = CreditLog::with('credit', 'credit.user')->where('status', 'used_on_order_#' . $id)->first();
         return response()->json($orderlogs);
+    }
+
+    /**
+     * Display Count of all Orders by Status based on updated_date
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrdersByStatus(Request $request)
+    {
+        $orders = Order::where('status', $request->status)->whereDate('updated_at', $request->updated_at)->get();
+        return response()->json(['status' => $request->status, 'total' => sizeof($orders)]);
+    }
+
+    /**
+     * Display Revenue based on orders by created_date
+     * @param  date  $created_date
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrderRevenue($created_date)
+    {
+        $revenue = Order::whereNotIn('status', ['cancelled, awaiting_refund', 'refunded, order_cancelled'])->whereDate('created_at', $created_date)
+            ->selectRaw('sum(product_total + shipping_total) as revenue')->first();
+        return response()->json($revenue);
     }
 }

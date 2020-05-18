@@ -15,7 +15,7 @@ class PaymentOrderController extends Controller
      */
     public function index()
     {
-        $paymentorders = PaymentOrder::with('organization')->get();
+        $paymentorders = PaymentOrder::with('order', 'payment', 'payment.organization')->get();
         return response()->json($paymentorders);
     }
 
@@ -40,8 +40,8 @@ class PaymentOrderController extends Controller
      */
     public function show($id)
     {
-        $paymentorder = PaymentOrder::with('organization')->find($id);
-        if(is_null($paymentorder)){
+        $paymentorder = PaymentOrder::with('order', 'payment', 'payment.organization')->find($id);
+        if (is_null($paymentorder)) {
             return response()->json(['error' => 'not_found']);
         }
         return response()->json($paymentorder);
@@ -58,7 +58,7 @@ class PaymentOrderController extends Controller
     {
         $this->validate($request, PaymentOrder::$rules);
         $paymentorder  = PaymentOrder::find($id);
-        if(is_null($paymentorder)){
+        if (is_null($paymentorder)) {
             return response()->json(['error' => 'not_found']);
         }
         $paymentorder->update($request->all());
@@ -74,7 +74,7 @@ class PaymentOrderController extends Controller
     public function destroy($id)
     {
         $paymentorder = PaymentOrder::find($id);
-        if(is_null($paymentorder)){
+        if (is_null($paymentorder)) {
             return response()->json(['error' => 'not_found']);
         }
         $paymentorder->delete();

@@ -32,6 +32,14 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::get('/organizations', 'Api\OrganizationController@index');
     Route::post('/organization', 'Api\OrganizationController@store');
 
+    /*Email endpoints*/
+    Route::get('/emails/{role}/', 'Api\UserController@getRoleEmails');
+
+    /*Metric endpoints*/
+    Route::get('/metric/revenue/{created_date}', 'Api\OrderController@getOrderRevenue');
+    Route::get('/metric/{role}/{created_date}', 'Api\UserController@getCreatedRoleUsers');
+    Route::post('/metric/orders', 'Api\OrderController@getOrdersByStatus');
+
     //Private endpoints
     Route::middleware('auth:api')->group(function () {
 
@@ -324,7 +332,5 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/paymentpayout', 'Api\PaymentPayoutController@store');
         Route::put('/paymentpayout/{id}', 'Api\PaymentPayoutController@update');
         Route::delete('/paymentpayout/{id}', 'Api\PaymentPayoutController@destroy');
-
     });
-    
 });

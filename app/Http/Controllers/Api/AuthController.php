@@ -146,6 +146,7 @@ class AuthController extends Controller
 				$user->lastname = $request->lastname;
 				$user->phone = $request->phone;
 				$user->email = $request->email;
+				$user->is_mailing_list = $request->is_mailing_list;
 				$user->save();
 				$response = 'Profile updated';
 				return response(['msg' => $response], 200);

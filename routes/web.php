@@ -120,3 +120,4 @@ Route::post('/action-order/{id}', 'Buyer\BuyerController@actionOrder');
 
 /*Email Routes*/
 Route::get('/email/metrics/{period_date?}', 'Admin\AdminController@sendBusinessMetrics');
+Route::get('/email/promos-deals/{period_date?}', 'Admin\AdminController@sendPromosDeals');

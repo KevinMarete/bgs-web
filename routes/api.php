@@ -33,12 +33,17 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::post('/organization', 'Api\OrganizationController@store');
 
     /*Email endpoints*/
+    Route::get('/emails/mailing-list/', 'Api\UserController@getMailingListEmails');
     Route::get('/emails/{role}/', 'Api\UserController@getRoleEmails');
 
     /*Metric endpoints*/
     Route::get('/metric/revenue/{created_date}', 'Api\OrderController@getOrderRevenue');
     Route::get('/metric/{role}/{created_date}', 'Api\UserController@getCreatedRoleUsers');
     Route::post('/metric/orders', 'Api\OrderController@getOrdersByStatus');
+
+    /*Marketing (Promos & Deals) endpoints*/
+    Route::get('/marketing/promos/{period_date}', 'Api\ProductPromoController@getPromosByDate');
+    Route::get('/marketing/deals/{period_date}', 'Api\ProductDealController@getDealsByDate');
 
     //Private endpoints
     Route::middleware('auth:api')->group(function () {

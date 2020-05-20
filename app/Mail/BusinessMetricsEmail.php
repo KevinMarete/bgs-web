@@ -30,6 +30,6 @@ class BusinessMetricsEmail extends Mailable
   {
     $this->view('emails/business_metrics');
     return $this->to($this->metric->email)
-      ->subject('BGS Business Metrics #' . $this->metric->date);
+      ->subject('BGS Business Metrics # ' . $this->metric->date);
   }
 }

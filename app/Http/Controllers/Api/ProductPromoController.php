@@ -45,7 +45,7 @@ class ProductPromoController extends Controller
     public function show($id)
     {
         $productpromo = ProductPromo::with('product_now', 'offer', 'product_now.product')->find($id);
-        if(is_null($productpromo)){
+        if (is_null($productpromo)) {
             return response()->json(['error' => 'not_found']);
         }
         return response()->json($productpromo);
@@ -62,7 +62,7 @@ class ProductPromoController extends Controller
     {
         $this->validate($request, ProductPromo::$rules);
         $productpromo  = ProductPromo::find($id);
-        if(is_null($productpromo)){
+        if (is_null($productpromo)) {
             return response()->json(['error' => 'not_found']);
         }
         $productpromo->update($request->all());
@@ -78,10 +78,25 @@ class ProductPromoController extends Controller
     public function destroy($id)
     {
         $productpromo = ProductPromo::find($id);
-        if(is_null($productpromo)){
+        if (is_null($productpromo)) {
             return response()->json(['error' => 'not_found']);
         }
         $productpromo->delete();
         return response()->json(['msg' => 'Removed successfully']);
+    }
+
+    /**
+     * Display all promos based on specified_date
+     *
+     * @param  date  $period_date
+     * @return \Illuminate\Http\Response
+     */
+    public function getPromosByDate($period_date)
+    {
+        $promos = ProductPromo::with(['offer', 'product_now', 'product_now.product', 'product_now.organization'])->whereHas('offer', function ($query) use ($period_date) {
+            $query->whereDate('valid_from', '<=', $period_date);
+            $query->whereDate('valid_until', '>=', $period_date);
+        })->get();
+        return response()->json($promos);
     }
 }

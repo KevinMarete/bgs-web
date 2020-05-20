@@ -40,7 +40,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstname\": \"Alphonce\",\n    \"lastname\": \"Ochieng\",\n    \"phone\": \"0715882227\",\n    \"email\": \"alpho07@gmail.com\",\n    \"password\": \"123456\",\n    \"organization_id\": \"1\"\n}"
+							"raw": "{\n    \"firstname\": \"Alphonce\",\n    \"lastname\": \"Ochieng\",\n    \"phone\": \"0715882227\",\n    \"email\": \"alpho07@gmail.com\",\n    \"password\": \"123456\",\n    \"organization_id\": \"1\",\n    \"is_mailing_list\": \"true\"\n}"
 						},
 						"url": {
 							"raw": "{{host}}{{port}}/api/register",
@@ -263,7 +263,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"1\",\n    \"firstname\": \"Kevin\",\n    \"lastname\": \"Marete\",\n    \"email\": \"kevomarete@gmail.com\",\n    \"phone\": \"0725102659\"\n}"
+							"raw": "{\n    \"id\": \"1\",\n    \"firstname\": \"Kevin\",\n    \"lastname\": \"Marete\",\n    \"email\": \"kevomarete@gmail.com\",\n    \"phone\": \"0725102659\",\n    \"is_mailing_list\": \"true\"\n}"
 						},
 						"url": {
 							"raw": "{{host}}{{port}}/api/profile",
@@ -5803,6 +5803,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Order CreditLog",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/order/8/creditlog",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"8",
+								"creditlog"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -8467,6 +8505,170 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Emails",
+			"item": [
+				{
+					"name": "Get Role Emails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{port}}/api/emails/admin",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"emails",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get MailingList Emails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{port}}/api/emails/mailing-list",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"emails",
+								"mailing-list"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Metrics",
+			"item": [
+				{
+					"name": "Get Role Metric",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{port}}/api/metric/buyer/2020-02-18",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"metric",
+								"buyer",
+								"2020-02-18"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders Metric",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"delivered, order_closed\",\n    \"updated_at\": \"2020-03-30\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{port}}/api/metric/orders",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"metric",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Revenue Metric",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{port}}/api/metric/revenue/2020-03-30",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"metric",
+								"revenue",
+								"2020-03-30"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Marketing",
+			"item": [
+				{
+					"name": "Get All Promos on Specified Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{port}}/api/marketing/promos/2020-04-18",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"marketing",
+								"promos",
+								"2020-04-18"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Deals on Specified Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{port}}/api/marketing/deals/2020-04-18",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"marketing",
+								"deals",
+								"2020-04-18"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -8493,21 +8695,21 @@
 	],
 	"variable": [
 		{
-			"id": "08951241-e2cc-4ae3-ab6f-a0dca2569fd1",
+			"id": "6a3e6d8e-0451-4d78-97d6-6d94b385e1ed",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "e5d47f45-dc35-43ce-9b4e-97c84020b28d",
+			"id": "6889d5c6-ac79-447f-992e-3db5f482d458",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "a6581adc-3c5c-402b-bc09-dbdf6a9e79a2",
+			"id": "ff6e79e5-79e8-41b3-b49b-1dc18d04ba85",
 			"key": "token",
-			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMTZiZTBjOGM5Y2ZjYjNlMmI2Y2NkMWU4ZjhkNGM1NzYyZWI5NmFkZmIyNjAzZTk1M2MyZTNmOGFmNDdjODU2YTlmM2Y0YzYzOWEzOTI2ZTQiLCJpYXQiOjE1ODE4NDc5NDQsIm5iZiI6MTU4MTg0Nzk0NCwiZXhwIjoxNjEzNDcwMzQ0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.BNhJp-Xr6ymEbSqcdf2hSPlm5iJDb5iR5fwsmS1jnUG1cX8GoO_z-SP2Qqe47qT6Cs2ZlaX6HMuXLD1QvApvaHwkZ8gCxJo2U_JhqLYc9VwDNXsDXygtdjajynZvxlcSFhPB7xI8wTFt0Pl6wdlPQbfDWWHarD4zO1pYelnlcRY1jqbyS1Z6L4fPgMlu9P8L4tRvkQF_6bm6yZtR7bS_yp7n1GjDA9s5rLzUEavfAhrFv9a4HfpR8RssX9DVOIPem6RvdDOzivyPkapAj-OQvQjl58faZNkaV1mk0cRjQLohdAtxaYMJYm0ORKAn7Fps6B_CA0DK0DJPBhtLU4xsmiAWXBYHcZ3wEQZR4iHoDjZUKp2HS3afthHobJIUS8OYrSoVQRsiOM7USaogfiAsuj2hj9c4GK6wXDkgI92VrXU3tSxI8qA95PRUWNVqjLDXCciBrxJ3C6BD8-e5C6kM8KJ7n4T4MsPlqVZAa75p7d7On1OaERaWyUOwF1z9pXUKYpnorkwbEc-K0RWK0Bgg-CXSiNpmvqISzDzSTsugZkC4ju_6PS3O9jdnOrijtT4LC-lyECIBJeliORAlDYgOBx1NjXp18JkaHqAuE-RWVlWSFK5AW7Kw3E3M-mHSh6jjTHuqp9JS39A8R-B_ciUEmTQCp4psg6wo8SVAnrS9vus",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"
 		}
 	],

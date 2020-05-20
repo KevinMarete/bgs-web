@@ -6,19 +6,19 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class BusinessMetricsEmail extends Mailable
+class PromosDealsEmail extends Mailable
 {
   use Queueable, SerializesModels;
-  public $metric;
+  public $mailing_list;
 
   /**
    * Create a new message instance.
    *
    * @return void
    */
-  public function __construct($metric)
+  public function __construct($mailing_list)
   {
-    $this->metric = $metric;
+    $this->mailing_list = $mailing_list;
   }
 
   /**
@@ -28,8 +28,8 @@ class BusinessMetricsEmail extends Mailable
    */
   public function build()
   {
-    $this->view('emails/business_metrics');
-    return $this->to($this->metric->email)
-      ->subject('BGS Business Metrics # ' . $this->metric->date);
+    $this->view('emails/promos_deals_mailing_list');
+    return $this->bcc($this->mailing_list->email)
+      ->subject('BGS Promos & Deals # ' . $this->mailing_list->date);
   }
 }

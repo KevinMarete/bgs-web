@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
 class AccountController extends MyController
-{   
-    
+{
+
     public function displayView()
-    {   
+    {
         $token = session()->get('token');
         $user_id = session()->get('id');
         $role_id = session()->get('organization.organization_type.role_id');
@@ -28,7 +28,7 @@ class AccountController extends MyController
             'min_redeem' => env('MIN_REDEEM_POINTS')
         ];
         $data = [
-            'page_title' => 'Manage Account', 
+            'page_title' => 'Manage Account',
             'content_view' => View::make('auth.account', $view_data),
             'menus' => $this->getRoleMenus($token, $role_id)
         ];
@@ -41,22 +41,22 @@ class AccountController extends MyController
         //Send request data to Api
         $response = $this->client->put("profile", [
             'headers' => [
-                'Authorization' => 'Bearer '.session()->get('token')
+                'Authorization' => 'Bearer ' . session()->get('token')
             ],
             'json' => $request->all()
         ]);
         $response = json_decode($response->getBody(), true);
 
-        if(isset($response['error'])){
+        if (isset($response['error'])) {
             $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> '.$response["error"].'
+                            <strong>Error!</strong> ' . $response["error"] . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>';
-        }else{
+        } else {
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> '.$response["msg"].'
+                            <strong>Success!</strong> ' . $response["msg"] . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -72,22 +72,22 @@ class AccountController extends MyController
         //Send request data to Api
         $response = $this->client->post("changepassword", [
             'headers' => [
-                'Authorization' => 'Bearer '.session()->get('token')
+                'Authorization' => 'Bearer ' . session()->get('token')
             ],
             'json' => $request->all()
         ]);
         $response = json_decode($response->getBody(), true);
 
-        if(isset($response['error'])){
+        if (isset($response['error'])) {
             $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> '.$response["error"].'
+                            <strong>Error!</strong> ' . $response["error"] . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>';
-        }else{
+        } else {
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> '.$response["msg"].'
+                            <strong>Success!</strong> ' . $response["msg"] . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -99,7 +99,7 @@ class AccountController extends MyController
     }
 
     public function saveSubscription(Request $request)
-    {   
+    {
         $token = session()->get('token');
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
@@ -113,13 +113,13 @@ class AccountController extends MyController
         //Send request data to Api
         $response = $this->client->post("subscription", [
             'headers' => [
-                'Authorization' => 'Bearer '.$token
+                'Authorization' => 'Bearer ' . $token
             ],
             'json' => $request->all()
         ]);
         $subscription_response = json_decode($response->getBody(), true);
         $subscription_id = $subscription_response['id'];
-        
+
         //Make payment
         $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
@@ -127,7 +127,7 @@ class AccountController extends MyController
         //Send request data to Api for payment
         $response = $this->client->post("paymentsubscription", [
             'headers' => [
-                'Authorization' => 'Bearer '.session()->get('token')
+                'Authorization' => 'Bearer ' . session()->get('token')
             ],
             'json' => ['payment_id' => $payment_id, 'subscription_id' => $subscription_id]
         ]);
@@ -144,8 +144,8 @@ class AccountController extends MyController
         return redirect('/account');
     }
 
-    public function getUserSubscription($token=null, $user_id=null)
-    {   
+    public function getUserSubscription($token = null, $user_id = null)
+    {
         $subscription = [
             'status' => 'inactive',
             'start_date' => null,
@@ -156,16 +156,16 @@ class AccountController extends MyController
             ]
         ];
 
-        if($token !== null){
-            $request = $this->client->get('user/'.$user_id.'/subscription', [
+        if ($token !== null) {
+            $request = $this->client->get('user/' . $user_id . '/subscription', [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ]
             ]);
             $response = json_decode($request->getBody(), true);
-            if($response){
+            if ($response) {
                 $subscription = [
-                    'status' => ( date('Y-m-d', strtotime($response['end_date'])) >= date('Y-m-d') ? 'active' : 'inactive'),
+                    'status' => (date('Y-m-d', strtotime($response['end_date'])) >= date('Y-m-d') ? 'active' : 'inactive'),
                     'start_date' => $response['start_date'],
                     'end_date' => date('jS-M-Y', strtotime($response['end_date'])),
                     'package' => [
@@ -179,21 +179,21 @@ class AccountController extends MyController
         return $subscription;
     }
 
-    public function getUserPoints($token=null, $user_id=null)
-    {   
+    public function getUserPoints($token = null, $user_id = null)
+    {
         $points = [
             'points' => 0,
             'loyalty_logs' => []
         ];
 
-        if($token !== null){
-            $request = $this->client->get('user/'.$user_id.'/loyalty', [
+        if ($token !== null) {
+            $request = $this->client->get('user/' . $user_id . '/loyalty', [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ]
             ]);
             $response = json_decode($request->getBody(), true);
-            if($response){
+            if ($response) {
                 $points = $response;
             }
         }
@@ -201,21 +201,21 @@ class AccountController extends MyController
         return $points;
     }
 
-    public function getUserCredits($token=null, $user_id=null)
-    {   
+    public function getUserCredits($token = null, $user_id = null)
+    {
         $credits = [
             'amount' => 0,
             'credit_logs' => []
         ];
 
-        if($token !== null){
-            $request = $this->client->get('user/'.$user_id.'/credit', [
+        if ($token !== null) {
+            $request = $this->client->get('user/' . $user_id . '/credit', [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ]
             ]);
             $response = json_decode($request->getBody(), true);
-            if($response){
+            if ($response) {
                 $credits = $response;
             }
         }
@@ -223,21 +223,21 @@ class AccountController extends MyController
         return $credits;
     }
 
-    public function getOrganizationPaymentType($token=null, $organization_id=null)
+    public function getOrganizationPaymentType($token = null, $organization_id = null)
     {
         $organization_payment_type = [
             'id' => '',
             'details' => json_encode([])
         ];
 
-        if($token !== null & $organization_id !== null){
-            $request = $this->client->get('organization/'.$organization_id.'/payment-type', [
+        if ($token !== null & $organization_id !== null) {
+            $request = $this->client->get('organization/' . $organization_id . '/payment-type', [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ]
             ]);
             $response = json_decode($request->getBody(), true);
-            if($response){
+            if ($response) {
                 $organization_payment_type = $response;
             }
         }
@@ -246,7 +246,7 @@ class AccountController extends MyController
     }
 
     public function getPaymentDetails()
-    {   
+    {
         $payment = [
             'paybill_number' => env('PAYBILL_NUMBER'),
             'account_number' => env('ACCOUNT_NUMBER')
@@ -255,7 +255,7 @@ class AccountController extends MyController
     }
 
     public function manageAccountPayment(Request $request)
-    {   
+    {
         $post_data = [
             'details' => json_encode(json_decode($request->details)),
             'organization_id' => session()->get('organization_id'),
@@ -265,7 +265,7 @@ class AccountController extends MyController
         //Send request data to Api
         $response = $this->client->post("organization-payment-type", [
             'headers' => [
-                'Authorization' => 'Bearer '.session()->get('token')
+                'Authorization' => 'Bearer ' . session()->get('token')
             ],
             'json' => $post_data
         ]);
@@ -282,7 +282,7 @@ class AccountController extends MyController
     }
 
     public function redeemPoints(Request $request)
-    {   
+    {
         $token = session()->get('token');
         $user_id = session()->get('id');
         $user_points = $this->getUserPoints($token, $user_id)['points'];
@@ -307,7 +307,7 @@ class AccountController extends MyController
 
         //Update CreditLog
         $credit_log_data = [
-            'status' => 'redeemed_from_loyalty', 
+            'status' => 'redeemed_from_loyalty',
             'amount' => ($credits_per_order * $redeemed_points),
             'credit_id' => $credit_id
         ];
@@ -325,11 +325,11 @@ class AccountController extends MyController
     }
 
     public function logout(Request $request)
-    {   
+    {
         //Send request data to Api
         $response = $this->client->post("logout", [
             'headers' => [
-                'Authorization' => 'Bearer '.session()->get('token')
+                'Authorization' => 'Bearer ' . session()->get('token')
             ]
         ]);
         $response = json_decode($response->getBody(), true);
@@ -337,9 +337,9 @@ class AccountController extends MyController
         //Clear sessions
         $request->session()->flush();
 
-        if(isset($response['msg'])){
+        if (isset($response['msg'])) {
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> '.$response["msg"].'
+                            <strong>Success!</strong> ' . $response["msg"] . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -349,5 +349,4 @@ class AccountController extends MyController
 
         return redirect('/sign-in');
     }
-
 }

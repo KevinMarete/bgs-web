@@ -151,4 +151,16 @@ class UserController extends Controller
         })->whereDate('created_at', $created_date)->get();
         return response()->json(['role' => $role_name, 'total' => sizeof($role_users)]);
     }
+
+    /**
+     * Display All MailingList Emails
+     *
+     * @param  string  $role_name
+     * @return \Illuminate\Http\Response
+     */
+    public function getMailingListEmails()
+    {
+        $mailing_list_emails = User::where('is_mailing_list', 1)->select('email')->get();
+        return response()->json($mailing_list_emails);
+    }
 }

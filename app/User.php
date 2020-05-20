@@ -23,7 +23,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['firstname', 'lastname', 'phone', 'email', 'email_verified_at', 'password', 'organization_id'];
+    protected $fillable = ['firstname', 'lastname', 'phone', 'email', 'email_verified_at', 'password', 'organization_id', 'is_mailing_list'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -45,5 +45,4 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Organization');
     }
-
 }

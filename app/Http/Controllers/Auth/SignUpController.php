@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
 class SignUpController extends Controller
-{   
+{
     protected $client;
 
     public function __construct()
-    {   
+    {
         //Setup Curl client
         $this->client = new Client([
             'base_uri' => env('API_URL'),
@@ -19,7 +19,7 @@ class SignUpController extends Controller
                 'exceptions' => false
             ],
             'timeout'  => 10.0
-        ]); 
+        ]);
     }
 
     public function displayView()
@@ -31,9 +31,9 @@ class SignUpController extends Controller
     }
 
     public function saveAccount(Request $request)
-    {   
+    {
         //Check if passwords match 
-        if($request->password !== $request->cpassword){
+        if ($request->password !== $request->cpassword) {
             $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Error!</strong> Your passwords do not match, please confirm again
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -65,7 +65,7 @@ class SignUpController extends Controller
     }
 
     public function getOrganizations()
-    {   
+    {
         $request = $this->client->get('organizations');
         $response = $request->getBody();
         $organizations = json_decode($response, true);

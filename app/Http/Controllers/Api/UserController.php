@@ -163,4 +163,17 @@ class UserController extends Controller
         $mailing_list_emails = User::where('is_mailing_list', 1)->select('email')->get();
         return response()->json($mailing_list_emails);
     }
+
+    /**
+     * Display the all admin users.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAdminUsers()
+    {
+        $admin_users = User::with(['organization', 'organization.organization_type', 'organization.organization_type.role'])->whereHas('organization.organization_type.role', function ($query) {
+            $query->where('name', 'admin');
+        })->get();
+        return response()->json($admin_users);
+    }
 }

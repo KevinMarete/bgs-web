@@ -77,6 +77,9 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/productdeals', 'Api\OrganizationController@getOrganizationProductDeals');
         Route::get('/organization/{id}/orders', 'Api\OrganizationController@getOrganizationOrders');
         Route::get('/organization/{id}/seller-orders', 'Api\OrganizationController@getOrganizationSellerOrders');
+        Route::get('/organization/{id}/products', 'Api\OrganizationController@getOrganizationProducts');
+        Route::get('/sellers', 'Api\OrganizationController@getSellerOrganizations');
+        Route::get('/admins', 'Api\OrganizationController@getAdminOrganizations');
 
         /*Package endpoints*/
         Route::get('/packages', 'Api\PackageController@index');
@@ -92,6 +95,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/user/{id}/subscription', 'Api\UserController@getUserSubscription');
         Route::get('/user/{id}/loyalty', 'Api\UserController@getUserPoints');
         Route::get('/user/{id}/credit', 'Api\UserController@getUserCredits');
+        Route::get('/user-admins', 'Api\UserController@getAdminUsers');
 
         /*Subscription endpoints*/
         Route::get('/subscriptions', 'Api\SubscriptionController@index');

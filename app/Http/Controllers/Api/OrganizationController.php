@@ -11,6 +11,7 @@ use App\ProductNow;
 use App\ProductPromo;
 use App\ProductDeal;
 use App\Order;
+use App\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,7 @@ class OrganizationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $this->validate($request, Organization::$rules);
         $organization = Organization::firstOrCreate([
             'name' => $request->name,
@@ -53,7 +54,7 @@ class OrganizationController extends Controller
     public function show($id)
     {
         $organization = Organization::with('organization_type', 'organization_type.role')->find($id);
-        if(is_null($organization)){
+        if (is_null($organization)) {
             return response()->json(['error' => 'not_found']);
         }
         return response()->json($organization);
@@ -70,7 +71,7 @@ class OrganizationController extends Controller
     {
         $this->validate($request, Organization::$rules);
         $organization  = Organization::find($id);
-        if(is_null($organization)){
+        if (is_null($organization)) {
             return response()->json(['error' => 'not_found']);
         }
         $organization->update($request->all());
@@ -86,7 +87,7 @@ class OrganizationController extends Controller
     public function destroy($id)
     {
         $organization = Organization::find($id);
-        if(is_null($organization)){
+        if (is_null($organization)) {
             return response()->json(['error' => 'not_found']);
         }
         $organization->delete();
@@ -138,12 +139,12 @@ class OrganizationController extends Controller
     public function getOrganizationStockBalances($id)
     {
         $stockbalances = DB::table('tbl_stock_balance AS sb')
-                            ->select(DB::raw('SUM(sb.quantity) as balance, sb.product_id, sb.organization_id, p.molecular_name, p.brand_name, p.pack_size, p.strength'))
-                            ->join('tbl_product AS p', 'p.id', '=', 'sb.product_id')
-                            ->where('organization_id', $id)
-                            ->groupBy('sb.product_id', 'sb.organization_id', 'p.molecular_name', 'p.brand_name', 'p.pack_size', 'p.strength')
-                            ->orderBy('p.molecular_name', 'DESC')
-                            ->get();
+            ->select(DB::raw('SUM(sb.quantity) as balance, sb.product_id, sb.organization_id, p.molecular_name, p.brand_name, p.pack_size, p.strength'))
+            ->join('tbl_product AS p', 'p.id', '=', 'sb.product_id')
+            ->where('sb.organization_id', $id)
+            ->groupBy('sb.product_id', 'sb.organization_id', 'p.molecular_name', 'p.brand_name', 'p.pack_size', 'p.strength')
+            ->orderBy('p.molecular_name', 'DESC')
+            ->get();
         return response()->json($stockbalances);
     }
 
@@ -190,10 +191,10 @@ class OrganizationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getOrganizationProductPromos($id)
-    {   
-        $productpromos = ProductPromo::with(['product_now' => function($query) use ($id) {
+    {
+        $productpromos = ProductPromo::with(['product_now' => function ($query) use ($id) {
             $query->where('organization_id', $id);
-          }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
+        }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
         return response()->json($productpromos);
     }
 
@@ -205,9 +206,9 @@ class OrganizationController extends Controller
      */
     public function getOrganizationProductDeals($id)
     {
-        $productdeals = ProductDeal::with(['product_now' => function($query) use ($id) {
+        $productdeals = ProductDeal::with(['product_now' => function ($query) use ($id) {
             $query->where('organization_id', $id);
-          }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
+        }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
         return response()->json($productdeals);
     }
 
@@ -230,10 +231,48 @@ class OrganizationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getOrganizationSellerOrders($id)
-    {   
-        $seller_orders = Order::with(['organization', 'order_items', 'order_logs'])->whereHas('order_items', function($query) use ($id) {
+    {
+        $seller_orders = Order::with(['organization', 'order_items', 'order_logs'])->whereHas('order_items', function ($query) use ($id) {
             $query->where('organization_id', $id);
-          })->get();
+        })->get();
         return response()->json($seller_orders);
+    }
+
+    /**
+     * Display the specified Organization's Products.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationProducts($id)
+    {
+        $organization_products = Product::with(['organization', 'product_category'])->where('organization_id', $id)->limit(100)->get();
+        return response()->json($organization_products);
+    }
+
+    /**
+     * Display the all seller organizations.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getSellerOrganizations()
+    {
+        $seller_orgs = Organization::with(['organization_type', 'organization_type.role'])->whereHas('organization_type.role', function ($query) {
+            $query->where('name', 'seller');
+        })->get();
+        return response()->json($seller_orgs);
+    }
+
+    /**
+     * Display the all admin organizations.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAdminOrganizations()
+    {
+        $admin_orgs = Organization::with(['organization_type', 'organization_type.role'])->whereHas('organization_type.role', function ($query) {
+            $query->where('name', 'admin');
+        })->get();
+        return response()->json($admin_orgs);
     }
 }

@@ -1,0 +1,54 @@
+<div class="sb-page-header pb-10 sb-page-header-dark bg-gradient-primary-to-secondary">
+  <div class="container-fluid">
+    <div class="sb-page-header-content py-5">
+      <h1 class="sb-page-header-title">
+        <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
+        <span>{{ $resource_name }} </span>
+      </h1>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt-n10">
+  @if (Session::has('bgs_msg'))
+  {!! session('bgs_msg') !!}
+  @endif
+  <div class="card mb-4">
+    <div class="card-header">
+      {{ $resource_name }} Listing
+      <a href="/manage/{{ str_replace(' ', '-', strtolower($resource_name)) }}" class="btn btn-primary ml-auto"><i data-feather="plus"></i> Add {{ $resource_name }}</a>
+    </div>
+    <div class="card-body">
+      <div class="sb-datatable table-responsive">
+        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              @foreach ($table_headers as $key => $header)
+              <th>{{ ucwords($header) }}</th>
+              @endforeach
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              @foreach ($table_headers as $header)
+              <th>{{ ucwords($header) }}</th>
+              @endforeach
+            </tr>
+          </tfoot>
+          <tbody>
+            @foreach ($table_data as $row)
+            <tr>
+              @foreach ($table_headers as $header)
+              @if (is_array($row[$header]))
+              <td>{{ $row[$header][(array_key_exists('name', $row[$header]) ? 'name' : 'molecular_name')] }}</td>
+              @else
+              <td>{{ $row[$header] }}</td>
+              @endif
+              @endforeach
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

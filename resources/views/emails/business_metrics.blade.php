@@ -31,6 +31,18 @@
 				<tr>
 					<td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">
 						<strong>
+							<span style="color: #7c7c7c;">New Sellers</span>
+						</strong>
+					</td>
+					<td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">
+						<strong>
+							<span style="color: #7c7c7c;">{{ number_format($metric->sellers) }}</span>
+						</strong>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">
+						<strong>
 							<span style="color: #7c7c7c;">Orders Serviced</span>
 						</strong>
 					</td>

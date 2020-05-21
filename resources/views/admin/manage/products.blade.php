@@ -63,13 +63,38 @@
                         <select class="form-control" size="0" name="product_category_id" required>
                             <option value="">Select Product Category</option>
                             @foreach ($product_categories as $product_category)
-                                @if ($product_category['id'] === (isset($edit['product_category_id']) ? $edit['product_category_id'] : ''))
-                                    <option value="{{ $product_category['id'] }}" selected>{{ $product_category['name'] }}</option>
-                                @else
-                                    <option value="{{ $product_category['id'] }}">{{ $product_category['name'] }}</option>
-                                @endif
+                            @if ($product_category['id'] === (isset($edit['product_category_id']) ? $edit['product_category_id'] : ''))
+                            <option value="{{ $product_category['id'] }}" selected>{{ $product_category['name'] }}</option>
+                            @else
+                            <option value="{{ $product_category['id'] }}">{{ $product_category['name'] }}</option>
+                            @endif
                             @endforeach
                         </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Organization</label>
+                    <div class="col-lg-9">
+                        @if (strtolower(session()->get('organization.organization_type.role.name')) === 'admin')
+                        <select class="form-control" size="0" name="organization_id" required>
+                            <option value="">Select Organization</option>
+                            @foreach ($sellers as $organization)
+                            @if ($organization['id'] === (isset($edit['organization_id']) ? $edit['organization_id'] : ''))
+                            <option value="{{ $organization['id'] }}" selected>{{ $organization['name'] }}</option>
+                            @else
+                            <option value="{{ $organization['id'] }}">{{ $organization['name'] }}</option>
+                            @endif
+                            @endforeach
+                        </select>
+                        @else
+                        <select class="form-control" size="0" readonly name="organization_id" required>
+                            @foreach ($sellers as $organization)
+                            @if ($organization['id'] === session()->get('organization_id'))
+                            <option value="{{ $organization['id'] }}" selected>{{ $organization['name'] }}</option>
+                            @endif
+                            @endforeach
+                        </select>
+                        @endif
                     </div>
                 </div>
                 <div class="form-group row">

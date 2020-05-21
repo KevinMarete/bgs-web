@@ -29,7 +29,7 @@ class BusinessMetricsEmail extends Mailable
   public function build()
   {
     $this->view('emails/business_metrics');
-    return $this->to($this->metric->email)
+    return $this->bcc($this->metric->email)
       ->subject('BGS Business Metrics # ' . $this->metric->date);
   }
 }

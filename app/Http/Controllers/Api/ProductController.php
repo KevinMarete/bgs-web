@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('product_category')->orderBy('molecular_name', 'ASC')->limit(1000)->get();
+        $products = Product::with('product_category', 'organization')->orderBy('molecular_name', 'ASC')->limit(100)->get();
         return response()->json($products);
     }
 
@@ -28,7 +28,14 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, Product::$rules);
-        $product = Product::firstOrCreate($request->all(), $request->all());
+        $product = Product::firstOrCreate([
+            'molecular_name' => $request->molecular_name,
+            'brand_name' => $request->brand_name,
+            'pack_size' => $request->pack_size,
+            'strength' => $request->strength,
+            'product_category_id' => $request->product_category_id,
+            'organization_id' => $request->organization_id,
+        ], $request->all());
         return response()->json($product);
     }
 
@@ -40,8 +47,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('product_category')->find($id);
-        if(is_null($product)){
+        $product = Product::with('product_category', 'organization')->find($id);
+        if (is_null($product)) {
             return response()->json(['error' => 'not_found']);
         }
         return response()->json($product);
@@ -58,7 +65,7 @@ class ProductController extends Controller
     {
         $this->validate($request, Product::$rules);
         $product  = Product::find($id);
-        if(is_null($product)){
+        if (is_null($product)) {
             return response()->json(['error' => 'not_found']);
         }
         $product->update($request->all());
@@ -74,7 +81,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        if(is_null($product)){
+        if (is_null($product)) {
             return response()->json(['error' => 'not_found']);
         }
         $product->delete();

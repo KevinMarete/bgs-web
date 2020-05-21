@@ -30,20 +30,53 @@ class AdminController extends MyController
 	{
 		$resource = $request->path();
 		$resource_name = ucwords(str_replace('-', ' ', $resource));
+		$resource_url = $this->getResourceUrl(session(), $resource);
+		$resource_view = $this->getResourceView(session(), $resource);
 		$token = session()->get('token');
 		$role_id = session()->get('organization.organization_type.role_id');
+
 		$view_data = [
 			'resource_name' => $resource_name,
 			'table_headers' => $this->getResourceKeys($resource),
-			'table_data' => $this->getResourceData($token, $resource)
+			'table_data' => $this->getResourceData($token, $resource_url)
 		];
 		$data = [
 			'page_title' => $resource_name,
-			'content_view' => View::make('admin.table', $view_data),
+			'content_view' => View::make($resource_view, $view_data),
 			'menus' => $this->getRoleMenus($token, $role_id),
 		];
 
 		return view('template.main', $data);
+	}
+
+	public function getResourceUrl($session_obj, $resource)
+	{
+		$resource_url = $resource;
+		$organization_id = $session_obj->get('organization_id');
+		$role_name = strtolower($session_obj->get('organization.organization_type.role.name'));
+
+		if ($role_name == 'seller' && $resource == 'products') {
+			//Get resource_url for seller products
+			$resource_url = 'organization/' . $organization_id . '/products';
+		} else if ($role_name == 'admin' && $resource == 'users') {
+			//Get resource_url for admin users
+			$resource_url = 'user-admins';
+		}
+
+		return $resource_url;
+	}
+
+	public function getResourceView($session_obj, $resource)
+	{
+		$resource_view = 'admin.table';
+		$role_name = strtolower($session_obj->get('organization.organization_type.role.name'));
+
+		//Get resource_view for admin users
+		if ($role_name == 'admin' && $resource == 'users') {
+			$resource_view = 'admin.user_table';
+		}
+
+		return $resource_view;
 	}
 
 	public function getResourceData($token = null, $resource = null)
@@ -73,10 +106,11 @@ class AdminController extends MyController
 				'product-categories' => ['id', 'name'],
 				'stocktypes' => ['id', 'name', 'effect'],
 				'payment-types' => ['id', 'name', 'details'],
-				'products' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'strength', 'product_category', 'unit_price', 'delivery_cost'],
+				'products' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'strength', 'product_category'],
 				'menus' => ['id', 'name'],
 				'menu-roles' => ['id', 'menu', 'role'],
 				'couriers' => ['id', 'name', 'phone', 'email', 'contact'],
+				'users' => ['id', 'firstname', 'lastname', 'email', 'phone', 'organization']
 			];
 			$header_data = $headers[$resource];
 		}
@@ -146,10 +180,11 @@ class AdminController extends MyController
 			'product-categories' => [],
 			'stocktypes' => [],
 			'payment-types' => [],
-			'products' => ['product-categories'],
+			'products' => ['product-categories', 'sellers'],
 			'menus' => [],
 			'menu-roles' => ['menus', 'roles'],
-			'couriers' => []
+			'couriers' => [],
+			'users' => ['admins']
 		];
 
 		if ($token !== null && $resource !== null) {
@@ -202,6 +237,9 @@ class AdminController extends MyController
 
 		$buyer_request = $this->client->get('metric/buyer/' . $period_date);
 		$metric->buyers = json_decode($buyer_request->getBody(), true)['total'];
+
+		$seller_request = $this->client->get('metric/seller/' . $period_date);
+		$metric->sellers = json_decode($seller_request->getBody(), true)['total'];
 
 		$orders_request = $this->client->request('POST', 'metric/orders', [
 			'json' => ['status' => 'delivered, order_closed', 'updated_at' => $period_date]
@@ -259,5 +297,39 @@ class AdminController extends MyController
 		$mailing_list->deals = json_decode($deals_request->getBody(), true);
 
 		return $mailing_list;
+	}
+
+	public function saveAdminAccount(Request $request)
+	{
+		//Check if passwords match 
+		if ($request->password !== $request->cpassword) {
+			$flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> Your passwords do not match, please confirm again
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>';
+			$request->session()->flash('bgs_msg', $flash_msg);
+			return redirect('/manage/users');
+		}
+
+		//Send request data to Api
+		$response = $this->client->post("register", ['json' => $request->all()]);
+		$response = json_decode($response->getBody(), true);
+
+		//Send Account Email 
+		$response = $this->client->post("activateaccountemail", ['json' => ['id' => $response['id']]]);
+		$response = json_decode($response->getBody(), true);
+
+		//Set flash message for View
+		$flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> Account was created successfully. Check the account email for the account activation code.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>';
+		$request->session()->flash('bgs_msg', $flash_msg);
+
+		return redirect('/users');
 	}
 }

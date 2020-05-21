@@ -98,10 +98,12 @@ Route::get('/products', 'Admin\AdminController@displayTableView');
 Route::get('/menus', 'Admin\AdminController@displayTableView');
 Route::get('/menu-roles', 'Admin\AdminController@displayTableView');
 Route::get('/couriers', 'Admin\AdminController@displayTableView');
+Route::get('/users', 'Admin\AdminController@displayTableView');
 Route::get('/manage/{resource}', 'Admin\AdminController@displayManageView');
 Route::post('/manage/{resource}/{action}', 'Admin\AdminController@displayManageView');
 Route::get('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
 Route::post('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
+Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
 
 /*Buyer Routes*/
 Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView');

@@ -1507,6 +1507,116 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Organization Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/products",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"products"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Seller Organizations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/sellers",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"sellers"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Admins Organizations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/admins",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"admins"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -1678,6 +1788,35 @@
 								"user",
 								"2",
 								"credit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Credit Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/user-admins",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"user-admins"
 							]
 						}
 					},
@@ -2571,7 +2710,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"molecular_name\": \"Test Product\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\"\n}",
+							"raw": "{\n    \"molecular_name\": \"Test Product\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"strength\": \"50mg\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2610,7 +2749,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"molecular_name\": \"Test Product Updated\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\"\n}",
+							"raw": "{\n    \"molecular_name\": \"Test Product Updated\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"strength\": \"50mg\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2618,14 +2757,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/product/1",
+							"raw": "{{host}}{{port}}/api/product/7614",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
 								"product",
-								"1"
+								"7614"
 							]
 						}
 					},
@@ -8695,19 +8834,19 @@
 	],
 	"variable": [
 		{
-			"id": "6a3e6d8e-0451-4d78-97d6-6d94b385e1ed",
+			"id": "6ce16469-9a31-48bd-8950-23036caff961",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "6889d5c6-ac79-447f-992e-3db5f482d458",
+			"id": "622e7490-e69c-44d2-9a44-27e1f9901ca5",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "ff6e79e5-79e8-41b3-b49b-1dc18d04ba85",
+			"id": "b0f5bff4-a830-4d88-9984-9f776a46f883",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

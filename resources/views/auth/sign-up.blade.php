@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;display=swap" rel="stylesheet" />
 </head>
 
-<body class="bg-primary">
+<body class="bg-primary-img">
   <div id="layoutAuthentication">
     <div id="layoutAuthentication_content">
       <main>
@@ -100,7 +100,7 @@
   </div>
   <script src="libs/jquery/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
   <script src="libs/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="/js/pagify.js"></script>
+  <script src="libs/jplist/1.2.0/jplist.min.js"></script>
   <script src="js/scripts.js"></script>
 
   <!--

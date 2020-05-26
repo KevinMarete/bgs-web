@@ -27,7 +27,7 @@ class SignInController extends Controller
         $redirect_url = [
             'admin' => '/dashboard',
             'buyer' => '/ordernow',
-            'seller' => '/catalogue'
+            'seller' => '/pricelist'
         ];
         //Send request data to Api
         $response = $this->client->post("login", ['json' => $request->all()]);

@@ -3,7 +3,7 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>Catalogue - OrderNow</span>
+                <span>Add PriceList Item(s)</span>
             </h1>
         </div>
     </div>
@@ -39,19 +39,19 @@
                                     </tfoot>
                                     <tbody>
                                         <tr class="tr_clone">
-                                            <td >
+                                            <td>
                                                 <select class="product col-md-12" size="0" name="product_id[]" required>
                                                     <option value="">Select Product</option>
                                                     @foreach ($products as $product)
-                                                        <option value="{{ $product['product_id'] }}">{{ $product['molecular_name']  }}</option>
+                                                    <option value="{{ $product['product_id'] }}">{{ $product['molecular_name']  }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="text" class="unit_price" value="" name="unit_price[]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/>
+                                                <input type="text" class="unit_price" value="" name="unit_price[]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
                                             </td>
                                             <td>
-                                                <input type="text" class="delivery_cost" value="" name="delivery_cost[]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/>
+                                                <input type="text" class="delivery_cost" value="" name="delivery_cost[]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
                                             </td>
                                             <td>
                                                 <select class="is_published col-md-12" size="0" name="is_published[]" required>
@@ -60,7 +60,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <a href="#" class="add"><i class="fa fa-plus"></i></a> | 
+                                                <a href="#" class="add"><i class="fa fa-plus"></i></a> |
                                                 <a href="#" class="remove"><i class="fa fa-minus"></i></a>
                                             </td>
                                         </tr>

@@ -3,7 +3,7 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>Manage ProductNow - {{ ucwords($manage_label) }}</span>
+                <span>Update PriceList Item</span>
             </h1>
         </div>
     </div>
@@ -17,8 +17,8 @@
                 <div class="form-group row">
                     <label class="col-lg-3 col-form-label form-control-label">UnitPrice</label>
                     <div class="col-lg-9">
-                        <input type="hidden" value="{{ session()->get('organization_id') }}" name="organization_id"/>
-                        <input type="hidden" value="{{ session()->get('id') }}" name="user_id"/>
+                        <input type="hidden" value="{{ session()->get('organization_id') }}" name="organization_id" />
+                        <input type="hidden" value="{{ session()->get('id') }}" name="user_id" />
                         <input class="form-control" type="hidden" value="{{ isset($edit['id']) ? $edit['id'] : '' }}" name="id" required>
                         <input class="form-control" type="text" value="{{ isset($edit['unit_price']) ? $edit['unit_price'] : '' }}" name="unit_price" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                     </div>
@@ -34,11 +34,11 @@
                     <div class="col-lg-9">
                         <select class="form-control" size="0" name="is_published" required>
                             @if ($edit['is_published'])
-                                <option value="1" selected>Yes</option>
-                                <option value="0">No</option>
+                            <option value="1" selected>Yes</option>
+                            <option value="0">No</option>
                             @else
-                                <option value="1">Yes</option>
-                                <option value="0" selected>No</option>
+                            <option value="1">Yes</option>
+                            <option value="0" selected>No</option>
                             @endif
                         </select>
                     </div>
@@ -48,9 +48,9 @@
                     <div class="col-lg-9">
                         <select class="form-control" size="0" readonly name="product_id">
                             @foreach ($products as $product)
-                                @if ($product['product_id'] === $edit['product_id'])
-                                    <option value="{{ $product['product_id'] }}" selected>{{ $product['molecular_name'].'-'.$product['brand_name'] }}</option>
-                               @endif
+                            @if ($product['product_id'] === $edit['product_id'])
+                            <option value="{{ $product['product_id'] }}" selected>{{ $product['molecular_name'].'-'.$product['brand_name'] }}</option>
+                            @endif
                             @endforeach
                         </select>
                     </div>

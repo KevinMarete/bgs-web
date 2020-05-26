@@ -11,7 +11,7 @@ class UpdateCataloguePricelistMenu extends Migration
      */
     public function up()
     {
-        DB::table('tbl_menu')->where('name', 'My Catalogue')->update(['name' => 'My PriceList']);
+        DB::table('tbl_menu')->where('name', 'My Catalogue')->update(['name' => 'My PriceList', 'link' => '/pricelist']);
     }
 
     /**
@@ -21,6 +21,6 @@ class UpdateCataloguePricelistMenu extends Migration
      */
     public function down()
     {
-        DB::table('tbl_menu')->where('name', 'My PriceList')->update(['name' => 'My Catalogue']);
+        DB::table('tbl_menu')->where('name', 'My PriceList')->update(['name' => 'My Catalogue', 'link' => '/catalogue']);
     }
 }

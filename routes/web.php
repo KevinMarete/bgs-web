@@ -57,7 +57,7 @@ Route::post('/redeem-points', 'Auth\AccountController@redeemPoints');
 Route::get('/sign-out', 'Auth\AccountController@logout');
 
 /*Seller Routes*/
-Route::get('/catalogue', 'Seller\SellerController@displayCatalogueView');
+Route::get('/pricelist', 'Seller\SellerController@displayPriceListView');
 Route::get('/manage-ordernows', 'Seller\SellerController@displayOrderNowView');
 Route::get('/manage-promos', 'Seller\SellerController@displayPromoView');
 Route::get('/manage-deals', 'Seller\SellerController@displayDealView');

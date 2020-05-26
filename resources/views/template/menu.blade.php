@@ -1,13 +1,9 @@
 <nav class="sb-topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
     <a class="navbar-brand d-none d-sm-block" href="/dashboard">
         <!-- Logo Image -->
-        <img src="/assets/img/logo.jpeg" width="45" alt="" class="d-inline-block align-middle mr-2">
-        <!-- Logo Text -->
-        <span class="text-uppercase font-weight-bold">
-            BGS<sub class="text-muted"><small>MEDS</small></sub>
-        </span>
+        <img src="/assets/img/logo.png" alt="" height="60" class="img-responsive d-inline-block align-middle mr-2">
     </a>
-    
+
     <button class="btn sb-btn-icon sb-btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#">
         <i data-feather="menu"></i>
     </button>
@@ -26,13 +22,13 @@
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/account"
-                    ><div class="sb-dropdown-item-icon"><i data-feather="settings"></i></div>
-                    Account</a
-                ><a class="dropdown-item" href="/sign-out"
-                    ><div class="sb-dropdown-item-icon"><i data-feather="log-out"></i></div>
-                    Logout</a
-                >
+                <a class="dropdown-item" href="/account">
+                    <div class="sb-dropdown-item-icon"><i data-feather="settings"></i></div>
+                    Account
+                </a><a class="dropdown-item" href="/sign-out">
+                    <div class="sb-dropdown-item-icon"><i data-feather="log-out"></i></div>
+                    Logout
+                </a>
             </div>
         </li>
     </ul>

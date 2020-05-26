@@ -95,14 +95,26 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Display the specified Organization's offers.
+     * Display the specified Organization's all offers.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationAllOffers($id)
+    {
+        $offers = Offer::with('organization')->where('organization_id', $id)->get();
+        return response()->json($offers);
+    }
+
+    /**
+     * Display the specified Organization's active offers.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function getOrganizationOffers($id)
     {
-        $offers = Offer::with('organization')->where('organization_id', $id)->get();
+        $offers = Offer::with('organization')->where('organization_id', $id)->whereDate('valid_until', '>=', date('Y-m-d'))->get();
         return response()->json($offers);
     }
 

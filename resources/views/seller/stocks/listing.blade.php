@@ -3,19 +3,19 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>Stock Balances</span>
+                <span>Stocks</span>
             </h1>
         </div>
     </div>
 </div>
 <div class="container-fluid mt-n10">
     @if (Session::has('bgs_msg'))
-        {!! session('bgs_msg') !!}
+    {!! session('bgs_msg') !!}
     @endif
     <div class="card mb-4">
         <div class="card-header">
             {{ $resource_name }} Listing
-            <a href="/stock-transactions" class="btn btn-primary ml-auto"><i data-feather="plus"></i> Manage Stocks</a>
+            <a href="/stocks/new" class="btn btn-primary ml-auto"><i data-feather="plus"></i> Manage Stocks</a>
         </div>
         <div class="card-body">
             <div class="sb-datatable table-responsive">
@@ -23,7 +23,7 @@
                     <thead>
                         <tr>
                             @foreach ($table_headers as $key => $header)
-                                <th>{{ ucwords($header) }}</th>  
+                            <th>{{ ucwords($header) }}</th>
                             @endforeach
                             <th>Actions</th>
                         </tr>
@@ -31,23 +31,23 @@
                     <tfoot>
                         <tr>
                             @foreach ($table_headers as $header)
-                                <th>{{ ucwords($header) }}</th>  
+                            <th>{{ ucwords($header) }}</th>
                             @endforeach
                             <th>Actions</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         @foreach ($table_data as $row)
-                            <tr>
+                        <tr>
                             @foreach ($table_headers as $header)
-                                <td>{{ $row[$header] }}</td>                                                  
+                            <td>{{ $row[$header] }}</td>
                             @endforeach
-                                <td>
-                                    <a href="/bin-card/{{ $row['product_id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
-                                        <i data-feather="more-vertical"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            <td>
+                                <a href="/stocks/view/{{ $row['product_id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                    <i data-feather="more-vertical"></i>
+                                </a>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>

@@ -12,7 +12,7 @@
     <div class="card mb-4">
         <div class="card-header"> </div>
         <div class="card-body">
-            <form role="form" action="/manage/productnows/{{ $manage_label }}" method="POST">
+            <form role="form" action="/pricelist/{{ $manage_label }}" method="POST">
                 @csrf
                 <div class="form-group row">
                     <label class="col-lg-3 col-form-label form-control-label">UnitPrice</label>

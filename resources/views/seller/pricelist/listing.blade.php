@@ -15,7 +15,7 @@
     <div class="card mb-4">
         <div class="card-header">
             PriceList Listing
-            <a href="/manage-ordernows" class="btn btn-primary ml-auto">
+            <a href="/pricelist/new" class="btn btn-primary ml-auto">
                 <i data-feather="plus"></i>
                 Add PriceList Items
             </a>
@@ -43,15 +43,15 @@
                         @foreach ($table_data as $row)
                         <tr>
                             <td>{{ $row['id'] }}</td>
-                            <td>{{ $row['product']['molecular_name'] }}</td>
                             <td>{{ $row['product']['brand_name'] }}</td>
+                            <td>{{ $row['product']['molecular_name'] }}</td>
                             <td>{{ $row['product']['pack_size'] }}</td>
                             <td>{{ ($row['is_published'] ? 'Yes' : 'No') }}</td>
                             <td>
-                                <a href="/manage/productnows/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                <a href="/pricelist/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                                     <i data-feather="more-vertical"></i>
                                 </a>
-                                <a href="/manage/productnows/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
+                                <a href="/pricelist/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
                                     <i data-feather="trash-2"></i>
                                 </a>
                             </td>

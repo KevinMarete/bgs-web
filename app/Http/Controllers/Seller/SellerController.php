@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 class SellerController extends MyController
 {
 
-    public function displayPriceListView()
+    public function displayPricelistTableView()
     {
         $resource = 'productnows';
         $token = session()->get('token');
@@ -26,282 +26,13 @@ class SellerController extends MyController
         $data = [
             'page_title' => 'PriceList',
             'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.pricelist', $view_data)
+            'content_view' => View::make('seller.pricelist.listing', $view_data)
         ];
 
         return view('template.main', $data);
     }
 
-    public function displayTableView(Request $request)
-    {
-        $resource = $request->path();
-        $resource_name = ucwords(str_replace('-', ' ', $resource));
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $view_data = [
-            'resource_name' => $resource_name,
-            'table_headers' => $this->getResourceKeys($resource),
-            'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
-        ];
-        $data = [
-            'page_title' => $resource_name,
-            'content_view' => View::make('seller.table', $view_data),
-            'menus' => $this->getRoleMenus($token, $role_id),
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayBalancesTableView(Request $request)
-    {
-        $resource = 'stockbalances';
-        $resource_name = ucwords(str_replace('-', ' ', $resource));
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $view_data = [
-            'resource_name' => $resource_name,
-            'table_headers' => $this->getResourceKeys($resource),
-            'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
-        ];
-        $data = [
-            'page_title' => $resource_name,
-            'content_view' => View::make('seller.balances_table', $view_data),
-            'menus' => $this->getRoleMenus($token, $role_id),
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function getResourceData($token = null, $resource = null)
-    {
-        $resource_data = [];
-        if ($token !== null && $resource != null) {
-            $request = $this->client->get($resource, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $token
-                ]
-            ]);
-            $response = $request->getBody();
-            $resource_data = json_decode($response, true);
-        }
-
-        return $resource_data;
-    }
-
-    public function getResourceKeys($resource = null)
-    {
-        $header_data = [];
-        if ($resource != null) {
-            $headers = [
-                'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
-                'stockbalances' => ['molecular_name', 'brand_name', 'pack_size', 'balance'],
-                'productnows' => ['id', 'molecular_name', 'brand_name', 'pack_size', 'published'],
-                'productpromos' => ['id', 'molecular_name', 'brand_name', 'coupon_code', 'unit_price', 'discount', 'max_amount'],
-                'productdeals' => ['id', 'molecular_name', 'brand_name', 'min_quantity', 'unit_price', 'discount', 'max_amount']
-            ];
-            $header_data = $headers[$resource];
-        }
-
-        return $header_data;
-    }
-
-    public function displayOfferView(Request $request)
-    {
-        $resource_name = 'offers';
-        $singular_resource_name = Str::singular($resource_name);
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $view_data = $this->getDropDownData($token, $resource_name);
-        $view_data['manage_label'] = 'new';
-
-        if ($request->action) {
-            if ($request->action == 'edit') {
-                $view_data['manage_label'] = 'update';
-                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
-            } else {
-                if ($request->action == 'new') {
-                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
-                } else if ($request->action == 'update') {
-                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                } else if ($request->action == 'delete') {
-                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                }
-
-                //Handle response
-                if (isset($response['error'])) {
-                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> ' . $response["error"] . '
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                } else {
-                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success!</strong> ' . ucwords($singular_resource_name) . ' was managed successfully
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                }
-                $request->session()->flash('bgs_msg', $flash_msg);
-                return redirect('/' . $resource_name);
-            }
-        }
-
-        $data = [
-            'page_title' => ucwords($resource_name),
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.manage.' . $resource_name, $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function getDropDownData($token = null, $resource = null)
-    {
-        $dropdown_data = [];
-        $data_sources = [
-            'offers' => ['organizations'],
-            'stockbalances' => ['products', 'stocktypes']
-        ];
-
-        if ($token !== null && $resource !== null) {
-            foreach ($data_sources[$resource] as $data_source) {
-                $dropdown_data[str_replace('-', '_', $data_source)] = $this->getResourceData($token, $data_source);
-            }
-        }
-
-        return $dropdown_data;
-    }
-
-    public function displayTransactionView(Request $request)
-    {
-        $resource_name = 'stockbalances';
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $view_data = $this->getDropDownData($token, $resource_name);
-        $data = [
-            'page_title' => 'Stocks',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.transactions', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayBinCardView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $product_id = $request->product;
-        $view_data = [
-            'product' => $this->getResourceData($token, 'product/' . $product_id),
-            'stocks' => $this->getResourceData($token, 'organization/' . $organization_id . '/stocks/' . $product_id),
-            'balances' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances/' . $product_id)
-        ];
-        $data = [
-            'page_title' => 'Stocks',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.bincard', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function saveTransactions(Request $request)
-    {
-        $post_data = $request->all();
-        $organization_id = session()->get('organization_id');
-        $user_id = session()->get('id');
-        $errors = 0;
-
-        foreach ($post_data['product_id'] as $key => $product_id) {
-            $batch_number = $post_data['batch_number'][$key];
-            $expiry_date = $post_data['expiry_date'][$key];
-            $quantity = $post_data['quantity'][$key];
-            $stock_type_id = $post_data['stock_type_id'];
-
-            //Get balance
-            $balance_data = $this->getExpectedBalance([
-                'batch_number' => $batch_number,
-                'expiry_date' => $expiry_date,
-                'quantity' => $quantity,
-                'product_id' => $product_id,
-                'stock_type_id' => $stock_type_id,
-                'organization_id' => $organization_id
-            ]);
-
-            //Build request object
-            $request_data = [
-                'transaction_date' => $post_data['transaction_date'],
-                'batch_number' => $batch_number,
-                'expiry_date' => $expiry_date,
-                'quantity' => $balance_data['quantity'],
-                'balance' => $balance_data['closing_balance'],
-                'product_id' => $product_id,
-                'stock_type_id' => $stock_type_id,
-                'organization_id' => $organization_id,
-                'user_id' => $user_id,
-            ];
-
-            //Send request data to Api
-            $response = $this->client->post("stock", [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . session()->get('token')
-                ],
-                'json' => $request_data
-            ]);
-
-            $response = json_decode($response->getBody(), true);
-
-            //Check success
-            if (isset($response['error'])) {
-                $errors += 1;
-            }
-        }
-
-        if ($errors > 0) {
-            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> ' . $errors . ' transactions were not added successfully
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>';
-        } else {
-            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your transactions were added successfully
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-        }
-
-        $request->session()->flash('bgs_msg', $flash_msg);
-
-        return redirect('/stocks');
-    }
-
-    public function getExpectedBalance($request_data = [])
-    {
-        $response_data = [];
-        if (!empty($request_data)) {
-            //Send request data to Api
-            $response = $this->client->post("calculatebalance", [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . session()->get('token')
-                ],
-                'json' => $request_data
-            ]);
-
-            $response_data = json_decode($response->getBody(), true);
-        }
-        return $response_data;
-    }
-
-    public function displayOrderNowView(Request $request)
+    public function displayNewPricelistView(Request $request)
     {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
@@ -312,216 +43,13 @@ class SellerController extends MyController
         $data = [
             'page_title' => 'pricelist',
             'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.manage.productnows', $view_data)
+            'content_view' => View::make('seller.pricelist.new', $view_data)
         ];
 
         return view('template.main', $data);
     }
 
-    public function displayPromoView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $view_data = [
-            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers'),
-            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows')
-        ];
-        $data = [
-            'page_title' => 'pricelist',
-            'content_view' => View::make('seller.manage.promos', $view_data),
-            'menus' => $this->getRoleMenus($token, $role_id),
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayDealView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $view_data = [
-            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers'),
-            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows')
-        ];
-        $data = [
-            'page_title' => 'pricelist',
-            'content_view' => View::make('seller.manage.deals', $view_data),
-            'menus' => $this->getRoleMenus($token, $role_id),
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayProductNowView(Request $request)
-    {
-        $resource_name = 'productnows';
-        $singular_resource_name = Str::singular($resource_name);
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $view_data = [
-            'products' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances')
-        ];
-        $view_data['manage_label'] = 'new';
-
-        if ($request->action) {
-            if ($request->action == 'edit') {
-                $view_data['manage_label'] = 'update';
-                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
-            } else {
-                if ($request->action == 'new') {
-                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
-                } else if ($request->action == 'update') {
-                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                } else if ($request->action == 'delete') {
-                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                }
-
-                //Handle response
-                if (isset($response['error'])) {
-                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> ' . $response["error"] . '
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                } else {
-                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success!</strong> ' . ucwords($singular_resource_name) . ' was managed successfully
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                }
-                $request->session()->flash('bgs_msg', $flash_msg);
-                return redirect('/pricelist');
-            }
-        }
-
-        $data = [
-            'page_title' => 'pricelist',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.manage.edit_' . $resource_name, $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayProductPromoView(Request $request)
-    {
-        $resource_name = 'productpromos';
-        $singular_resource_name = Str::singular($resource_name);
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $view_data = [
-            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows'),
-            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers')
-        ];
-        $view_data['manage_label'] = 'new';
-
-        if ($request->action) {
-            if ($request->action == 'edit') {
-                $view_data['manage_label'] = 'update';
-                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
-            } else {
-                if ($request->action == 'new') {
-                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
-                } else if ($request->action == 'update') {
-                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                } else if ($request->action == 'delete') {
-                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                }
-
-                //Handle response
-                if (isset($response['error'])) {
-                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> ' . $response["error"] . '
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                } else {
-                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success!</strong> ' . ucwords($singular_resource_name) . ' was managed successfully
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                }
-                $request->session()->flash('bgs_msg', $flash_msg);
-                return redirect('/pricelist');
-            }
-        }
-
-        $data = [
-            'page_title' => 'pricelist',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.manage.edit_' . $resource_name, $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayProductDealView(Request $request)
-    {
-        $resource_name = 'productdeals';
-        $singular_resource_name = Str::singular($resource_name);
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $organization_id = session()->get('organization_id');
-        $view_data = [
-            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows'),
-            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers')
-        ];
-        $view_data['manage_label'] = 'new';
-
-        if ($request->action) {
-            if ($request->action == 'edit') {
-                $view_data['manage_label'] = 'update';
-                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
-            } else {
-                if ($request->action == 'new') {
-                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
-                } else if ($request->action == 'update') {
-                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                } else if ($request->action == 'delete') {
-                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-                }
-
-                //Handle response
-                if (isset($response['error'])) {
-                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> ' . $response["error"] . '
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                } else {
-                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success!</strong> ' . ucwords($singular_resource_name) . ' was managed successfully
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-                }
-                $request->session()->flash('bgs_msg', $flash_msg);
-                return redirect('/pricelist');
-            }
-        }
-
-        $data = [
-            'page_title' => 'pricelist',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('seller.manage.edit_' . $resource_name, $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function saveOrderNows(Request $request)
+    public function savePricelist(Request $request)
     {
         $token = session()->get('token');
         $post_data = $request->all();
@@ -585,14 +113,14 @@ class SellerController extends MyController
 
         if ($errors > 0) {
             $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> ' . $errors . ' transactions were not added successfully
+                                <strong>Error!</strong> ' . $errors . ' pricelist item(s) were not added successfully
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>';
         } else {
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your transactions were added successfully
+                            <strong>Success!</strong> Your pricelist item(s) were added successfully
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -604,7 +132,248 @@ class SellerController extends MyController
         return redirect('/pricelist');
     }
 
-    public function saveProductPromos(Request $request)
+    public function managePricelist(Request $request)
+    {
+        $resource_name = 'productnows';
+        $singular_resource_name = Str::singular($resource_name);
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances')
+        ];
+        $view_data['manage_label'] = 'new';
+
+        if ($request->action) {
+            if ($request->action == 'edit') {
+                $view_data['manage_label'] = 'update';
+                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
+            } else {
+                if ($request->action == 'new') {
+                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
+                } else if ($request->action == 'update') {
+                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                } else if ($request->action == 'delete') {
+                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                }
+
+                //Handle response
+                if (isset($response['error'])) {
+                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> ' . $response["error"] . '
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                } else {
+                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> Pricelist was managed successfully
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }
+                $request->session()->flash('bgs_msg', $flash_msg);
+                return redirect('/pricelist');
+            }
+        }
+
+        $data = [
+            'page_title' => 'pricelist',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.pricelist.edit', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayStocksTableView(Request $request)
+    {
+        $resource = 'stockbalances';
+        $resource_name = ucwords(str_replace('-', ' ', $resource));
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'resource_name' => $resource_name,
+            'table_headers' => $this->getResourceKeys($resource),
+            'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
+        ];
+        $data = [
+            'page_title' => $resource_name,
+            'content_view' => View::make('seller.stocks.listing', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayNewStockTransactionView(Request $request)
+    {
+        $resource_name = 'stockbalances';
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $view_data = $this->getDropDownData($token, $resource_name);
+        $data = [
+            'page_title' => 'Stocks',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.stocks.new', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function saveStocks(Request $request)
+    {
+        $post_data = $request->all();
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+        $errors = 0;
+
+        foreach ($post_data['product_id'] as $key => $product_id) {
+            $batch_number = $post_data['batch_number'][$key];
+            $expiry_date = $post_data['expiry_date'][$key];
+            $quantity = $post_data['quantity'][$key];
+            $stock_type_id = $post_data['stock_type_id'];
+
+            //Get balance
+            $balance_data = $this->getExpectedBalance([
+                'batch_number' => $batch_number,
+                'expiry_date' => $expiry_date,
+                'quantity' => $quantity,
+                'product_id' => $product_id,
+                'stock_type_id' => $stock_type_id,
+                'organization_id' => $organization_id
+            ]);
+
+            //Build request object
+            $request_data = [
+                'transaction_date' => $post_data['transaction_date'],
+                'batch_number' => $batch_number,
+                'expiry_date' => $expiry_date,
+                'quantity' => $balance_data['quantity'],
+                'balance' => $balance_data['closing_balance'],
+                'product_id' => $product_id,
+                'stock_type_id' => $stock_type_id,
+                'organization_id' => $organization_id,
+                'user_id' => $user_id,
+            ];
+
+            //Send request data to Api
+            $response = $this->client->post("stock", [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . session()->get('token')
+                ],
+                'json' => $request_data
+            ]);
+
+            $response = json_decode($response->getBody(), true);
+
+            //Check success
+            if (isset($response['error'])) {
+                $errors += 1;
+            }
+        }
+
+        if ($errors > 0) {
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong> ' . $errors . ' stock item(s) were not added successfully
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>';
+        } else {
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your stock item(s) were added successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/stocks');
+    }
+
+    public function getExpectedBalance($request_data = [])
+    {
+        $response_data = [];
+        if (!empty($request_data)) {
+            //Send request data to Api
+            $response = $this->client->post("calculatebalance", [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . session()->get('token')
+                ],
+                'json' => $request_data
+            ]);
+
+            $response_data = json_decode($response->getBody(), true);
+        }
+        return $response_data;
+    }
+
+    public function displayStockBinCardView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $product_id = $request->productId;
+        $view_data = [
+            'product' => $this->getResourceData($token, 'product/' . $product_id),
+            'stocks' => $this->getResourceData($token, 'organization/' . $organization_id . '/stocks/' . $product_id),
+            'balances' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances/' . $product_id)
+        ];
+        $data = [
+            'page_title' => 'Stocks',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.stocks.view', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayPromotionsTableView()
+    {
+        $resource = 'productpromos';
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+
+        $view_data = [
+            'resource_name' => $resource,
+            'table_headers' => $this->getResourceKeys($resource),
+            'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
+        ];
+
+        $data = [
+            'page_title' => 'Promotions',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.promotions.listing', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayNewPromotionView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers'),
+            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows')
+        ];
+        $data = [
+            'page_title' => 'promotions',
+            'content_view' => View::make('seller.promotions.new', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function savePromotions(Request $request)
     {
         $token = session()->get('token');
         $post_data = $request->all();
@@ -665,14 +434,14 @@ class SellerController extends MyController
 
         if ($errors > 0) {
             $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> ' . $errors . ' transactions were not added successfully
+                                <strong>Error!</strong> ' . $errors . ' Promotion Item(s) were not added successfully
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>';
         } else {
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your transactions were added successfully
+                            <strong>Success!</strong> Your Promotion Item(s) were added successfully
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -681,7 +450,210 @@ class SellerController extends MyController
 
         $request->session()->flash('bgs_msg', $flash_msg);
 
-        return redirect('/pricelist');
+        return redirect('/promotions');
+    }
+
+    public function managePromotions(Request $request)
+    {
+        $resource_name = 'productpromos';
+        $singular_resource_name = Str::singular($resource_name);
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows'),
+            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/all-offers')
+        ];
+        $view_data['manage_label'] = 'new';
+
+        if ($request->action) {
+            if ($request->action == 'edit') {
+                $view_data['manage_label'] = 'update';
+                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
+            } else {
+                if ($request->action == 'new') {
+                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
+                } else if ($request->action == 'update') {
+                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                } else if ($request->action == 'delete') {
+                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                }
+
+                //Handle response
+                if (isset($response['error'])) {
+                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> ' . $response["error"] . '
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                } else {
+                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> Promotion was managed successfully
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }
+                $request->session()->flash('bgs_msg', $flash_msg);
+                return redirect('/promotions');
+            }
+        }
+
+        $data = [
+            'page_title' => 'promotions',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.promotions.edit', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayTableView(Request $request)
+    {
+        $resource = $request->path();
+        $resource_name = ucwords(str_replace('-', ' ', $resource));
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'resource_name' => $resource_name,
+            'table_headers' => $this->getResourceKeys($resource),
+            'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
+        ];
+        $data = [
+            'page_title' => $resource_name,
+            'content_view' => View::make('seller.table', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayOfferView(Request $request)
+    {
+        $resource_name = 'offers';
+        $singular_resource_name = Str::singular($resource_name);
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $view_data = $this->getDropDownData($token, $resource_name);
+        $view_data['manage_label'] = 'new';
+
+        if ($request->action) {
+            if ($request->action == 'edit') {
+                $view_data['manage_label'] = 'update';
+                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
+            } else {
+                if ($request->action == 'new') {
+                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
+                } else if ($request->action == 'update') {
+                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                } else if ($request->action == 'delete') {
+                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                }
+
+                //Handle response
+                if (isset($response['error'])) {
+                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> ' . $response["error"] . '
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                } else {
+                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> ' . ucwords($singular_resource_name) . ' was managed successfully
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }
+                $request->session()->flash('bgs_msg', $flash_msg);
+                return redirect('/' . $resource_name);
+            }
+        }
+
+        $data = [
+            'page_title' => ucwords($resource_name),
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.manage.' . $resource_name, $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayDealView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers'),
+            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows')
+        ];
+        $data = [
+            'page_title' => 'pricelist',
+            'content_view' => View::make('seller.manage.deals', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayProductDealView(Request $request)
+    {
+        $resource_name = 'productdeals';
+        $singular_resource_name = Str::singular($resource_name);
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows'),
+            'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers')
+        ];
+        $view_data['manage_label'] = 'new';
+
+        if ($request->action) {
+            if ($request->action == 'edit') {
+                $view_data['manage_label'] = 'update';
+                $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
+            } else {
+                if ($request->action == 'new') {
+                    $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
+                } else if ($request->action == 'update') {
+                    $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                } else if ($request->action == 'delete') {
+                    $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+                }
+
+                //Handle response
+                if (isset($response['error'])) {
+                    $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> ' . $response["error"] . '
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                } else {
+                    $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Success!</strong> ' . ucwords($singular_resource_name) . ' was managed successfully
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                }
+                $request->session()->flash('bgs_msg', $flash_msg);
+                return redirect('/pricelist');
+            }
+        }
+
+        $data = [
+            'page_title' => 'pricelist',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.manage.edit_' . $resource_name, $view_data)
+        ];
+
+        return view('template.main', $data);
     }
 
     public function saveProductDeals(Request $request)
@@ -762,5 +734,55 @@ class SellerController extends MyController
         $request->session()->flash('bgs_msg', $flash_msg);
 
         return redirect('/pricelist');
+    }
+
+    public function getResourceData($token = null, $resource = null)
+    {
+        $resource_data = [];
+        if ($token !== null && $resource != null) {
+            $request = $this->client->get($resource, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token
+                ]
+            ]);
+            $response = $request->getBody();
+            $resource_data = json_decode($response, true);
+        }
+
+        return $resource_data;
+    }
+
+    public function getResourceKeys($resource = null)
+    {
+        $header_data = [];
+        if ($resource != null) {
+            $headers = [
+                'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
+                'stockbalances' => ['brand_name', 'molecular_name', 'pack_size', 'balance'],
+                'productnows' => ['id', 'brand_name', 'molecular_name', 'pack_size', 'published'],
+                'productpromos' => ['id', 'brand_name', 'molecular_name', 'coupon_code', 'unit_price', 'discount', 'max_amount'],
+                'productdeals' => ['id', 'brand_name', 'molecular_name', 'min_quantity', 'unit_price', 'discount', 'max_amount']
+            ];
+            $header_data = $headers[$resource];
+        }
+
+        return $header_data;
+    }
+
+    public function getDropDownData($token = null, $resource = null)
+    {
+        $dropdown_data = [];
+        $data_sources = [
+            'offers' => ['organizations'],
+            'stockbalances' => ['products', 'stocktypes']
+        ];
+
+        if ($token !== null && $resource !== null) {
+            foreach ($data_sources[$resource] as $data_source) {
+                $dropdown_data[str_replace('-', '_', $data_source)] = $this->getResourceData($token, $data_source);
+            }
+        }
+
+        return $dropdown_data;
     }
 }

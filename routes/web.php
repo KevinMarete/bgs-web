@@ -57,34 +57,36 @@ Route::post('/redeem-points', 'Auth\AccountController@redeemPoints');
 Route::get('/sign-out', 'Auth\AccountController@logout');
 
 /*Seller Routes*/
-Route::get('/pricelist', 'Seller\SellerController@displayPriceListView');
-Route::get('/manage-ordernows', 'Seller\SellerController@displayOrderNowView');
-Route::get('/manage-promos', 'Seller\SellerController@displayPromoView');
-Route::get('/manage-deals', 'Seller\SellerController@displayDealView');
+Route::get('/pricelist', 'Seller\SellerController@displayPricelistTableView');
+Route::get('/pricelist/new', 'Seller\SellerController@displayNewPricelistView');
+Route::post('/pricelist/save', 'Seller\SellerController@savePricelist');
+Route::post('/pricelist/{action}', 'Seller\SellerController@managePricelist');
+Route::get('/pricelist/{action}/{id}', 'Seller\SellerController@managePricelist');
+Route::get('/stocks', 'Seller\SellerController@displayStocksTableView');
+Route::get('/stocks/new', 'Seller\SellerController@displayNewStockTransactionView');
+Route::post('/stocks/save', 'Seller\SellerController@saveStocks');
+Route::get('/stocks/view/{productId}', 'Seller\SellerController@displayStockBinCardView');
+Route::get('/promotions', 'Seller\SellerController@displayPromotionsTableView');
+Route::get('/promotions/new', 'Seller\SellerController@displayNewPromotionView');
+Route::post('/promotions/save', 'Seller\SellerController@savePromotions');
+Route::post('/promotions/{action}', 'Seller\SellerController@managePromotions');
+Route::get('/promotions/{action}/{id}', 'Seller\SellerController@managePromotions');
+
+/*My Offers*/
 Route::get('/offers', 'Seller\SellerController@displayTableView');
+//Add
+Route::get('/manage-deals', 'Seller\SellerController@displayDealView');
+//Update & Delete
 Route::get('/manage/offers', 'Seller\SellerController@displayOfferView');
 Route::post('/manage/offers/{action}', 'Seller\SellerController@displayOfferView');
 Route::get('/manage/offers/{action}/{id}', 'Seller\SellerController@displayOfferView');
 Route::post('/manage/offers/{action}/{id}', 'Seller\SellerController@displayOfferView');
-Route::post('/save-ordernows', 'Seller\SellerController@saveOrderNows');
-Route::get('/manage/productnows', 'Seller\SellerController@displayProductNowView');
-Route::post('/manage/productnows/{action}', 'Seller\SellerController@displayProductNowView');
-Route::get('/manage/productnows/{action}/{id}', 'Seller\SellerController@displayProductNowView');
-Route::post('/manage/productnows/{action}/{id}', 'Seller\SellerController@displayProductNowView');
-Route::post('/save-productpromos', 'Seller\SellerController@saveProductPromos');
-Route::get('/manage/productpromos', 'Seller\SellerController@displayProductPromoView');
-Route::post('/manage/productpromos/{action}', 'Seller\SellerController@displayProductPromoView');
-Route::get('/manage/productpromos/{action}/{id}', 'Seller\SellerController@displayProductPromoView');
-Route::post('/manage/productpromos/{action}/{id}', 'Seller\SellerController@displayProductPromoView');
+//deals
 Route::post('/save-productdeals', 'Seller\SellerController@saveProductDeals');
 Route::get('/manage/productdeals', 'Seller\SellerController@displayProductDealView');
 Route::post('/manage/productdeals/{action}', 'Seller\SellerController@displayProductDealView');
 Route::get('/manage/productdeals/{action}/{id}', 'Seller\SellerController@displayProductDealView');
 Route::post('/manage/productdeals/{action}/{id}', 'Seller\SellerController@displayProductDealView');
-Route::get('/stocks', 'Seller\SellerController@displayBalancesTableView');
-Route::get('/stock-transactions', 'Seller\SellerController@displayTransactionView');
-Route::post('/save-transactions', 'Seller\SellerController@saveTransactions');
-Route::get('/bin-card/{product}', 'Seller\SellerController@displayBinCardView');
 
 /*Admin Routes*/
 Route::get('/dashboard', 'Admin\AdminController@displayDashboardView');

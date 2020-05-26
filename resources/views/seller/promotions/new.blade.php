@@ -3,7 +3,7 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>Add Promotion Item(s)</span>
+                <span>New Promotion Item(s)</span>
             </h1>
         </div>
     </div>

@@ -71,22 +71,14 @@ Route::get('/promotions/new', 'Seller\SellerController@displayNewPromotionView')
 Route::post('/promotions/save', 'Seller\SellerController@savePromotions');
 Route::post('/promotions/{action}', 'Seller\SellerController@managePromotions');
 Route::get('/promotions/{action}/{id}', 'Seller\SellerController@managePromotions');
-
-/*My Offers*/
-Route::get('/offers', 'Seller\SellerController@displayTableView');
-//Add
-Route::get('/manage-deals', 'Seller\SellerController@displayDealView');
-//Update & Delete
-Route::get('/manage/offers', 'Seller\SellerController@displayOfferView');
-Route::post('/manage/offers/{action}', 'Seller\SellerController@displayOfferView');
-Route::get('/manage/offers/{action}/{id}', 'Seller\SellerController@displayOfferView');
-Route::post('/manage/offers/{action}/{id}', 'Seller\SellerController@displayOfferView');
-//deals
-Route::post('/save-productdeals', 'Seller\SellerController@saveProductDeals');
-Route::get('/manage/productdeals', 'Seller\SellerController@displayProductDealView');
-Route::post('/manage/productdeals/{action}', 'Seller\SellerController@displayProductDealView');
-Route::get('/manage/productdeals/{action}/{id}', 'Seller\SellerController@displayProductDealView');
-Route::post('/manage/productdeals/{action}/{id}', 'Seller\SellerController@displayProductDealView');
+Route::get('/offers', 'Seller\SellerController@displayOffersTableView');
+Route::get('/offers/new', 'Seller\SellerController@manageOffers');
+Route::post('/offers/{action}', 'Seller\SellerController@manageOffers');
+Route::get('/offers/{action}/{id}', 'Seller\SellerController@manageOffers');
+Route::get('/deals/new', 'Seller\SellerController@displayNewDealView');
+Route::post('/deals/save', 'Seller\SellerController@saveDeals');
+Route::post('/deals/{action}', 'Seller\SellerController@manageDeals');
+Route::get('/deals/{action}/{id}', 'Seller\SellerController@manageDeals');
 
 /*Admin Routes*/
 Route::get('/dashboard', 'Admin\AdminController@displayDashboardView');

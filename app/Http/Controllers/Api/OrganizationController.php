@@ -100,7 +100,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getOrganizationAllOffers($id)
+    public function getOrganizationOffers($id)
     {
         $offers = Offer::with('organization')->where('organization_id', $id)->get();
         return response()->json($offers);
@@ -112,7 +112,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getOrganizationOffers($id)
+    public function getOrganizationActiveOffers($id)
     {
         $offers = Offer::with('organization')->where('organization_id', $id)->whereDate('valid_until', '>=', date('Y-m-d'))->get();
         return response()->json($offers);

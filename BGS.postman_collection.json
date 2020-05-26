@@ -1105,7 +1105,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/organization/3/offers",
+							"raw": "{{host}}{{port}}/api/organization/3/activeoffers",
 							"host": [
 								"{{host}}{{port}}"
 							],
@@ -1113,7 +1113,7 @@
 								"api",
 								"organization",
 								"3",
-								"offers"
+								"activeoffers"
 							],
 							"query": [
 								{
@@ -1143,7 +1143,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/organization/3/all-offers",
+							"raw": "{{host}}{{port}}/api/organization/3/offers",
 							"host": [
 								"{{host}}{{port}}"
 							],
@@ -1151,7 +1151,7 @@
 								"api",
 								"organization",
 								"3",
-								"all-offers"
+								"offers"
 							],
 							"query": [
 								{
@@ -8872,19 +8872,19 @@
 	],
 	"variable": [
 		{
-			"id": "52898e4e-84ec-440c-922d-1662fe1a1fa1",
+			"id": "53538a00-0bcc-40f4-90d7-266ee402b3a7",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "9053e500-18a0-4f32-adfa-b79e2ced363f",
+			"id": "6918efeb-bf36-4ae8-b89a-46d385051db6",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "c1e4685c-ca94-4956-9cab-add62f4bf5d5",
+			"id": "399f8e68-69a7-46b1-bb29-e4a4d37a60e5",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

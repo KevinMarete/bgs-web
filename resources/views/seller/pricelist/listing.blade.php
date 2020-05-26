@@ -3,7 +3,7 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>Orders</span>
+                <span>PriceList</span>
             </h1>
         </div>
     </div>
@@ -14,14 +14,18 @@
     @endif
     <div class="card mb-4">
         <div class="card-header">
-            {{ $resource_name }} Listing
+            PriceList Listing
+            <a href="/pricelist/new" class="btn btn-primary ml-auto">
+                <i data-feather="plus"></i>
+                Add PriceList Items
+            </a>
         </div>
         <div class="card-body">
             <div class="sb-datatable table-responsive">
-                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            @foreach ($table_headers as $key => $header)
+                            @foreach ($table_headers as $header)
                             <th>{{ ucwords($header) }}</th>
                             @endforeach
                             <th>Actions</th>
@@ -39,17 +43,16 @@
                         @foreach ($table_data as $row)
                         <tr>
                             <td>{{ $row['id'] }}</td>
-                            @if($role_name !== 'buyer')
-                            <td>{{ $row['organization']['name'] }}</td>
-                            @endif
-                            <td>{{ $row['status'] }}</td>
-                            <td>{{ $row['created_at'] }}</td>
-                            <td>KES {{ number_format($row['product_total']) }}</td>
-                            <td>KES {{ number_format($row['shipping_total']) }}</td>
-                            <td>KES {{ number_format($row['product_total'] + $row['shipping_total']) }}</td>
+                            <td>{{ $row['product']['brand_name'] }}</td>
+                            <td>{{ $row['product']['molecular_name'] }}</td>
+                            <td>{{ $row['product']['pack_size'] }}</td>
+                            <td>{{ ($row['is_published'] ? 'Yes' : 'No') }}</td>
                             <td>
-                                <a href="/view-order/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                <a href="/pricelist/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                                     <i data-feather="more-vertical"></i>
+                                </a>
+                                <a href="/pricelist/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
+                                    <i data-feather="trash-2"></i>
                                 </a>
                             </td>
                         </tr>

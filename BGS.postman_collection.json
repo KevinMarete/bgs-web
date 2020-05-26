@@ -1089,7 +1089,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Organization Offers",
+					"name": "Get Organization Active Offers",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1102,6 +1102,44 @@
 								"key": "Authorization",
 								"value": "Bearer {{token}}",
 								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/activeoffers",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"activeoffers"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization All Offers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
 							}
 						],
 						"url": {
@@ -8834,19 +8872,19 @@
 	],
 	"variable": [
 		{
-			"id": "6ce16469-9a31-48bd-8950-23036caff961",
+			"id": "53538a00-0bcc-40f4-90d7-266ee402b3a7",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "622e7490-e69c-44d2-9a44-27e1f9901ca5",
+			"id": "6918efeb-bf36-4ae8-b89a-46d385051db6",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "b0f5bff4-a830-4d88-9984-9f776a46f883",
+			"id": "399f8e68-69a7-46b1-bb29-e4a4d37a60e5",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

@@ -67,6 +67,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::put('/organization/{id}', 'Api\OrganizationController@update');
         Route::delete('/organization/{id}', 'Api\OrganizationController@destroy');
         Route::get('/organization/{id}/offers', 'Api\OrganizationController@getOrganizationOffers');
+        Route::get('/organization/{id}/activeoffers', 'Api\OrganizationController@getOrganizationActiveOffers');
         Route::get('/organization/{id}/payment-type', 'Api\OrganizationController@getOrganizationPaymentType');
         Route::get('/organization/{id}/stocks', 'Api\OrganizationController@getOrganizationStocks');
         Route::get('/organization/{id}/stockbalances', 'Api\OrganizationController@getOrganizationStockBalances');

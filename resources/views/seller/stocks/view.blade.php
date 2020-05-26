@@ -3,7 +3,7 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>Stock - Bin Card</span>
+                <span>View Stock Item</span>
             </h1>
         </div>
     </div>
@@ -52,11 +52,11 @@
                                 </tfoot>
                                 <tbody>
                                     @foreach ($balances as $balance)
-                                        <tr>
-                                            <td>{{ $balance['batch_number'] }}</td>
-                                            <td>{{ $balance['expiry_date'] }}</td>
-                                            <td>{{ $balance['quantity'] }}</td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{ $balance['batch_number'] }}</td>
+                                        <td>{{ $balance['expiry_date'] }}</td>
+                                        <td>{{ $balance['quantity'] }}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -90,14 +90,14 @@
                                 </tfoot>
                                 <tbody>
                                     @foreach ($stocks as $stock)
-                                        <tr>
-                                            <td>{{ $stock['transaction_date'] }}</td>
-                                            <td>{{ $stock['stock_type']['name'] }}</td>
-                                            <td>{{ $stock['batch_number'] }}</td>
-                                            <td>{{ $stock['expiry_date'] }}</td>
-                                            <td>{{ $stock['quantity'] }}</td>
-                                            <td>{{ $stock['balance'] }}</td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{ $stock['transaction_date'] }}</td>
+                                        <td>{{ $stock['stock_type']['name'] }}</td>
+                                        <td>{{ $stock['batch_number'] }}</td>
+                                        <td>{{ $stock['expiry_date'] }}</td>
+                                        <td>{{ $stock['quantity'] }}</td>
+                                        <td>{{ $stock['balance'] }}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>

@@ -238,7 +238,8 @@ class AccountController extends MyController
             ]);
             $response = json_decode($request->getBody(), true);
             if ($response) {
-                $organization_payment_type = $response;
+                $organization_payment_type['id'] = $response['payment_type_id'];
+                $organization_payment_type['details'] = $response['details'];
             }
         }
 

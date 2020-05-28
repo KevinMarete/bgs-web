@@ -62,6 +62,18 @@ class SellerController extends MyController
         $source_url = 'organization/' . $organization_id . '/payment-type';
         $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
 
+        //Redirect if no payment-type configured
+        if (empty($source_response)) {
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> Please configure payment-type under account tab!
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+            $request->session()->flash('bgs_msg', $flash_msg);
+            return redirect('/pricelist');
+        }
+
         //Make payment
         $payment_data = [
             'method' => $source_response['payment_type']['name'],
@@ -386,6 +398,19 @@ class SellerController extends MyController
         $source_url = 'organization/' . $organization_id . '/payment-type';
         $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
 
+
+        //Redirect if no payment-type configured
+        if (empty($source_response)) {
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> Please configure payment-type under account tab!
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+            $request->session()->flash('bgs_msg', $flash_msg);
+            return redirect('/promotions');
+        }
+
         //Make payment
         $payment_data = [
             'method' => $source_response['payment_type']['name'],
@@ -615,6 +640,18 @@ class SellerController extends MyController
         //Get organization payment_type
         $source_url = 'organization/' . $organization_id . '/payment-type';
         $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
+
+        //Redirect if no payment-type configured
+        if (empty($source_response)) {
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error!</strong> Please configure payment-type under account tab!
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+            $request->session()->flash('bgs_msg', $flash_msg);
+            return redirect('/offers');
+        }
 
         //Make payment
         $payment_data = [

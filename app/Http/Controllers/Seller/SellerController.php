@@ -775,14 +775,15 @@ class SellerController extends MyController
     public function getDropDownData($token = null, $resource = null)
     {
         $dropdown_data = [];
+        $organization_id = session()->get('organization_id');
         $data_sources = [
-            'offers' => ['organizations'],
-            'stockbalances' => ['products', 'stocktypes']
+            'offers' => ['organizations' => 'organizations'],
+            'stockbalances' => ['products' => 'organization/' . $organization_id . '/products', 'stocktypes' => 'stocktypes']
         ];
 
         if ($token !== null && $resource !== null) {
-            foreach ($data_sources[$resource] as $data_source) {
-                $dropdown_data[str_replace('-', '_', $data_source)] = $this->getResourceData($token, $data_source);
+            foreach ($data_sources[$resource] as $data_ref => $data_source) {
+                $dropdown_data[str_replace('-', '_', $data_ref)] = $this->getResourceData($token, $data_source);
             }
         }
 

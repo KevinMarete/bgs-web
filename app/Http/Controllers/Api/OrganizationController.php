@@ -154,6 +154,7 @@ class OrganizationController extends Controller
             ->select(DB::raw('SUM(sb.quantity) as balance, sb.product_id, sb.organization_id, p.molecular_name, p.brand_name, p.pack_size, p.strength'))
             ->join('tbl_product AS p', 'p.id', '=', 'sb.product_id')
             ->where('sb.organization_id', $id)
+            ->where('p.organization_id', $id)
             ->groupBy('sb.product_id', 'sb.organization_id', 'p.molecular_name', 'p.brand_name', 'p.pack_size', 'p.strength')
             ->orderBy('p.molecular_name', 'DESC')
             ->get();
@@ -204,9 +205,9 @@ class OrganizationController extends Controller
      */
     public function getOrganizationProductPromos($id)
     {
-        $productpromos = ProductPromo::with(['product_now' => function ($query) use ($id) {
+        $productpromos = ProductPromo::with(['product_now', 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->whereHas('product_now', function ($query) use ($id) {
             $query->where('organization_id', $id);
-        }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
+        })->get();
         return response()->json($productpromos);
     }
 
@@ -218,9 +219,9 @@ class OrganizationController extends Controller
      */
     public function getOrganizationProductDeals($id)
     {
-        $productdeals = ProductDeal::with(['product_now' => function ($query) use ($id) {
+        $productdeals = ProductDeal::with(['product_now', 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->whereHas('product_now', function ($query) use ($id) {
             $query->where('organization_id', $id);
-        }, 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->get();
+        })->get();
         return response()->json($productdeals);
     }
 
@@ -258,7 +259,7 @@ class OrganizationController extends Controller
      */
     public function getOrganizationProducts($id)
     {
-        $organization_products = Product::with(['organization', 'product_category'])->where('organization_id', $id)->limit(100)->get();
+        $organization_products = Product::with(['organization', 'product_category'])->where('organization_id', $id)->orderBy('molecular_name', 'ASC')->get();
         return response()->json($organization_products);
     }
 

@@ -144,6 +144,40 @@ class SellerController extends MyController
         return redirect('/pricelist');
     }
 
+    public function displayImportPricelistView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances')
+        ];
+        $data = [
+            'page_title' => 'pricelist',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.pricelist.import', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayPublishPricelistView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $organization_id = session()->get('organization_id');
+        $view_data = [
+            'products' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances')
+        ];
+        $data = [
+            'page_title' => 'pricelist',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('seller.pricelist.publish', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
     public function managePricelist(Request $request)
     {
         $resource_name = 'productnows';

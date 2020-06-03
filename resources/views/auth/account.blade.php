@@ -147,7 +147,7 @@
                         <h4 class="my-0 font-weight-normal">{{ $package['name'] }}</h4>
                       </div>
                       <div class="card-body">
-                        <h4 class="card-title pricing-card-title">Ksh {{ number_format($package['price']) }} <small class="text-muted"> Monthly <br />Excl. VAT</small></h4>
+                        <h6 class="card-title pricing-card-title">Ksh {{ number_format($package['price']) }} <small class="text-muted"> <br />Monthly <br />Excl. VAT</small></h6>
                         <ul class="list-unstyled mt-3 mb-4">
                           @foreach (json_decode($package['details'], true) as $detail)
                           <li>
@@ -156,13 +156,13 @@
                           @endforeach
                         </ul>
                         @if ($package['id'] === $subscription['package']['id'] && $subscription['status'] === 'active')
-                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-warning" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Current Package</button>
+                        <button type="button" class="subscription-btn btn btn-sm btn-block btn-warning" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Current Package</button>
                         <strong><small>Expires on: {{ $subscription['end_date'] }} </small></strong>
                         @elseif ($package['id'] === $subscription['package']['id'] && $subscription['status'] !== 'active')
-                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Expired Package</button>
+                        <button type="button" class="subscription-btn btn btn-sm btn-block btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Expired Package</button>
                         <strong><small>Expired on: {{ $subscription['end_date'] }} </small></strong>
                         @else
-                        <button type="button" class="subscription-btn btn btn-lg btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Select Package</button>
+                        <button type="button" class="subscription-btn btn btn-sm btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Select Package</button>
                         @endif
                       </div>
                     </div>

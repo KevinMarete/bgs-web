@@ -28,15 +28,15 @@
                             </li>
                             @if(strtolower(session()->get('organization.organization_type.role.name')) == 'buyer')
                             <li class="nav-item">
-                                <a href="" data-target="#subscription" data-toggle="tab" class="nav-link">Subscription</a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="" data-target="#loyalty" data-toggle="tab" class="nav-link">Loyalty</a>
                             </li>
                             <li class="nav-item">
                                 <a href="" data-target="#credits" data-toggle="tab" class="nav-link">Credits</a>
                             </li>
                             @elseif(strtolower(session()->get('organization.organization_type.role.name')) == 'seller')
+                            <li class="nav-item">
+                                <a href="" data-target="#subscription" data-toggle="tab" class="nav-link">Subscription</a>
+                            </li>
                             <li class="nav-item">
                                 <a href="" data-target="#payment" data-toggle="tab" class="nav-link">Payment</a>
                             </li>

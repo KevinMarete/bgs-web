@@ -106,7 +106,7 @@ class AdminController extends MyController
 				'product-categories' => ['id', 'name'],
 				'stocktypes' => ['id', 'name', 'effect'],
 				'payment-types' => ['id', 'name', 'details'],
-				'products' => ['id', 'brand_name', 'molecular_name', 'pack_size', 'strength', 'product_category'],
+				'products' => ['id', 'brand_name', 'molecular_name', 'pack_size', 'product_category'],
 				'menus' => ['id', 'name'],
 				'menu-roles' => ['id', 'menu', 'role'],
 				'couriers' => ['id', 'name', 'phone', 'email', 'contact'],

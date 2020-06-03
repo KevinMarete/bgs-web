@@ -2748,7 +2748,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"molecular_name\": \"Test Product\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"strength\": \"50mg\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
+							"raw": "{\n    \"molecular_name\": \"Test Product\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2787,7 +2787,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"molecular_name\": \"Test Product Updated\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"strength\": \"50mg\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
+							"raw": "{\n    \"molecular_name\": \"Test Product Updated\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -8872,19 +8872,19 @@
 	],
 	"variable": [
 		{
-			"id": "53538a00-0bcc-40f4-90d7-266ee402b3a7",
+			"id": "c539ab47-a8bd-4fdc-9766-5ed993d73ee2",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "6918efeb-bf36-4ae8-b89a-46d385051db6",
+			"id": "d472dcf8-42a9-4e79-b6d1-bae72375e93d",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "399f8e68-69a7-46b1-bb29-e4a4d37a60e5",
+			"id": "a03ee48b-7f2d-4ec7-831f-9136e7d524df",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

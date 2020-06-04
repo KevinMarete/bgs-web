@@ -19,7 +19,7 @@
               <div class="card-header bg-primary text-white"><i class="fa fa-upload"></i> &nbsp; Import Template
               </div>
               <div class="card-body">
-                <form role="form" action="/pricelist/import" method="POST">
+                <form role="form" action="/pricelist/import" method="POST" enctype="multipart/form-data">
                   @csrf
                   <div class="form-group">
                     <label for="product_category">Products Category</label>
@@ -32,7 +32,7 @@
                   </div>
                   <div class="form-group">
                     <label for="upload">Upload</label>
-                    <input type="file" class="form-control" id="upload" name="template" accept=".csv" required>
+                    <input type="file" class="form-control" id="upload" name="upload" accept=".csv" required>
                   </div>
                   <div class="mx-auto">
                     <button type="submit" class="btn btn-primary text-right">Import File</button></div>

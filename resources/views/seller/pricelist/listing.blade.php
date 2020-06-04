@@ -28,7 +28,7 @@
               <i data-feather="chevrons-up"></i> &nbsp; Import PriceList Items
             </a>
             <a href="/pricelist/publish" class="dropdown-item">
-              <i data-feather="airplay"></i> &nbsp; (Un)Publish PriceList Items
+              <i data-feather="airplay"></i> &nbsp; Bulk (Un)Publish
             </a>
           </div>
         </div>

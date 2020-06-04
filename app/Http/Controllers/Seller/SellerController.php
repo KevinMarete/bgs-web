@@ -162,31 +162,99 @@ class SellerController extends MyController
 
   public function importPricelist(Request $request)
   {
-    $token = session()->get('token');
-    $post_data = $request->all();
-    $organization_id = session()->get('organization_id');
-    $user_id = session()->get('id');
+    $upload_file = $request->file('upload');
+    $product_category_id = $request->product_category_id;
+    $flash_id = 'bgs_msg';
+    $redirect_url = '/pricelist';
+    $max_file_size = 2097152; // 2MB in Bytes
     $errors = 0;
 
-    if ($errors > 0) {
-      $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> ' . $errors . ' pricelist item(s) were not imported successfully
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>';
-    } else {
-      $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your pricelist item(s) were imported successfully
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
+    $token = session()->get('token');
+    $organization_id = session()->get('organization_id');
+    $user_id = session()->get('id');
+
+    if (!$request->has('upload')) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> No file selected for upload');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
     }
 
-    $request->session()->flash('bgs_msg', $flash_msg);
+    $file_details = $this->getFileDetails($upload_file);
+    if (!$this->isValidExtension($file_details['extension'], ['csv'])) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid File Extension');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
 
-    return redirect('/pricelist');
+    if (!$this->isAllowedSize($file_details['size'], $max_file_size)) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> File too large. File must be less than 2MB');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $import_data_arr = $this->getCsvData($file_details['path']);
+    foreach ($import_data_arr as $import_data) {
+      $brand_name = $import_data[0];
+      $molecular_name = $import_data[1];
+      $pack_size = $import_data[2];
+      $unit_price = $import_data[3];
+      $available_stock = $import_data[4];
+      //Add Product
+      $product_data = [
+        'molecular_name' => $molecular_name,
+        'brand_name' => $brand_name,
+        'pack_size' => $pack_size,
+        'product_category_id' => $product_category_id,
+        'organization_id' => $organization_id,
+      ];
+      $product_response = $this->manageResourceData($token, 'POST', 'product', $product_data);
+      if (!array_key_exists('id', $product_response)) {
+        $errors++;
+        continue;
+      }
+      //Add stock
+      $product_id = $product_response['id'];
+      $stock_data = [
+        'transaction_date' => date('Y-m-d'),
+        'batch_number' => strtoupper(Str::random(6)),
+        'expiry_date' => date('Y-m-t', strtotime('+1 year')),
+        'quantity' => $available_stock,
+        'balance' => $available_stock,
+        'product_id' => $product_id,
+        'stock_type_id' => 3,
+        'organization_id' => $organization_id,
+        'user_id' => $user_id,
+      ];
+      $stock_response = $this->manageResourceData($token, 'POST', 'stock', $stock_data);
+      if (!array_key_exists('id', $stock_response)) {
+        $errors++;
+        continue;
+      }
+      //Add pricelist
+      $pricelist_data = [
+        'unit_price' => $unit_price,
+        'delivery_cost' => 0,
+        'is_published' => false,
+        'product_id' => $product_id,
+        'organization_id' => $organization_id,
+        'user_id' => $user_id,
+      ];
+      $pricelist_response = $this->manageResourceData($token, 'POST', 'productnow', $pricelist_data);
+      if (!array_key_exists('id', $pricelist_response)) {
+        $errors++;
+        continue;
+      }
+    }
+
+    if ($errors > 0) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> ' . $errors . ' pricelist item(s) were not imported successfully');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $flash_msg = $this->getAlertMessage('success', '<strong>Success!</strong> Your pricelist item(s) on ' . $file_details['name'] . ' were imported successfully');
+    $request->session()->flash($flash_id, $flash_msg);
+    return redirect($redirect_url);
   }
 
   public function displayPublishPricelistView(Request $request)

@@ -19,22 +19,23 @@
               <div class="card-header bg-primary text-white"><i class="fa fa-upload"></i> &nbsp; Import Template
               </div>
               <div class="card-body">
-                <form>
+                <form role="form" action="/pricelist/import" method="POST">
+                  @csrf
                   <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter name" required>
+                    <label for="product_category">Products Category</label>
+                    <select class="form-control" id="product_category" name="product_category_id" aria-describedby="productCategory" required>
+                      <option value="">Select Products Category</option>
+                      @foreach ($product_categories as $product_category)
+                      <option value="{{ $product_category['id'] }}">{{ $product_category['name']  }}</option>
+                      @endforeach
+                    </select>
                   </div>
                   <div class="form-group">
-                    <label for="email">Email address</label>
-                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea class="form-control" id="message" rows="6" required></textarea>
+                    <label for="upload">Upload</label>
+                    <input type="file" class="form-control" id="upload" name="template" accept=".csv" required>
                   </div>
                   <div class="mx-auto">
-                    <button type="submit" class="btn btn-primary text-right">Submit</button></div>
+                    <button type="submit" class="btn btn-primary text-right">Import File</button></div>
                 </form>
               </div>
             </div>

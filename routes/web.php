@@ -61,6 +61,7 @@ Route::get('/pricelist', 'Seller\SellerController@displayPricelistTableView');
 Route::get('/pricelist/new', 'Seller\SellerController@displayNewPricelistView');
 Route::post('/pricelist/save', 'Seller\SellerController@savePricelist');
 Route::get('/pricelist/import', 'Seller\SellerController@displayImportPricelistView');
+Route::post('/pricelist/import', 'Seller\SellerController@importPricelist');
 Route::get('/pricelist/publish', 'Seller\SellerController@displayPublishPricelistView');
 Route::post('/pricelist/{action}', 'Seller\SellerController@managePricelist');
 Route::get('/pricelist/{action}/{id}', 'Seller\SellerController@managePricelist');

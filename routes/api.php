@@ -81,6 +81,8 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/products', 'Api\OrganizationController@getOrganizationProducts');
         Route::get('/sellers', 'Api\OrganizationController@getSellerOrganizations');
         Route::get('/admins', 'Api\OrganizationController@getAdminOrganizations');
+        Route::get('/organization/{id}/unpublished', 'Api\OrganizationController@getUnpublishedProductNows');
+        Route::get('/organization/{id}/published', 'Api\OrganizationController@getPublishedProductNows');
 
         /*Package endpoints*/
         Route::get('/packages', 'Api\PackageController@index');
@@ -191,6 +193,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/productnow/{id}', 'Api\ProductNowController@show');
         Route::post('/productnow', 'Api\ProductNowController@store');
         Route::put('/productnow/{id}', 'Api\ProductNowController@update');
+        Route::post('/productnow/{id}', 'Api\ProductNowController@patch');
         Route::delete('/productnow/{id}', 'Api\ProductNowController@destroy');
 
         /*ProductPromos endpoints*/

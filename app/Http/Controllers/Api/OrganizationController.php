@@ -288,4 +288,28 @@ class OrganizationController extends Controller
         })->get();
         return response()->json($admin_orgs);
     }
+
+    /**
+     * Display the specified Organization's Unpublished productnows.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getUnpublishedProductNows($id)
+    {
+        $productnows = ProductNow::with('product', 'organization', 'user')->where('organization_id', $id)->where('is_published', false)->get();
+        return response()->json($productnows);
+    }
+
+    /**
+     * Display the specified Organization's productnows.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getPublishedProductNows($id)
+    {
+        $productnows = ProductNow::with('product', 'organization', 'user')->where('organization_id', $id)->where('is_published', true)->get();
+        return response()->json($productnows);
+    }
 }

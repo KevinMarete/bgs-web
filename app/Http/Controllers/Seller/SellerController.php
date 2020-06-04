@@ -194,11 +194,11 @@ class SellerController extends MyController
 
     $import_data_arr = $this->getCsvData($file_details['path']);
     foreach ($import_data_arr as $import_data) {
-      $brand_name = $import_data[0];
-      $molecular_name = $import_data[1];
-      $pack_size = $import_data[2];
-      $unit_price = $import_data[3];
-      $available_stock = $import_data[4];
+      $brand_name = isset($import_data[0]);
+      $molecular_name = isset($import_data[1]);
+      $pack_size = isset($import_data[2]);
+      $unit_price = isset($import_data[3]);
+      $available_stock = isset($import_data[4]);
       //Add Product
       $product_data = [
         'molecular_name' => $molecular_name,
@@ -259,12 +259,19 @@ class SellerController extends MyController
 
   public function displayPublishPricelistView(Request $request)
   {
+    $resources = ['unpublished', 'published'];
     $token = session()->get('token');
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
-    $view_data = [
-      'products' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances')
-    ];
+    $headers = $this->getResourceKeys('productnows');
+
+    $view_data = [];
+    foreach ($resources as $resource) {
+      $view_data[$resource] = [
+        'table_headers' => $headers,
+        'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
+      ];
+    }
     $data = [
       'page_title' => 'pricelist',
       'menus' => $this->getRoleMenus($token, $role_id),
@@ -272,6 +279,61 @@ class SellerController extends MyController
     ];
 
     return view('template.main', $data);
+  }
+
+  public function publishPricelist(Request $request)
+  {
+    $flash_id = 'bgs_msg';
+    $redirect_url = '/pricelist/publish';
+    $is_published = $request->is_published;
+    $pricelist_ids = json_decode($request->pricelist_ids, true);
+    $action_label = ['unpublished', 'published'];
+
+    if (!$pricelist_ids) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Please select an item to be ' . $action_label[$is_published]);
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $currently_published = $request->currently_published;
+    $num_of_pricelist = sizeof($pricelist_ids);
+    $published_arr = [
+      $currently_published - $num_of_pricelist, $num_of_pricelist + $currently_published
+    ];
+    $total_published = $published_arr[$is_published];
+    $package_limit = 1000;
+    $errors = 0;
+
+    $token = session()->get('token');
+    $organization_id = session()->get('organization_id');
+
+    if ($total_published > $package_limit) {
+      //Redirect to subscription page and recommend upgrade
+      $flash_msg = $this->getAlertMessage('info', '<strong>Info!</strong> You cannot publish pricelist item(s) as you have exceeded your limit. Please <b>upgrade</b> you subscription under the "Subscription" tab below!');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect('/account');
+    }
+
+    foreach ($pricelist_ids as $pricelist_id) {
+      $pricelist_data = [
+        'is_published' => $is_published
+      ];
+      $pricelist_response = $this->manageResourceData($token, 'POST', 'productnow/' . $pricelist_id, $pricelist_data);
+      if (!array_key_exists('id', $pricelist_response)) {
+        $errors++;
+        continue;
+      }
+    }
+
+    if ($errors > 0) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> ' . $errors . ' pricelist item(s) were not ' . $action_label[$is_published] . ' successfully');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $flash_msg = $this->getAlertMessage('success', '<strong>Success!</strong> Your pricelist item(s) were ' . $action_label[$is_published] . ' successfully');
+    $request->session()->flash($flash_id, $flash_msg);
+    return redirect($redirect_url);
   }
 
   public function managePricelist(Request $request)

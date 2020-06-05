@@ -38,7 +38,7 @@ class SellerController extends MyController
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
     $view_data = [
-      'products' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances')
+      'products' => $this->getResourceData($token, 'organization/' . $organization_id . '/stockbalances-pricelist')
     ];
     $data = [
       'page_title' => 'pricelist',
@@ -51,45 +51,17 @@ class SellerController extends MyController
 
   public function savePricelist(Request $request)
   {
-    $token = session()->get('token');
     $post_data = $request->all();
+    $flash_id = 'bgs_msg';
+    $redirect_url = '/pricelist';
+    $errors = 0;
+
+    $token = session()->get('token');
     $organization_id = session()->get('organization_id');
     $user_id = session()->get('id');
-    $errors = 0;
-    $cost_per_product = env('ORDER_NOW_COST');
-
-    //Get organization payment_type
-    $source_url = 'organization/' . $organization_id . '/payment-type';
-    $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
-
-    //Redirect if no payment-type configured
-    if (empty($source_response)) {
-      $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> Please configure payment-type under account tab!
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-      $request->session()->flash('bgs_msg', $flash_msg);
-      return redirect('/pricelist');
-    }
-
-    //Make payment
-    $payment_data = [
-      'method' => $source_response['payment_type']['name'],
-      'amount' => ($cost_per_product * sizeof($post_data['product_id'])),
-      'source' => $source_response['payment_type']['details'],
-      'destination' => [
-        'paybill_number' => env('PAYBILL_NUMBER'),
-        'account_number' => env('ACCOUNT_NUMBER')
-      ]
-    ];
-    $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
-    $payment_id = $payment_response['id'];
 
     foreach ($post_data['product_id'] as $key => $product_id) {
-      //Build request object
-      $request_data = [
+      $pricelist_data = [
         'unit_price' => $post_data['unit_price'][$key],
         'delivery_cost' => $post_data['delivery_cost'][$key],
         'is_published' => $post_data['is_published'][$key],
@@ -98,50 +70,22 @@ class SellerController extends MyController
         'user_id' => $user_id,
       ];
 
-      //Send request data to Api
-      $response = $this->client->post("productnow", [
-        'headers' => [
-          'Authorization' => 'Bearer ' . $token
-        ],
-        'json' => $request_data
-      ]);
-
-      $response = json_decode($response->getBody(), true);
-
-      //Check success
-      if (isset($response['error'])) {
-        $errors += 1;
-      } else {
-        $product_now_id = $response['id'];
-        //Send request data to Api for payment
-        $response = $this->client->post("paymentnow", [
-          'headers' => [
-            'Authorization' => 'Bearer ' . session()->get('token')
-          ],
-          'json' => ['payment_id' => $payment_id, 'product_now_id' => $product_now_id]
-        ]);
+      $pricelist_response = $this->manageResourceData($token, 'POST', 'productnow', $pricelist_data);
+      if (!array_key_exists('id', $pricelist_response)) {
+        $errors++;
+        continue;
       }
     }
 
     if ($errors > 0) {
-      $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> ' . $errors . ' pricelist item(s) were not added successfully
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>';
-    } else {
-      $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your pricelist item(s) were added successfully
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> ' . $errors . ' pricelist item(s) were not saved successfully');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
     }
 
-    $request->session()->flash('bgs_msg', $flash_msg);
-
-    return redirect('/pricelist');
+    $flash_msg = $this->getAlertMessage('success', '<strong>Success!</strong> Your pricelist item(s) were saved successfully');
+    $request->session()->flash($flash_id, $flash_msg);
+    return redirect($redirect_url);
   }
 
   public function displayImportPricelistView(Request $request)

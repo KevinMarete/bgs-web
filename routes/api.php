@@ -70,7 +70,8 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/activeoffers', 'Api\OrganizationController@getOrganizationActiveOffers');
         Route::get('/organization/{id}/payment-type', 'Api\OrganizationController@getOrganizationPaymentType');
         Route::get('/organization/{id}/stocks', 'Api\OrganizationController@getOrganizationStocks');
-        Route::get('/organization/{id}/stockbalances', 'Api\OrganizationController@getOrganizationStockBalances');
+        Route::get('/organization/{id}/stockbalances', 'Api\OrganizationController@getOrganizationAllStockBalances');
+        Route::get('/organization/{id}/stockbalances-pricelist', 'Api\OrganizationController@getOrganizationPricelistStockBalances');
         Route::get('/organization/{id}/stocks/{product}', 'Api\OrganizationController@getOrganizationProductStocks');
         Route::get('/organization/{id}/stockbalances/{product}', 'Api\OrganizationController@getOrganizationProductStockBalances');
         Route::get('/organization/{id}/productnows', 'Api\OrganizationController@getOrganizationProductNows');
@@ -216,13 +217,6 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/payment', 'Api\PaymentController@store');
         Route::put('/payment/{id}', 'Api\PaymentController@update');
         Route::delete('/payment/{id}', 'Api\PaymentController@destroy');
-
-        /*PaymentNows endpoints*/
-        Route::get('/paymentnows', 'Api\PaymentNowController@index');
-        Route::get('/paymentnow/{id}', 'Api\PaymentNowController@show');
-        Route::post('/paymentnow', 'Api\PaymentNowController@store');
-        Route::put('/paymentnow/{id}', 'Api\PaymentNowController@update');
-        Route::delete('/paymentnow/{id}', 'Api\PaymentNowController@destroy');
 
         /*PaymentPromos endpoints*/
         Route::get('/paymentpromos', 'Api\PaymentPromoController@index');

@@ -152,53 +152,63 @@ class SellerController extends MyController
 
     $import_data_arr = $this->getCsvData($file_details['path']);
     foreach ($import_data_arr as $import_data) {
-      $brand_name = isset($import_data[0]);
-      $molecular_name = isset($import_data[1]);
-      $pack_size = isset($import_data[2]);
-      $unit_price = isset($import_data[3]);
-      $available_stock = isset($import_data[4]);
-      //Add Product
-      $product_data = [
-        'molecular_name' => $molecular_name,
-        'brand_name' => $brand_name,
-        'pack_size' => $pack_size,
-        'product_category_id' => $product_category_id,
-        'organization_id' => $organization_id,
-      ];
-      $product_response = $this->manageResourceData($token, 'POST', 'product', $product_data);
-      if (!array_key_exists('id', $product_response)) {
-        $errors++;
-        continue;
-      }
-      //Add stock
-      $product_id = $product_response['id'];
-      $stock_data = [
-        'transaction_date' => date('Y-m-d'),
-        'batch_number' => strtoupper(Str::random(6)),
-        'expiry_date' => date('Y-m-t', strtotime('+1 year')),
-        'quantity' => $available_stock,
-        'balance' => $available_stock,
-        'product_id' => $product_id,
-        'stock_type_id' => 3,
-        'organization_id' => $organization_id,
-        'user_id' => $user_id,
-      ];
-      $stock_response = $this->manageResourceData($token, 'POST', 'stock', $stock_data);
-      if (!array_key_exists('id', $stock_response)) {
-        $errors++;
-        continue;
-      }
-      //Add pricelist
-      $pricelist_data = [
-        'unit_price' => $unit_price,
-        'delivery_cost' => 0,
-        'is_published' => false,
-        'product_id' => $product_id,
-        'organization_id' => $organization_id,
-        'user_id' => $user_id,
-      ];
-      $pricelist_response = $this->manageResourceData($token, 'POST', 'productnow', $pricelist_data);
-      if (!array_key_exists('id', $pricelist_response)) {
+      try {
+        if (!isset($import_data[0]) && !isset($import_data[1]) && !isset($import_data[2]) && !isset($import_data[3])) {
+          $errors++;
+          continue;
+        }
+        $brand_name = $import_data[0];
+        $molecular_name = $import_data[1];
+        $pack_size = $import_data[2];
+        $unit_price = $import_data[3];
+        $available_stock = $import_data[4];
+        //Add Product
+        $product_data = [
+          'molecular_name' => $molecular_name,
+          'brand_name' => $brand_name,
+          'pack_size' => $pack_size,
+          'product_category_id' => $product_category_id,
+          'organization_id' => $organization_id,
+        ];
+        $product_response = $this->manageResourceData($token, 'POST', 'product', $product_data);
+        if (!array_key_exists('id', $product_response)) {
+          $errors++;
+          continue;
+        }
+        //Add stock
+        $product_id = $product_response['id'];
+        $stock_data = [
+          'transaction_date' => date('Y-m-d'),
+          'batch_number' => strtoupper(Str::random(6)),
+          'expiry_date' => date('Y-m-t', strtotime('+1 year')),
+          'quantity' => intval($available_stock),
+          'balance' => intval($available_stock),
+          'product_id' => $product_id,
+          'stock_type_id' => 3,
+          'organization_id' => $organization_id,
+          'user_id' => $user_id,
+        ];
+        $stock_response = $this->manageResourceData($token, 'POST', 'stock', $stock_data);
+        if (!array_key_exists('id', $stock_response)) {
+          $errors++;
+          continue;
+        }
+        //Add pricelist
+        $pricelist_data = [
+          'unit_price' => floatval($unit_price),
+          'delivery_cost' => 0,
+          'is_published' => false,
+          'product_id' => $product_id,
+          'organization_id' => $organization_id,
+          'user_id' => $user_id,
+        ];
+        $pricelist_response = $this->manageResourceData($token, 'POST', 'productnow', $pricelist_data);
+        if (!array_key_exists('id', $pricelist_response)) {
+          $errors++;
+          continue;
+        }
+      } catch (\Exception $e) {
+        $e->getMessage();
         $errors++;
         continue;
       }

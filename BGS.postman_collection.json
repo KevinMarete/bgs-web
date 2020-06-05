@@ -1318,6 +1318,44 @@
 					"response": []
 				},
 				{
+					"name": "Get Organization Pricelist StockBalances",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/stockbalances-pricelist",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"stockbalances-pricelist"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Organization Product StockBalances",
 					"request": {
 						"method": "GET",
@@ -1382,6 +1420,82 @@
 								"organization",
 								"3",
 								"productnows"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization Unpublished",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/unpublished",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"unpublished"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization Published",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/published",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"published"
 							],
 							"query": [
 								{
@@ -1655,6 +1769,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Organization Subscription",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/subscription",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"subscription"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -1739,37 +1884,6 @@
 					"response": []
 				},
 				{
-					"name": "Get User Subscriptions",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/user/1/subscription",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"user",
-								"1",
-								"subscription"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get User Loyalty",
 					"request": {
 						"method": "GET",
@@ -1832,7 +1946,7 @@
 					"response": []
 				},
 				{
-					"name": "Get User Credit Copy",
+					"name": "Get User Admins",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -2748,7 +2862,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"molecular_name\": \"Test Product\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"strength\": \"50mg\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
+							"raw": "{\n    \"molecular_name\": \"Test Product\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2787,7 +2901,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"molecular_name\": \"Test Product Updated\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"strength\": \"50mg\",\n    \"minimum_order_quantity\": \"10\",\n    \"unit_price\": \"1200.00\",\n    \"delivery_cost\": \"500.00\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
+							"raw": "{\n    \"molecular_name\": \"Test Product Updated\",\n    \"brand_name\": \"Test Product Brand\",\n    \"pack_size\": \"10\",\n    \"product_category_id\": \"1\",\n    \"organization_id\": \"3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4104,7 +4218,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "ProductNows",
+			"name": "ProductNows aka Pricelists",
 			"item": [
 				{
 					"name": "All ProductNows",
@@ -4246,6 +4360,46 @@
 								"api",
 								"productnow",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch ProductNow",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_published\": \"0\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{port}}/api/productnow/4",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"productnow",
+								"4"
 							]
 						}
 					},
@@ -4884,209 +5038,6 @@
 							"path": [
 								"api",
 								"payment",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "bc30ccc4-dd56-44e0-8791-285ac212f6b0",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "faf00664-fb65-4293-956b-3e7de1e12fde",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "PaymentNows",
-			"item": [
-				{
-					"name": "All PaymentNows",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/paymentnows",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"paymentnows"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get PaymentNow",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/paymentnow/1",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"paymentnow",
-								"1"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add PaymentNow",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"payment_id\": \"1\",\n    \"product_now_id\": \"1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}{{port}}/api/paymentnow",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"paymentnow"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update PaymentNow",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"payment_id\": \"1\",\n    \"product_now_id\": \"1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}{{port}}/api/paymentnow/1",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"paymentnow",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete PaymentNow",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/paymentnow/1",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"paymentnow",
 								"1"
 							]
 						}
@@ -8872,19 +8823,19 @@
 	],
 	"variable": [
 		{
-			"id": "53538a00-0bcc-40f4-90d7-266ee402b3a7",
+			"id": "c71dc462-2812-4198-b47b-8441e6195f09",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "6918efeb-bf36-4ae8-b89a-46d385051db6",
+			"id": "aa1ce583-0005-4340-ab52-bf4c31629479",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "399f8e68-69a7-46b1-bb29-e4a4d37a60e5",
+			"id": "625be238-ca07-4f71-b477-a8d23f628100",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

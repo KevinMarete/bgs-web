@@ -14,11 +14,11 @@ class ProductNowController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         $order = 'ASC';
         $productnows = ProductNow::with(['product' => function ($q) use ($order) {
-            $q->orderBy('molecular_name', $order)->orderBy('unit_price', $order);
-        }, 'organization', 'user'])->get();
+            $q->orderBy('molecular_name', $order);
+        }, 'organization', 'user'])->orderBy('unit_price', $order)->get();
 
         return response()->json($productnows);
     }
@@ -48,7 +48,7 @@ class ProductNowController extends Controller
     public function show($id)
     {
         $productnow = ProductNow::with('product', 'organization', 'user')->find($id);
-        if(is_null($productnow)){
+        if (is_null($productnow)) {
             return response()->json(['error' => 'not_found']);
         }
         return response()->json($productnow);
@@ -65,7 +65,24 @@ class ProductNowController extends Controller
     {
         $this->validate($request, ProductNow::$rules);
         $productnow  = ProductNow::find($id);
-        if(is_null($productnow)){
+        if (is_null($productnow)) {
+            return response()->json(['error' => 'not_found']);
+        }
+        $productnow->update($request->all());
+        return response()->json($productnow);
+    }
+
+    /**
+     * Update the specified resource in storage (patch method).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function patch(Request $request, $id)
+    {
+        $productnow  = ProductNow::find($id);
+        if (is_null($productnow)) {
             return response()->json(['error' => 'not_found']);
         }
         $productnow->update($request->all());
@@ -81,7 +98,7 @@ class ProductNowController extends Controller
     public function destroy($id)
     {
         $productnow = ProductNow::find($id);
-        if(is_null($productnow)){
+        if (is_null($productnow)) {
             return response()->json(['error' => 'not_found']);
         }
         $productnow->delete();

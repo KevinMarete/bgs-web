@@ -88,18 +88,6 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified user's subscription.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function getUserSubscription($id)
-    {
-        $subscription = Subscription::with('user', 'package')->where('user_id', $id)->first();
-        return response()->json($subscription);
-    }
-
-    /**
      * Display the specified user's loyalty points.
      *
      * @param  int  $id

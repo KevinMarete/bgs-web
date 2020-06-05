@@ -32,7 +32,6 @@ class ProductController extends Controller
             'molecular_name' => $request->molecular_name,
             'brand_name' => $request->brand_name,
             'pack_size' => $request->pack_size,
-            'strength' => $request->strength,
             'product_category_id' => $request->product_category_id,
             'organization_id' => $request->organization_id,
         ], $request->all());

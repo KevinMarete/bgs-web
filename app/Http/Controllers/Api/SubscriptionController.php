@@ -29,7 +29,7 @@ class SubscriptionController extends Controller
     {
         $this->validate($request, Subscription::$rules);
         $subscription = Subscription::updateOrCreate([
-            'user_id' => $request->user_id
+            'organization_id' => $request->organization_id
         ], $request->all());
         return response()->json($subscription);
     }
@@ -43,7 +43,7 @@ class SubscriptionController extends Controller
     public function show($id)
     {
         $subscription = Subscription::find($id);
-        if(is_null($subscription)){
+        if (is_null($subscription)) {
             return response()->json(['error' => 'not_found']);
         }
         return response()->json($subscription);
@@ -60,7 +60,7 @@ class SubscriptionController extends Controller
     {
         $this->validate($request, Subscription::$rules);
         $subscription  = Subscription::find($id);
-        if(is_null($subscription)){
+        if (is_null($subscription)) {
             return response()->json(['error' => 'not_found']);
         }
         $subscription->update($request->all());
@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
     public function destroy($id)
     {
         $subscription = Subscription::find($id);
-        if(is_null($subscription)){
+        if (is_null($subscription)) {
             return response()->json(['error' => 'not_found']);
         }
         $subscription->delete();

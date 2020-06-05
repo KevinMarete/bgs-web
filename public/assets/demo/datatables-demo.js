@@ -24,12 +24,16 @@ $(document).ready(function () {
         saveSelectedValues(".pricelist_ids", JSON.stringify(values));
     });
 
-    $(".bulk_item_unpublish[type=checkbox]").on("change", function (e) {
-        values = getSelectedTableValues(oTable);
-        saveSelectedValues(".pricelist_ids", JSON.stringify(values));
-    });
+    $(document).on(
+        "change",
+        ".bulk_item_unpublish[type=checkbox]",
+        function () {
+            values = getSelectedTableValues(oTable);
+            saveSelectedValues(".pricelist_ids", JSON.stringify(values));
+        }
+    );
 
-    $(".bulk_item_publish[type=checkbox]").on("change", function (e) {
+    $(document).on("change", ".bulk_item_publish[type=checkbox]", function () {
         values = getSelectedTableValues(oTable);
         saveSelectedValues(".pricelist_ids", JSON.stringify(values));
     });

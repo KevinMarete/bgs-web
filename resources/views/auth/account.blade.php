@@ -157,10 +157,10 @@
                         </ul>
                         @if ($package['id'] === $subscription['package']['id'] && $subscription['status'] === 'active')
                         <button type="button" class="subscription-btn btn btn-sm btn-block btn-warning" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Current Package</button>
-                        <strong><small>Expires on: {{ $subscription['end_date'] }} </small></strong>
+                        <strong><small>Expires on: <br /> {{ $subscription['end_date'] }} </small></strong>
                         @elseif ($package['id'] === $subscription['package']['id'] && $subscription['status'] !== 'active')
                         <button type="button" class="subscription-btn btn btn-sm btn-block btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Expired Package</button>
-                        <strong><small>Expired on: {{ $subscription['end_date'] }} </small></strong>
+                        <strong><small>Expired on: <br />{{ $subscription['end_date'] }} </small></strong>
                         @else
                         <button type="button" class="subscription-btn btn btn-sm btn-block btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" data-price="{{ $package['price'] }}" data-package="{{ $package['id'] }}">Select Package</button>
                         @endif
@@ -198,7 +198,7 @@
                                     <label for="username">Full name (on the card)</label>
                                     <input type="hidden" class="form-control" name="start_date" value="{{ date('Y-m-d') }}">
                                     <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
-                                    <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
+                                    <input type="hidden" class="form-control" name="organization_id" value="{{ $profile['organization_id'] }}">
                                     <input type="hidden" class="form-control subscription-package" name="package_id">
                                     <input type="hidden" class="form-control subscription-price" name="price">
                                     <input type="hidden" class="form-control" name="destination[paybill_number]" value="{{ $payment['paybill_number'] }}">
@@ -256,7 +256,7 @@
                                     <dd>
                                       <input type="hidden" class="form-control" name="start_date" value="{{ date('Y-m-d') }}">
                                       <input type="hidden" class="form-control" name="end_date" value="{{ date('Y-m-d', strtotime('+1 month')) }}">
-                                      <input type="hidden" class="form-control" name="user_id" value="{{ $profile['id'] }}">
+                                      <input type="hidden" class="form-control" name="organization_id" value="{{ $profile['organization_id'] }}">
                                       <input type="hidden" class="form-control subscription-package" name="package_id">
                                       <input type="hidden" class="form-control" name="destination[paybill_number]" value="{{ $payment['paybill_number'] }}">
                                       <input type="hidden" class="form-control" name="destination[account_number]" value="{{ $payment['account_number'] }}">

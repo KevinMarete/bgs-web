@@ -29,7 +29,6 @@
             <form role="form" action="/pricelist/publish" method="POST">
               @csrf
               <input type="hidden" name="is_published" value="1">
-              <input type="hidden" name="currently_published" value="{{ sizeof($published['table_data']) }}">
               <input type="hidden" name="pricelist_ids" value="" class="pricelist_ids">
               <div class="card mb-4">
                 <div class="card-header">
@@ -83,7 +82,6 @@
             <form role="form" action="/pricelist/publish" method="POST">
               @csrf
               <input type="hidden" name="is_published" value="0">
-              <input type="hidden" name="currently_published" value="{{ sizeof($published['table_data']) }}">
               <input type="hidden" name="pricelist_ids" value="" class="pricelist_ids">
               <div class="card mb-4">
                 <div class="card-header">

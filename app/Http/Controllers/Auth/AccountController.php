@@ -20,7 +20,7 @@ class AccountController extends MyController
             'organizations' => $this->manageResourceData($token, 'GET', 'organizations'),
             'packages' => $this->manageResourceData($token, 'GET', 'packages'),
             'payment' => $this->getPaymentDetails(),
-            'subscription' => $this->getUserSubscription($token, $user_id),
+            'subscription' => $this->getOrganizationSubscription($token, $organization_id),
             'payment_types' => $this->manageResourceData($token, 'GET', 'payment-types'),
             'organization_payment_type' => $this->getOrganizationPaymentType($token, $organization_id),
             'loyalty' => $this->getUserPoints($token, $user_id),
@@ -144,7 +144,7 @@ class AccountController extends MyController
         return redirect('/account');
     }
 
-    public function getUserSubscription($token = null, $user_id = null)
+    public function getOrganizationSubscription($token = null, $organization_id = null)
     {
         $subscription = [
             'status' => 'inactive',
@@ -157,7 +157,7 @@ class AccountController extends MyController
         ];
 
         if ($token !== null) {
-            $request = $this->client->get('user/' . $user_id . '/subscription', [
+            $request = $this->client->get('organization/' . $organization_id . '/subscription', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $token
                 ]

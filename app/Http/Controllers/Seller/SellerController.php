@@ -49,6 +49,20 @@ class SellerController extends MyController
     return view('template.main', $data);
   }
 
+  public function getPricelistSubscriptionLimit($token, $organization_id)
+  {
+    $response = $this->getResourceData($token, 'organization/' . $organization_id . '/subscription');
+    if (empty($response)) {
+      return 0;
+    }
+    return intval(json_decode($response['package']['details'], true)['published_items']['value']);
+  }
+
+  public function getCurrentPublishedPricelist($token, $organization_id)
+  {
+    return sizeof($this->getResourceData($token, 'organization/' . $organization_id . '/published'));
+  }
+
   public function savePricelist(Request $request)
   {
     $post_data = $request->all();
@@ -227,6 +241,9 @@ class SellerController extends MyController
 
   public function publishPricelist(Request $request)
   {
+    $token = session()->get('token');
+    $organization_id = session()->get('organization_id');
+
     $flash_id = 'bgs_msg';
     $redirect_url = '/pricelist/publish';
     $is_published = $request->is_published;
@@ -239,17 +256,14 @@ class SellerController extends MyController
       return redirect($redirect_url);
     }
 
-    $currently_published = $request->currently_published;
+    $currently_published = $this->getCurrentPublishedPricelist($token, $organization_id);
     $num_of_pricelist = sizeof($pricelist_ids);
     $published_arr = [
       $currently_published - $num_of_pricelist, $num_of_pricelist + $currently_published
     ];
     $total_published = $published_arr[$is_published];
-    $package_limit = 1000;
+    $package_limit = $this->getPricelistSubscriptionLimit($token, $organization_id);
     $errors = 0;
-
-    $token = session()->get('token');
-    $organization_id = session()->get('organization_id');
 
     if ($total_published > $package_limit) {
       //Redirect to subscription page and recommend upgrade

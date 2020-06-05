@@ -1769,6 +1769,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Organization Subscription",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/subscription",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"subscription"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -1853,37 +1884,6 @@
 					"response": []
 				},
 				{
-					"name": "Get User Subscriptions",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/user/1/subscription",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"user",
-								"1",
-								"subscription"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get User Loyalty",
 					"request": {
 						"method": "GET",
@@ -1946,7 +1946,7 @@
 					"response": []
 				},
 				{
-					"name": "Get User Credit Copy",
+					"name": "Get User Admins",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -8823,19 +8823,19 @@
 	],
 	"variable": [
 		{
-			"id": "facf9481-6036-4efc-8ece-6232804ad135",
+			"id": "c71dc462-2812-4198-b47b-8441e6195f09",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "d729a38c-7c4e-42db-9982-265f8d27bef0",
+			"id": "aa1ce583-0005-4340-ab52-bf4c31629479",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "d65ef21f-40da-41ad-8587-d27c316b6422",
+			"id": "625be238-ca07-4f71-b477-a8d23f628100",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

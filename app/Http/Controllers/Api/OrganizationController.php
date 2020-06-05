@@ -12,6 +12,7 @@ use App\ProductPromo;
 use App\ProductDeal;
 use App\Order;
 use App\Product;
+use App\Subscription;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -335,5 +336,17 @@ class OrganizationController extends Controller
   {
     $productnows = ProductNow::with('product', 'organization', 'user')->where('organization_id', $id)->where('is_published', true)->get();
     return response()->json($productnows);
+  }
+
+  /**
+   * Display the specified Organization's subscription.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function getOrganizationSubscription($id)
+  {
+    $subscription = Subscription::with('organization', 'package')->where('organization_id', $id)->first();
+    return response()->json($subscription);
   }
 }

@@ -51,7 +51,7 @@ class AddNewSellerPackages extends Migration
           'promotions' => ['value' => '0', 'description' => 'No products in the promotions window'],
         ])],
         ['name' => 'Platform', 'price' => '14999', 'created_at' => now(), 'details' => json_encode([
-          'published_items' => ['value' => '-1', 'description' => 'Unlimited products published'],
+          'published_items' => ['value' => '100000', 'description' => 'Unlimited products published'],
           'cash_orders' => ['value' => true, 'description' => 'Get cash orders from chemists & institutions'],
           'product_visiblity' => ['value' => '10', 'description' => '10 product visibility in the first page'],
           'offer_of_day' => ['value' => '10', 'description' => '10 products in the offers of the day window'],

@@ -106,7 +106,6 @@ Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
 /*Buyer Routes*/
 Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView');
 Route::get('/deals', 'Buyer\BuyerController@displayDealView');
-Route::get('/promos', 'Buyer\BuyerController@displayPromoView');
 Route::post('/add-cart', 'Buyer\BuyerController@addCart');
 Route::get('/cart', 'Buyer\BuyerController@displayCartView');
 Route::post('/update-cart/{id}', 'Buyer\BuyerController@updateCart');

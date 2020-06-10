@@ -8,11 +8,11 @@ use App\OrganizationPaymentType;
 use App\Stock;
 use App\StockBalance;
 use App\ProductNow;
-use App\ProductPromo;
 use App\ProductDeal;
 use App\Order;
 use App\Product;
 use App\Subscription;
+use App\Promotion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -228,12 +228,10 @@ class OrganizationController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function getOrganizationProductPromos($id)
+  public function getOrganizationPromotions($id)
   {
-    $productpromos = ProductPromo::with(['product_now', 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->whereHas('product_now', function ($query) use ($id) {
-      $query->where('organization_id', $id);
-    })->get();
-    return response()->json($productpromos);
+    $promotions = Promotion::with(['product_now', 'product_now.product'])->where('organization_id', $id)->get();
+    return response()->json($promotions);
   }
 
   /**

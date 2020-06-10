@@ -11,10 +11,10 @@ use App\Mail\CourierEmail;
 use App\Mail\NotificationEmail;
 
 class BuyerController extends MyController
-{   
+{
 
     public function displayOrderNowView()
-    {   
+    {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $view_data = [
@@ -22,7 +22,7 @@ class BuyerController extends MyController
             'products' => $this->getResourceData($token, 'productnows')
         ];
         $data = [
-            'page_title' => 'Ordernow', 
+            'page_title' => 'Ordernow',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.ordernow', $view_data)
         ];
@@ -32,7 +32,7 @@ class BuyerController extends MyController
     }
 
     public function displayDealView()
-    {   
+    {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $view_data = [
@@ -40,7 +40,7 @@ class BuyerController extends MyController
             'products' => $this->getResourceData($token, 'productdeals')
         ];
         $data = [
-            'page_title' => 'Deals', 
+            'page_title' => 'Deals',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.deal', $view_data)
         ];
@@ -49,26 +49,8 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function displayPromoView()
-    {   
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $view_data = [
-            'products_per_page' => env('PRODUCTS_PER_PAGE'),
-            'products' => $this->getResourceData($token, 'productpromos')
-        ];
-        $data = [
-            'page_title' => 'Promos', 
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.promo', $view_data)
-        ];
-        session()->put('cart_title', $data['page_title']);
-
-        return view('template.main', $data);
-    }
-
     public function displayCartView(Request $request)
-    {   
+    {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $cart_title = session()->get('cart_title');
@@ -78,7 +60,7 @@ class BuyerController extends MyController
             'total' => 0
         ];
         $data = [
-            'page_title' => $cart_title, 
+            'page_title' => $cart_title,
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.cart', $view_data)
         ];
@@ -87,13 +69,13 @@ class BuyerController extends MyController
     }
 
     public function displayCheckoutView()
-    {   
+    {
         $token = session()->get('token');
         $user_id = session()->get('id');
         $role_id = session()->get('organization.organization_type.role_id');
         $cart_title = session()->get('cart_title');
-        $credit_response = $this->getResourceData($token, 'user/'.$user_id.'/credit');
-        
+        $credit_response = $this->getResourceData($token, 'user/' . $user_id . '/credit');
+
         $view_data = [
             'cart_items' => session()->get('cart'),
             'back_to_link' => strtolower($cart_title),
@@ -104,7 +86,7 @@ class BuyerController extends MyController
             'account_number' => env('ACCOUNT_NUMBER')
         ];
         $data = [
-            'page_title' => $cart_title, 
+            'page_title' => $cart_title,
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.checkout', $view_data)
         ];
@@ -112,13 +94,13 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function getResourceData($token=null, $resource=null)
-    {   
+    public function getResourceData($token = null, $resource = null)
+    {
         $resource_data = [];
-        if($token !== null && $resource != null){
+        if ($token !== null && $resource != null) {
             $request = $this->client->get($resource, [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ]
             ]);
             $response = $request->getBody();
@@ -129,7 +111,7 @@ class BuyerController extends MyController
     }
 
     public function addCart(Request $request)
-    {   
+    {
         $request_data = $request->except('_token');
         //Add data to session array
         $cart = session()->get('cart');
@@ -148,13 +130,13 @@ class BuyerController extends MyController
     }
 
     public function updateCart(Request $request)
-    {   
+    {
         $request_data = $request->except('_token');
         $product_id = $request->id;
         //update data to session array
         $cart = session()->get('cart');
         $cart[$product_id]['quantity'] = $request_data['quantity'];
-        $cart[$product_id]['sub_total'] = $request_data['price']*$request_data['quantity'];
+        $cart[$product_id]['sub_total'] = $request_data['price'] * $request_data['quantity'];
 
         session()->put('cart', $cart);
 
@@ -166,11 +148,11 @@ class BuyerController extends MyController
                     </div>';
         $request->session()->flash('bgs_msg', $flash_msg);
 
-        return redirect('cart'); 
+        return redirect('cart');
     }
 
     public function removeCart(Request $request)
-    {   
+    {
         //Remove data from session array
         $cart = session()->pull('cart', []);
         unset($cart[$request->id]);
@@ -185,24 +167,22 @@ class BuyerController extends MyController
 
         $request->session()->flash('bgs_msg', $flash_msg);
 
-        return redirect('cart');  
+        return redirect('cart');
     }
 
     public function splitOrder($cart_items)
-    {   
-        $orders = []; 
+    {
+        $orders = [];
         $status = 'paid, awaiting_confirmation';
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
 
-        foreach($cart_items as $cart_item)
-        {   
+        foreach ($cart_items as $cart_item) {
             $seller_id = $cart_item['organization_id'];
             $sub_total = round($cart_item['sub_total'], 2);
             $shipping_total = round(($cart_item['delivery'] * $cart_item['quantity']), 2);
 
-            if(!in_array($seller_id, array_keys($orders)))
-            {   
+            if (!in_array($seller_id, array_keys($orders))) {
                 //Add new order and log
                 $orders[$seller_id] = [
                     'status' => $status,
@@ -215,7 +195,7 @@ class BuyerController extends MyController
                         'organization_id' => $organization_id
                     ]
                 ];
-            }else{
+            } else {
                 //Update existing order 
                 $orders[$seller_id]['product_total'] = round(($orders[$seller_id]['product_total'] + $sub_total), 2);
                 $orders[$seller_id]['shipping_total'] = round(($orders[$seller_id]['shipping_total'] + $shipping_total), 2);
@@ -240,28 +220,27 @@ class BuyerController extends MyController
     }
 
     public function saveOrder(Request $request)
-    {   
+    {
         $cart_items = session()->get('cart');
         $orders = $this->splitOrder($cart_items);
         $token = session()->get('token');
-        $transaction_type = $request->type; 
+        $transaction_type = $request->type;
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
         $user_points = 0;
         $points_per_order = env('POINTS_PER_ORDER');
 
         //Get user credits
-        $credit_response = $this->getResourceData($token, 'user/'.$user_id.'/credit');
+        $credit_response = $this->getResourceData($token, 'user/' . $user_id . '/credit');
         $credits = (empty($credit_response) ? 0 : $credit_response['amount']);
         $order_size = sizeof($orders);
-        $cart_size = sizeof($cart_items); 
-        $credits_per_order = round(($credits/$order_size), 2);
-        $credits_per_item = round(($credits/$cart_size), 2);
+        $cart_size = sizeof($cart_items);
+        $credits_per_order = round(($credits / $order_size), 2);
+        $credits_per_item = round(($credits / $cart_size), 2);
         $credits_balance = $credits;
 
-        foreach($orders as $order)
-        {   
-            $orderitems = []; 
+        foreach ($orders as $order) {
+            $orderitems = [];
             $supplier_emails = [];
             $credits_balance = round(($credits_balance - $credits_per_order), 2);
 
@@ -281,8 +260,7 @@ class BuyerController extends MyController
             $this->manageResourceData($token, "POST", "orderlog", $orderlog_data);
 
             //Add OrderItems
-            foreach($order['order_items'] as $order_item)
-            {   
+            foreach ($order['order_items'] as $order_item) {
                 $orderitem_data = [
                     'quantity' => $order_item['quantity'],
                     'unit_price' => $order_item['unit_price'],
@@ -299,10 +277,10 @@ class BuyerController extends MyController
 
                 //Add mail orderitems
                 $orderitems[] = [
-                    'product_name' => $order_item['product_name'], 
-                    'quantity' => $order_item['quantity'], 
-                    'unit_price'=> $order_item['unit_price'], 
-                    'sub_total'=> round(($order_item['sub_total'] - $credits_per_item), 2), 
+                    'product_name' => $order_item['product_name'],
+                    'quantity' => $order_item['quantity'],
+                    'unit_price' => $order_item['unit_price'],
+                    'sub_total' => round(($order_item['sub_total'] - $credits_per_item), 2),
                 ];
 
                 //Add supplier emails
@@ -324,9 +302,8 @@ class BuyerController extends MyController
             $this->manageResourceData($token, "POST", "paymentorder", $paymentorder_data);
 
             //Get user loyalty points
-            $loyalty_response = $this->manageResourceData($token, "GET", "user/".$user_id."/loyalty", []);
-            if($loyalty_response)
-            {
+            $loyalty_response = $this->manageResourceData($token, "GET", "user/" . $user_id . "/loyalty", []);
+            if ($loyalty_response) {
                 $user_points = $loyalty_response['points'];
             }
 
@@ -345,15 +322,14 @@ class BuyerController extends MyController
             $this->manageResourceData($token, "POST", "loyaltylog", $loyaltylog_data);
 
             //Update Credits if credits_per_order > 0
-            if($credits_per_order > 0)
-            {
+            if ($credits_per_order > 0) {
                 $credit_data = ['amount' => $credits_balance, 'user_id' => $user_id];
                 $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
                 $credit_id = $credit_response['id'];
 
                 //Add Credit Log
                 $creditlog_data = [
-                    'status' => 'used_on_order_#'.$order_id,
+                    'status' => 'used_on_order_#' . $order_id,
                     'amount' => $credits_per_order,
                     'credit_id' => $credit_id
                 ];
@@ -392,12 +368,12 @@ class BuyerController extends MyController
     public function send_mail($order)
     {
         Mail::send(new OrderEmail($order));
-        
-        return ['msg'=> 'Mail sent'];
+
+        return ['msg' => 'Mail sent'];
     }
 
     public function displayOrderView()
-    {   
+    {
         $resource = 'orders';
         $resource_name = ucwords(str_replace('-', ' ', $resource));
         $token = session()->get('token');
@@ -412,7 +388,7 @@ class BuyerController extends MyController
             'table_data' => $this->getResourceData($token, $resource_url)
         ];
         $data = [
-            'page_title' => $resource_name, 
+            'page_title' => $resource_name,
             'content_view' => View::make('buyer.orders', $view_data),
             'menus' => $this->getRoleMenus($token, $role_id),
         ];
@@ -420,10 +396,10 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function getOrderHeaders($role=null)
-    {   
+    public function getOrderHeaders($role = null)
+    {
         $headers = [];
-        if ($role !== null){
+        if ($role !== null) {
             $data = [
                 'admin' => ['id', 'organization', 'status', 'created_at', 'product_total', 'shipping_total', 'total'],
                 'buyer' => ['id', 'status', 'created_at', 'product_total', 'shipping_total', 'total'],
@@ -434,14 +410,14 @@ class BuyerController extends MyController
         return $headers;
     }
 
-    public function getOrderUrl($role=null, $id=null)
-    {   
+    public function getOrderUrl($role = null, $id = null)
+    {
         $url = '';
-        if ($role !== null){
+        if ($role !== null) {
             $role_url = [
                 'admin' => 'orders',
-                'buyer' => 'organization/'.$id.'/orders',
-                'seller' => 'organization/'.$id.'/seller-orders'
+                'buyer' => 'organization/' . $id . '/orders',
+                'seller' => 'organization/' . $id . '/seller-orders'
             ];
             $url = $role_url[$role];
         }
@@ -449,7 +425,7 @@ class BuyerController extends MyController
     }
 
     public function displayViewOrder(Request $request)
-    {   
+    {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $role_name = strtolower(session()->get('organization.organization_type.role.name'));
@@ -457,10 +433,10 @@ class BuyerController extends MyController
 
         $view_data = [
             'role_name' => $role_name,
-            'order' => $this->getResourceData($token, 'order/'.$order_id)
+            'order' => $this->getResourceData($token, 'order/' . $order_id)
         ];
         $data = [
-            'page_title' => 'orders', 
+            'page_title' => 'orders',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.manage.view_order', $view_data)
         ];
@@ -469,13 +445,13 @@ class BuyerController extends MyController
     }
 
     public function displayActionOrder(Request $request)
-    {   
+    {
         $token = session()->get('token');
         $organization_id = session()->get('organization_id');
         $role_id = session()->get('organization.organization_type.role_id');
         $role_name = strtolower(session()->get('organization.organization_type.role.name'));
         $order_id = $request->id;
-        $order = $this->getResourceData($token, 'order/'.$order_id);
+        $order = $this->getResourceData($token, 'order/' . $order_id);
 
         $view_data = [
             'couriers' => $this->manageResourceData($token, "GET", "couriers", []),
@@ -485,7 +461,7 @@ class BuyerController extends MyController
             'order' => $order
         ];
         $data = [
-            'page_title' => 'orders', 
+            'page_title' => 'orders',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.manage.action_order', $view_data)
         ];
@@ -493,10 +469,10 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function getOrderActions($role=null, $status=null)
-    {   
+    public function getOrderActions($role = null, $status = null)
+    {
         $status_actions = [];
-        if($role !== null & $status !== null ){
+        if ($role !== null & $status !== null) {
             $actions = [
                 'admin' => [
                     'paid, awaiting_confirmation' => [],
@@ -543,7 +519,7 @@ class BuyerController extends MyController
     }
 
     public function actionOrder(Request $request)
-    {   
+    {
         $token = session()->get('token');
         $organization_id = session()->get('organization_id');
         $order_organization_id = $request->organization_id;
@@ -553,8 +529,7 @@ class BuyerController extends MyController
 
         //Trigger Actions based on status
         $trigger_response = $this->triggerStatusAction($status, $request->all());
-        if($trigger_response['status'] == 'success')
-        {
+        if ($trigger_response['status'] == 'success') {
             //Update Order 
             $order_data = [
                 'status' => $status,
@@ -562,7 +537,7 @@ class BuyerController extends MyController
                 'shipping_total' => $request->shipping_total,
                 'organization_id' => $order_organization_id
             ];
-            $order_response = $this->manageResourceData($token, "PUT", "order/".$order_id, $order_data);
+            $order_response = $this->manageResourceData($token, "PUT", "order/" . $order_id, $order_data);
             $order_id = $order_response['id'];
 
             //Add OrderLog
@@ -575,16 +550,14 @@ class BuyerController extends MyController
             $this->manageResourceData($token, "POST", "orderlog", $orderlog_data);
 
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your action was successful on Order#'.$order_id.'
+                            <strong>Success!</strong> Your action was successful on Order#' . $order_id . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>';
-        }
-        else
-        {
+        } else {
             $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> '.$trigger_response['message'].'
+                            <strong>Error!</strong> ' . $trigger_response['message'] . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -592,30 +565,29 @@ class BuyerController extends MyController
         }
         $request->session()->flash('bgs_msg', $flash_msg);
 
-        return redirect('/view-order/'.$order_id);
+        return redirect('/view-order/' . $order_id);
     }
 
-    public function triggerStatusAction($status=null, $request_data)
-    {   
+    public function triggerStatusAction($status = null, $request_data)
+    {
         $response = [];
         $order_id = $request_data['id'];
-        if($status !== null)
-        {
-            if($status == 'refunded, order_cancelled'){
+        if ($status !== null) {
+            if ($status == 'refunded, order_cancelled') {
                 //Trigger Refund
                 $response = $this->refundOrder($order_id);
-            }else if($status == 'dispatched, awaiting_pickup'){
+            } else if ($status == 'dispatched, awaiting_pickup') {
                 //Trigger Courier Dispatch
                 $response = $this->sendOrderCourier($order_id, $request_data['courier_id']);
-            }else if($status == 'delivered, order_closed'){
+            } else if ($status == 'delivered, order_closed') {
                 //Trigger Payout
                 $response = $this->payoutOrder($order_id);
-            }else{
+            } else {
                 $response = ['status' => 'success', 'message' => 'Action was successful!'];
             }
 
             //Notify Buyer
-            if($response['status'] = 'success'){
+            if ($response['status'] = 'success') {
                 $this->sendNotification($order_id, $status);
             }
         }
@@ -623,20 +595,19 @@ class BuyerController extends MyController
     }
 
     public function refundOrder($order_id)
-    {   
+    {
         $token = session()->get('token');
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
         $response = ['status' => 'error', 'message' => 'Refund was unsuccessful'];
 
         //Get Order 
-        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+        $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
         //Get Organization PaymentType
         $payment_type = $order['order_logs'][0]['user'];
 
-        if(!empty($payment_type))
-        {
+        if (!empty($payment_type)) {
             //Add refund
             $refund_data = ['status' => 'order_cancelled', 'order_id' => $order_id];
             $refund_response = $this->manageResourceData($token, "POST", "refund", $refund_data);
@@ -647,7 +618,7 @@ class BuyerController extends MyController
                 'method' => 'mobile',
                 'amount' => ($order['product_total'] + $order['shipping_total'] - env('REFUND_FEE')),
                 'source' => [
-                    'paybill_number' => env('PAYBILL_NUMBER'), 
+                    'paybill_number' => env('PAYBILL_NUMBER'),
                     'account_number' => env('ACCOUNT_NUMBER')
                 ],
                 'destination' => ['phone' => $payment_type['phone']]
@@ -663,9 +634,8 @@ class BuyerController extends MyController
             $user_points = 0;
             $buyer_id = $order['order_logs'][0]['user_id'];
             $points_per_order = env('POINTS_PER_ORDER');
-            $loyalty_response = $this->manageResourceData($token, "GET", "user/".$buyer_id."/loyalty", []);
-            if($loyalty_response)
-            {
+            $loyalty_response = $this->manageResourceData($token, "GET", "user/" . $buyer_id . "/loyalty", []);
+            if ($loyalty_response) {
                 $user_points = $loyalty_response['points'];
             }
 
@@ -684,31 +654,30 @@ class BuyerController extends MyController
             $this->manageResourceData($token, "POST", "loyaltylog", $loyaltylog_data);
 
             //Get buyer credits
-            $credit_response = $this->getResourceData($token, 'user/'.$buyer_id.'/credit');
+            $credit_response = $this->getResourceData($token, 'user/' . $buyer_id . '/credit');
             $credits_balance = (empty($credit_response) ? 0 : $credit_response['amount']);
-            
+
             //Get order credits
             $credits_per_order = 0;
-            $creditlog_response = $this->manageResourceData($token, "GET", "order/".$order_id."/creditlog", []);
+            $creditlog_response = $this->manageResourceData($token, "GET", "order/" . $order_id . "/creditlog", []);
             $credits_per_order = (empty($creditlog_response) ? 0 : $creditlog_response['amount']);
-            
+
             //Return Credits if credits_per_order > 0
-            if($credits_per_order > 0)
-            {
+            if ($credits_per_order > 0) {
                 $credit_data = ['amount' => round(($credits_balance + $credits_per_order), 2), 'user_id' => $buyer_id];
                 $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
                 $credit_id = $credit_response['id'];
 
                 //Add Credit Log
                 $creditlog_data = [
-                    'status' => 'refund_on_order_#'.$order_id,
+                    'status' => 'refund_on_order_#' . $order_id,
                     'amount' => round((-1 * abs($credits_per_order)), 2),
                     'credit_id' => $credit_id
                 ];
                 $this->manageResourceData($token, "POST", "creditlog", $creditlog_data);
             }
 
-            $response = ['status' => 'success', 'message' => 'Refund#'.$refund_id.' was successful'];
+            $response = ['status' => 'success', 'message' => 'Refund#' . $refund_id . ' was successful'];
         }
 
         return $response;
@@ -720,16 +689,15 @@ class BuyerController extends MyController
         $response = ['status' => 'error', 'message' => 'Courier was not assigned'];
 
         //Get Order 
-        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+        $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
         //Add Order Courier 
         $order_courier_data = ['order_id' => $order_id, 'courier_id' => $courier_id];
         $order_courier_response = $this->manageResourceData($token, "POST", "ordercourier", $order_courier_data);
 
-        if(!empty($order_courier_response))
-        {    
+        if (!empty($order_courier_response)) {
             //Get Courier
-            $courier = $this->manageResourceData($token, "GET", "courier/".$courier_id, []);
+            $courier = $this->manageResourceData($token, "GET", "courier/" . $courier_id, []);
 
             //Send email to courier
             $email_data = [
@@ -742,7 +710,7 @@ class BuyerController extends MyController
                 'buyer' => $order['organization']
             ];
             $email_dataobj = json_decode(json_encode($email_data));
-    
+
             Mail::send(new CourierEmail($email_dataobj));
 
             $response = ['status' => 'success', 'message' => 'Courier was assigned successfully!'];
@@ -758,14 +726,13 @@ class BuyerController extends MyController
         $response = ['status' => 'error', 'message' => 'Payout was unsuccessful'];
 
         //Get Order 
-        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+        $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
         //Get Organization PaymentType
         $seller_id = $order['order_items'][0]['organization']['id'];
-        $payment_type = $this->manageResourceData($token, "GET", "organization/".$seller_id."/payment-type", []);
+        $payment_type = $this->manageResourceData($token, "GET", "organization/" . $seller_id . "/payment-type", []);
 
-        if(!empty($payment_type))
-        {
+        if (!empty($payment_type)) {
             //Add Payout
             $payout_data = ['order_id' => $order_id, 'organization_id' => $seller_id];
             $payout_response = $this->manageResourceData($token, "POST", "payout", $payout_data);
@@ -776,7 +743,7 @@ class BuyerController extends MyController
                 'method' => 'mobile',
                 'amount' => ($order['product_total'] + $order['shipping_total']),
                 'source' => [
-                    'paybill_number' => env('PAYBILL_NUMBER'), 
+                    'paybill_number' => env('PAYBILL_NUMBER'),
                     'account_number' => env('ACCOUNT_NUMBER')
                 ],
                 'destination' => json_decode($payment_type['details'], true)
@@ -788,18 +755,18 @@ class BuyerController extends MyController
             $paymentpayout_data = ['payment_id' => $payment_id, 'payout_id' => $payout_id];
             $this->manageResourceData($token, "POST", "paymentpayout", $paymentpayout_data);
 
-            $response = ['status' => 'success', 'message' => 'Payout#'.$payout_id.' was successful'];
+            $response = ['status' => 'success', 'message' => 'Payout#' . $payout_id . ' was successful'];
         }
 
         return $response;
     }
 
     public function sendNotification($order_id, $status)
-    {   
+    {
         $token = session()->get('token');
 
         //Get Order 
-        $order = $this->manageResourceData($token, "GET", "order/".$order_id, []);
+        $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
         //Send notification to buyer
         $buyer = $order['order_logs'][0]['user'];
@@ -814,7 +781,7 @@ class BuyerController extends MyController
         $email_dataobj = json_decode(json_encode($email_data));
 
         Mail::send(new NotificationEmail($email_dataobj));
-        
-        return ['status' => 'success', 'message'=> 'Notification sent'];
+
+        return ['status' => 'success', 'message' => 'Notification sent'];
     }
 }

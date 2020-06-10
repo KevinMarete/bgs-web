@@ -29,7 +29,7 @@
             <div class="card mb-4">
               <div class="card-header">
                 Slider Promotion Listing
-                <a href="/promotions/new" class="btn btn-primary ml-auto">
+                <a href="/promotions/new/slider" class="btn btn-primary ml-auto">
                   <i data-feather="plus"></i>
                   Add Slider Promotion
                 </a>
@@ -61,7 +61,7 @@
                         <td>{{ $row['display_date'] }}</td>
                         <td>{{ $row['product_now']['product']['brand_name'] }}</td>
                         <td>
-                          <a href="/promotions/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                          <a href="/promotions/edit/slider/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                             <i data-feather="more-vertical"></i>
                           </a>
                         </td>
@@ -77,7 +77,7 @@
             <div class="card mb-4">
               <div class="card-header">
                 Static Promotion Listing
-                <a href="/promotions/new" class="btn btn-primary ml-auto">
+                <a href="/promotions/new/static" class="btn btn-primary ml-auto">
                   <i data-feather="plus"></i>
                   Add Static Promotion
                 </a>
@@ -109,7 +109,7 @@
                         <td>{{ $row['display_date'] }}</td>
                         <td>{{ $row['product_now']['product']['brand_name'] }}</td>
                         <td>
-                          <a href="/promotions/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                          <a href="/promotions/edit/static/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                             <i data-feather="more-vertical"></i>
                           </a>
                         </td>

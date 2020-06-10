@@ -536,8 +536,8 @@ class SellerController extends MyController
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
     $view_data = [
-      'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/activeoffers'),
-      'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows')
+      'type' => $request->type,
+      'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/published')
     ];
     $data = [
       'page_title' => 'promotions',
@@ -643,14 +643,14 @@ class SellerController extends MyController
 
   public function managePromotions(Request $request)
   {
-    $resource_name = 'productpromos';
+    $resource_name = 'promotions';
     $singular_resource_name = Str::singular($resource_name);
     $token = session()->get('token');
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
     $view_data = [
-      'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows'),
-      'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers')
+      'type' => $request->type,
+      'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/published'),
     ];
     $view_data['manage_label'] = 'new';
 

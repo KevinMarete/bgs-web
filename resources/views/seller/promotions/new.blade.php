@@ -3,7 +3,7 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>New Promotion Item(s)</span>
+                <span>New {{ ucwords($type) }} Promotion</span>
             </h1>
         </div>
     </div>
@@ -48,9 +48,6 @@
                                             <td>
                                                 <select class="form-control offer_id" size="0" name="offer_id[]" required>
                                                     <option value="">Select Offer</option>
-                                                    @foreach ($offers as $offer)
-                                                    <option value="{{ $offer['id'] }}">{{ $offer['description'] }}</option>
-                                                    @endforeach
                                                 </select>
                                             </td>
                                             <td>

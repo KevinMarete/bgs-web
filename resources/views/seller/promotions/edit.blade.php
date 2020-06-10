@@ -3,7 +3,7 @@
         <div class="sb-page-header-content py-5">
             <h1 class="sb-page-header-title">
                 <div class="sb-page-header-icon"><i data-feather="activity"></i></div>
-                <span>Update Promotion Item</span>
+                <span>Update Promotion</span>
             </h1>
         </div>
     </div>
@@ -26,13 +26,6 @@
                     <div class="col-lg-9">
                         <select class="form-control" size="0" name="offer_id" required>
                             <option value="">Select Offer</option>
-                            @foreach ($offers as $offer)
-                            @if ($offer['id'] === $edit['offer_id'])
-                            <option value="{{ $offer['id'] }}" selected>{{ $offer['description'].'('.$offer['valid_from'].' to '.$offer['valid_until'].') ('.$offer['discount'].'% Discount)' }}</option>
-                            @else
-                            <option value="{{ $offer['id'] }}">{{ $offer['description'].'('.$offer['valid_from'].' to '.$offer['valid_until'].') ('.$offer['discount'].'% Discount)' }}</option>
-                            @endif
-                            @endforeach
                         </select>
                     </div>
                 </div>

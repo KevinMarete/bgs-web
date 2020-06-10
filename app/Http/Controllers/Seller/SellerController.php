@@ -507,16 +507,19 @@ class SellerController extends MyController
 
   public function displayPromotionsTableView()
   {
-    $resource = 'productpromos';
+    $parent_resource = 'promotions';
+    $resources = ['slider', 'static'];
     $token = session()->get('token');
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
 
-    $view_data = [
-      'resource_name' => $resource,
-      'table_headers' => $this->getResourceKeys($resource),
-      'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
-    ];
+    $view_data = [];
+    foreach ($resources as $resource) {
+      $view_data[$resource] = [
+        'table_headers' => $this->getResourceKeys($parent_resource),
+        'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $parent_resource  . '-' . $resource)
+      ];
+    }
 
     $data = [
       'page_title' => 'Promotions',
@@ -960,7 +963,7 @@ class SellerController extends MyController
         'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
         'stockbalances' => ['brand_name', 'molecular_name', 'pack_size', 'balance'],
         'productnows' => ['id', 'brand_name', 'molecular_name', 'pack_size', 'published'],
-        'productpromos' => ['id', 'brand_name', 'molecular_name', 'coupon_code', 'unit_price', 'discount', 'max_amount'],
+        'promotions' => ['id', 'status', 'display_date', 'product'],
         'productdeals' => ['id', 'brand_name', 'molecular_name', 'min_quantity', 'unit_price', 'discount', 'max_amount']
       ];
       $header_data = $headers[$resource];

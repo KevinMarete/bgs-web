@@ -11,9 +11,10 @@ class Promotion extends Model
 
     protected $table = 'tbl_promotion';
 
-    protected $fillable = ['status', 'display_date', 'display_url', 'product_now_id', 'organization_id'];
+    protected $fillable = ['type', 'status', 'display_date', 'display_url', 'product_now_id', 'organization_id'];
 
     public static $rules = [
+        "type" => "required",
         "status" => "required",
         "display_date" => "required",
         "display_url" => "required",

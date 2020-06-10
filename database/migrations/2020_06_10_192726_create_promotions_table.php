@@ -15,6 +15,7 @@ class CreatePromotionsTable extends Migration
     {
         Schema::create('tbl_promotion', function (Blueprint $table) {
             $table->increments('id');
+            $table->enum('type', ['slider', 'static']);
             $table->string('status');
             $table->date('display_date');
             $table->string('display_url');
@@ -23,7 +24,7 @@ class CreatePromotionsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['status', 'display_date', 'product_now_id', 'organization_id']);
+            $table->unique(['type', 'status', 'display_date', 'product_now_id', 'organization_id']);
 
             $table->foreign('product_now_id')->references('id')->on('tbl_product_now')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('organization_id')->references('id')->on('tbl_organization')->onUpdate('cascade')->onDelete('cascade');

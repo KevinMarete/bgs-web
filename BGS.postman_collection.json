@@ -1547,6 +1547,82 @@
 					"response": []
 				},
 				{
+					"name": "Get Organization Slider Promotions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/promotions-slider",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"promotions-slider"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization Static Promotions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/promotions-static",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"promotions-static"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Organization ProductDeals",
 					"request": {
 						"method": "GET",
@@ -4471,14 +4547,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/promotion/1",
+							"raw": "{{host}}{{port}}/api/promotion/2",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
 								"promotion",
-								"1"
+								"2"
 							],
 							"query": [
 								{
@@ -4510,7 +4586,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"status\": \"booked\",\n    \"display_date\": \"2020-06-15\",\n    \"display_url\": \"kemsa-ad9jp01.jpg\",\n    \"product_now_id\": \"1\",\n    \"organization_id\": \"1\"\n}",
+							"raw": "{\n    \"type\": \"slider\",\n    \"status\": \"booked\",\n    \"display_date\": \"2020-06-15\",\n    \"display_url\": \"kemsa-ad9jp01.jpg\",\n    \"product_now_id\": \"1\",\n    \"organization_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4549,7 +4625,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"status\": \"paid\",\n    \"display_date\": \"2020-06-15\",\n    \"display_url\": \"kemsa-ad9jp01.jpg\",\n    \"product_now_id\": \"1\",\n    \"organization_id\": \"1\"\n}",
+							"raw": "{   \n    \"type\": \"slider\",\n    \"status\": \"paid\",\n    \"display_date\": \"2020-06-15\",\n    \"display_url\": \"kemsa-ad9jp01.jpg\",\n    \"product_now_id\": \"1\",\n    \"organization_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4557,14 +4633,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/promotion/1",
+							"raw": "{{host}}{{port}}/api/promotion/2",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
 								"promotion",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -5119,7 +5195,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"payment_id\": \"1\",\n    \"promotion_id\": \"1\"\n}",
+							"raw": "{\n    \"payment_id\": \"1\",\n    \"promotion_id\": \"2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -8765,19 +8841,19 @@
 	],
 	"variable": [
 		{
-			"id": "68401070-ec40-4116-8df2-8d4cda779baa",
+			"id": "befd47e4-c3b9-4ab1-87b1-dfa62c170561",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "98cad2c0-7f16-48e4-9edf-6cdeb1268d42",
+			"id": "c7d0e199-6c28-4d46-9bb7-0574ccbf56ca",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "2f9d35db-a111-4c1e-b698-5cf4180183fc",
+			"id": "b166c788-c969-43c3-9c99-c41c60abf893",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

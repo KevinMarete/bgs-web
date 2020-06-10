@@ -223,7 +223,7 @@ class OrganizationController extends Controller
   }
 
   /**
-   * Display the specified Organization's product promos.
+   * Display the specified Organization's all promotions.
    *
    * @param  int  $id
    * @return \Illuminate\Http\Response
@@ -231,6 +231,30 @@ class OrganizationController extends Controller
   public function getOrganizationPromotions($id)
   {
     $promotions = Promotion::with(['product_now', 'product_now.product'])->where('organization_id', $id)->get();
+    return response()->json($promotions);
+  }
+
+  /**
+   * Display the specified Organization's all slider promotions.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function getOrganizationSliderPromotions($id)
+  {
+    $promotions = Promotion::with(['product_now', 'product_now.product'])->where('type', 'slider')->where('organization_id', $id)->get();
+    return response()->json($promotions);
+  }
+
+  /**
+   * Display the specified Organization's all static promotions.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function getOrganizationStaticPromotions($id)
+  {
+    $promotions = Promotion::with(['product_now', 'product_now.product'])->where('type', 'static')->where('organization_id', $id)->get();
     return response()->json($promotions);
   }
 

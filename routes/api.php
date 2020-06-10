@@ -75,6 +75,8 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::get('/organization/{id}/stockbalances/{product}', 'Api\OrganizationController@getOrganizationProductStockBalances');
     Route::get('/organization/{id}/productnows', 'Api\OrganizationController@getOrganizationProductNows');
     Route::get('/organization/{id}/promotions', 'Api\OrganizationController@getOrganizationPromotions');
+    Route::get('/organization/{id}/promotions-slider', 'Api\OrganizationController@getOrganizationSliderPromotions');
+    Route::get('/organization/{id}/promotions-static', 'Api\OrganizationController@getOrganizationStaticPromotions');
     Route::get('/organization/{id}/productdeals', 'Api\OrganizationController@getOrganizationProductDeals');
     Route::get('/organization/{id}/orders', 'Api\OrganizationController@getOrganizationOrders');
     Route::get('/organization/{id}/seller-orders', 'Api\OrganizationController@getOrganizationSellerOrders');

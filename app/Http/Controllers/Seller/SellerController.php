@@ -530,13 +530,31 @@ class SellerController extends MyController
     return view('template.main', $data);
   }
 
+  public function getPromotionBookingTotals($token, $organization_id, $type)
+  {
+    $bookings_totals = [];
+    $bookings = $this->getResourceData($token, 'organization/' . $organization_id . '/promotions-' . $type);
+    foreach ($bookings as $booking) {
+      if ($booking['display_date'] >= date('Y-m-d')) {
+        if (!array_key_exists($booking['display_date'], $bookings_totals)) {
+          $bookings_totals[$booking['display_date']] = 0;
+        }
+        $bookings_totals[$booking['display_date']] += 1;
+      }
+    }
+    return $bookings_totals;
+  }
+
   public function displayNewPromotionView(Request $request)
   {
     $token = session()->get('token');
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
+    $type = $request->type;
     $view_data = [
-      'type' => $request->type,
+      'type' => $type,
+      'booking_limit' => env('PROMOTIONS_' . strtoupper($type) . '_LIMIT'),
+      'bookings' => json_encode($this->getPromotionBookingTotals($token, $organization_id, $type)),
       'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/published')
     ];
     $data = [
@@ -550,34 +568,33 @@ class SellerController extends MyController
 
   public function savePromotions(Request $request)
   {
+    $type = $request->type;
+    $display_dates = explode(',', $request->display_date);
+
+    $flash_id = 'bgs_msg';
+    $redirect_url = '/promotions';
+    $promotion_cost = env('PROMOTIONS_' . strtoupper($type) . '_COST');
+    $errors = 0;
+
     $token = session()->get('token');
-    $post_data = $request->all();
     $organization_id = session()->get('organization_id');
     $user_id = session()->get('id');
-    $errors = 0;
-    $cost_per_product = env('PROMO_COST');
 
     //Get organization payment_type
     $source_url = 'organization/' . $organization_id . '/payment-type';
     $source_response = $this->manageResourceData($token, 'GET', $source_url, []);
 
-
     //Redirect if no payment-type configured
     if (empty($source_response)) {
-      $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> Please configure payment-type under account tab!
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-      $request->session()->flash('bgs_msg', $flash_msg);
-      return redirect('/promotions');
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Please configure payment-type under account tab');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
     }
 
     //Make payment
     $payment_data = [
       'method' => $source_response['payment_type']['name'],
-      'amount' => ($cost_per_product * sizeof($post_data['product_now_id'])),
+      'amount' => $promotion_cost * sizeof($display_dates),
       'source' => $source_response['payment_type']['details'],
       'destination' => [
         'paybill_number' => env('PAYBILL_NUMBER'),
@@ -585,60 +602,49 @@ class SellerController extends MyController
       ]
     ];
     $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
+    if (!array_key_exists('id', $payment_response)) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Payment was not successful, promotion could not be booked');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
     $payment_id = $payment_response['id'];
 
-    foreach ($post_data['product_now_id'] as $key => $product_now_id) {
-      //Build request object
-      $request_data = [
-        'coupon_code' => $post_data['coupon_code'][$key],
-        'offer_id' => $post_data['offer_id'][$key],
-        'product_now_id' => $product_now_id
+    //Loop through display_dates
+    foreach ($display_dates as $display_date) {
+      //Add promotion
+      $promotion_data = [
+        'type' => $type,
+        'status' => 'paid',
+        'display_date' => $display_date,
+        'display_url' => '/tmp-00012.jpg',
+        'product_now_id' => $request->product_now_id,
+        'organization_id' => $organization_id
       ];
+      $promotion_response = $this->manageResourceData($token, 'POST', 'promotion', $promotion_data);
+      if (!array_key_exists('id', $promotion_response)) {
+        $errors++;
+        continue;
+      }
+      $promotion_id = $promotion_response['id'];
 
-      //Send request data to Api
-      $response = $this->client->post("productpromo", [
-        'headers' => [
-          'Authorization' => 'Bearer ' . $token
-        ],
-        'json' => $request_data
-      ]);
-
-      $response = json_decode($response->getBody(), true);
-
-      //Check success
-      if (isset($response['error'])) {
-        $errors += 1;
-      } else {
-        $product_now_id = $response['id'];
-        //Send request data to Api for payment
-        $response = $this->client->post("paymentpromo", [
-          'headers' => [
-            'Authorization' => 'Bearer ' . session()->get('token')
-          ],
-          'json' => ['payment_id' => $payment_id, 'product_promo_id' => $product_now_id]
-        ]);
+      //Add payment_promotion
+      $payment_promotion_data = ['payment_id' => $payment_id, 'promotion_id' => $promotion_id];
+      $payment_promotion_response = $this->manageResourceData($token, 'POST', 'paymentpromotion', $payment_promotion_data);
+      if (!array_key_exists('id', $payment_promotion_response)) {
+        $errors++;
+        continue;
       }
     }
 
     if ($errors > 0) {
-      $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> ' . $errors . ' Promotion Item(s) were not added successfully
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>';
-    } else {
-      $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your Promotion Item(s) were added successfully
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> ' . $errors . ' ' . $type . ' promotions were not added successfully');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
     }
 
-    $request->session()->flash('bgs_msg', $flash_msg);
-
-    return redirect('/promotions');
+    $flash_msg = $this->getAlertMessage('success', '<strong>Success!</strong> Your ' . $type . ' promotions were added successfully');
+    $request->session()->flash($flash_id, $flash_msg);
+    return redirect($redirect_url);
   }
 
   public function managePromotions(Request $request)

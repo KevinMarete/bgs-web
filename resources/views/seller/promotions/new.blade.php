@@ -12,59 +12,40 @@
     <div class="card mb-4">
         <div class="card-header"> </div>
         <div class="card-body">
-            <form role="form" action="/promotions/save" method="POST">
+            <form role="form" action="/promotions/save" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="sb-datatable table-responsive">
-                                <table class="table table-bordered table-hover transactions-tbl" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Product Name</th>
-                                            <th>Offer</th>
-                                            <th>CouponCode</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Product Name</th>
-                                            <th>Offer</th>
-                                            <th>CouponCode</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr class="tr_clone">
-                                            <td>
-                                                <select class="product col-md-12" size="0" name="product_now_id[]" required>
-                                                    <option value="">Select Product</option>
-                                                    @foreach ($productnows as $productnow)
-                                                    <option value="{{ $productnow['id'] }}">{{ $productnow['product']['molecular_name']  }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select class="form-control offer_id" size="0" name="offer_id[]" required>
-                                                    <option value="">Select Offer</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="coupon_code" value="" name="coupon_code[]" required />
-                                            </td>
-                                            <td>
-                                                <a href="#" class="add"><i class="fa fa-plus"></i></a> |
-                                                <a href="#" class="remove"><i class="fa fa-minus"></i></a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp;Save</button>
-                            </div>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">DisplayDates</label>
+                    <div class="col-lg-6">
+                        <input class="form-control" type="hidden" id="booking_Limit" value="{{ $booking_limit }}" />
+                        <input class="form-control" type="hidden" id="bookings" value="{{ $bookings }}" />
+                        <input class="form-control" type="hidden" name="type" value="{{ $type }}" />
+                        <input class="form-control" type="hidden" name="display_date" value="" />
+                        <div class="display_date"></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">DisplayURL</label>
+                    <div class="col-lg-6">
+                        <input type="file" name="display_url" required accept="image/x-png,image/jpeg" required />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Pricelist Product</label>
+                    <div class="col-lg-6">
+                        <select class="form-control" size="0" name="product_now_id" required>
+                            <option value="">Select Product</option>
+                            @foreach ($productnows as $productnow)
+                            <option value="{{ $productnow['id'] }}">{{ $productnow['product']['brand_name'].'-'.$productnow['product']['molecular_name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label"></label>
+                    <div class="col-lg-9">
+                        <button type="reset" class="btn btn-secondary"><i class="fa fa-refresh"></i>&nbsp;Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp;Save</button>
                     </div>
                 </div>
             </form>

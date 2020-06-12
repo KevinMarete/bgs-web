@@ -27,7 +27,7 @@
                 <div class="form-group row">
                     <label class="col-lg-3 col-form-label form-control-label">DisplayURL</label>
                     <div class="col-lg-6">
-                        <input type="file" name="display_url" required accept="image/x-png,image/jpeg" required />
+                        <input type="file" name="upload" required accept="image/x-png,image/jpeg" required />
                     </div>
                 </div>
                 <div class="form-group row">

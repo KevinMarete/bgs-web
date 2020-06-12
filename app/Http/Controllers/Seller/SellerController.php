@@ -566,18 +566,28 @@ class SellerController extends MyController
     return view('template.main', $data);
   }
 
+  public function saveFile($location, $file, $new_filename)
+  {
+    $file->move($location, $new_filename);
+    return $location . $new_filename;
+  }
+
   public function savePromotions(Request $request)
   {
     $type = $request->type;
     $display_dates = explode(',', $request->display_date);
+    $upload_image = $request->file('upload');
 
     $flash_id = 'bgs_msg';
     $redirect_url = '/promotions';
     $promotion_cost = env('PROMOTIONS_' . strtoupper($type) . '_COST');
+    $max_file_size = 2097152; // 2MB in Bytes
+    $location = env('PROMOTIONS_UPLOAD_DIR');
     $errors = 0;
 
     $token = session()->get('token');
     $organization_id = session()->get('organization_id');
+    $organization_name = session()->get('organization.name');
     $user_id = session()->get('id');
 
     //Get organization payment_type
@@ -609,6 +619,28 @@ class SellerController extends MyController
     }
     $payment_id = $payment_response['id'];
 
+    if (!$request->has('upload')) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> No image selected for upload');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $image_details = $this->getFileDetails($upload_image);
+    if (!$this->isValidExtension($image_details['extension'], ['jpeg', 'png'])) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    if (!$this->isAllowedSize($image_details['size'], $max_file_size)) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> File too large. File must be less than 2MB');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $new_filename = strtolower($organization_name . '-' . $type . '-' . Str::random(6)) . '.' . $image_details['extension'];
+    $display_url = $this->saveFile($location, $upload_image, $new_filename);
+
     //Loop through display_dates
     foreach ($display_dates as $display_date) {
       //Add promotion
@@ -616,7 +648,7 @@ class SellerController extends MyController
         'type' => $type,
         'status' => 'paid',
         'display_date' => $display_date,
-        'display_url' => '/tmp-00012.jpg',
+        'display_url' => $display_url,
         'product_now_id' => $request->product_now_id,
         'organization_id' => $organization_id
       ];

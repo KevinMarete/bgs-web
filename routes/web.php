@@ -71,10 +71,10 @@ Route::get('/stocks/new', 'Seller\SellerController@displayNewStockTransactionVie
 Route::post('/stocks/save', 'Seller\SellerController@saveStocks');
 Route::get('/stocks/view/{productId}', 'Seller\SellerController@displayStockBinCardView');
 Route::get('/promotions', 'Seller\SellerController@displayPromotionsTableView');
-Route::get('/promotions/new', 'Seller\SellerController@displayNewPromotionView');
+Route::get('/promotions/new/{type}', 'Seller\SellerController@displayNewPromotionView');
 Route::post('/promotions/save', 'Seller\SellerController@savePromotions');
 Route::post('/promotions/{action}', 'Seller\SellerController@managePromotions');
-Route::get('/promotions/{action}/{id}', 'Seller\SellerController@managePromotions');
+Route::get('/promotions/{action}/{type}/{id}', 'Seller\SellerController@managePromotions');
 Route::get('/offers', 'Seller\SellerController@displayOffersTableView');
 Route::get('/offers/new', 'Seller\SellerController@manageOffers');
 Route::post('/offers/{action}', 'Seller\SellerController@manageOffers');
@@ -106,7 +106,6 @@ Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
 /*Buyer Routes*/
 Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView');
 Route::get('/deals', 'Buyer\BuyerController@displayDealView');
-Route::get('/promos', 'Buyer\BuyerController@displayPromoView');
 Route::post('/add-cart', 'Buyer\BuyerController@addCart');
 Route::get('/cart', 'Buyer\BuyerController@displayCartView');
 Route::post('/update-cart/{id}', 'Buyer\BuyerController@updateCart');

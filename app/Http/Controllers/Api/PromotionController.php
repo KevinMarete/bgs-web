@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Offer;
-use App\Deal;
+use App\Promotion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class OfferController extends Controller
+class PromotionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,8 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::with('organization')->get();
-        return response()->json($offers);
+        $promotions = Promotion::with('product_now', 'product_now.product', 'organization')->get();
+        return response()->json($promotions);
     }
 
     /**
@@ -28,12 +27,9 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Offer::$rules);
-        $offer = Offer::firstOrCreate([
-            'description' => $request->description,
-            'organization_id' => $request->organization_id
-        ], $request->all());
-        return response()->json($offer);
+        $this->validate($request, Promotion::$rules);
+        $promotion = Promotion::firstOrCreate($request->all(), $request->all());
+        return response()->json($promotion);
     }
 
     /**
@@ -44,11 +40,11 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        $offer = Offer::with('organization')->find($id);
-        if (is_null($offer)) {
+        $promotion = Promotion::with('product_now', 'product_now.product', 'organization')->find($id);
+        if (is_null($promotion)) {
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($offer);
+        return response()->json($promotion);
     }
 
     /**
@@ -60,13 +56,13 @@ class OfferController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, Offer::$rules);
-        $offer  = Offer::find($id);
-        if (is_null($offer)) {
+        $this->validate($request, Promotion::$rules);
+        $promotion  = Promotion::find($id);
+        if (is_null($promotion)) {
             return response()->json(['error' => 'not_found']);
         }
-        $offer->update($request->all());
-        return response()->json($offer);
+        $promotion->update($request->all());
+        return response()->json($promotion);
     }
 
     /**
@@ -77,23 +73,11 @@ class OfferController extends Controller
      */
     public function destroy($id)
     {
-        $offer = Offer::find($id);
-        if (is_null($offer)) {
+        $promotion = Promotion::find($id);
+        if (is_null($promotion)) {
             return response()->json(['error' => 'not_found']);
         }
-        $offer->delete();
+        $promotion->delete();
         return response()->json(['msg' => 'Removed successfully']);
-    }
-
-    /**
-     * Display the specified Offer's deals.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function getOfferDeals($id)
-    {
-        $deals = Deal::with('offer')->where('offer_id', $id)->get();
-        return response()->json($deals);
     }
 }

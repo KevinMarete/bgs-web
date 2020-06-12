@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\PaymentPromo;
+use App\PaymentPromotion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PaymentPromoController extends Controller
+class PaymentPromotionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class PaymentPromoController extends Controller
      */
     public function index()
     {
-        $paymentpromos = PaymentPromo::with('payment', 'product_promo', 'product_promo.product_now', 'product_promo.promo', 'product_promo.product_now.product')->get();
-        return response()->json($paymentpromos);
+        $paymentpromotions = PaymentPromotion::with('payment', 'promotion', 'promotion.product_now', 'promotion.product_now.product')->get();
+        return response()->json($paymentpromotions);
     }
 
     /**
@@ -27,9 +27,9 @@ class PaymentPromoController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, PaymentPromo::$rules);
-        $paymentpromo = PaymentPromo::firstOrCreate($request->all(), $request->all());
-        return response()->json($paymentpromo);
+        $this->validate($request, PaymentPromotion::$rules);
+        $paymentpromotion = PaymentPromotion::firstOrCreate($request->all(), $request->all());
+        return response()->json($paymentpromotion);
     }
 
     /**
@@ -40,11 +40,11 @@ class PaymentPromoController extends Controller
      */
     public function show($id)
     {
-        $paymentpromo = PaymentPromo::with('payment', 'product_promo', 'product_promo.product_now', 'product_promo.promo', 'product_promo.product_now.product')->find($id);
-        if(is_null($paymentpromo)){
+        $paymentpromotion = PaymentPromotion::with('payment', 'promotion', 'promotion.product_now', 'promotion.product_now.product')->find($id);
+        if (is_null($paymentpromotion)) {
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($paymentpromo);
+        return response()->json($paymentpromotion);
     }
 
     /**
@@ -56,13 +56,13 @@ class PaymentPromoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, PaymentPromo::$rules);
-        $paymentpromo  = PaymentPromo::find($id);
-        if(is_null($paymentpromo)){
+        $this->validate($request, PaymentPromotion::$rules);
+        $paymentpromotion  = PaymentPromotion::find($id);
+        if (is_null($paymentpromotion)) {
             return response()->json(['error' => 'not_found']);
         }
-        $paymentpromo->update($request->all());
-        return response()->json($paymentpromo);
+        $paymentpromotion->update($request->all());
+        return response()->json($paymentpromotion);
     }
 
     /**
@@ -73,11 +73,11 @@ class PaymentPromoController extends Controller
      */
     public function destroy($id)
     {
-        $paymentpromo = PaymentPromo::find($id);
-        if(is_null($paymentpromo)){
+        $paymentpromotion = PaymentPromotion::find($id);
+        if (is_null($paymentpromotion)) {
             return response()->json(['error' => 'not_found']);
         }
-        $paymentpromo->delete();
+        $paymentpromotion->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 }

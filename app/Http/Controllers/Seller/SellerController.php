@@ -124,7 +124,7 @@ class SellerController extends MyController
     $product_category_id = $request->product_category_id;
     $flash_id = 'bgs_msg';
     $redirect_url = '/pricelist';
-    $max_file_size = 2097152; // 2MB in Bytes
+    $max_file_size = env('UPLOAD_FILE_LIMIT');
     $errors = 0;
 
     $token = session()->get('token');
@@ -581,7 +581,7 @@ class SellerController extends MyController
     $flash_id = 'bgs_msg';
     $redirect_url = '/promotions';
     $promotion_cost = env('PROMOTIONS_' . strtoupper($type) . '_COST');
-    $max_file_size = 2097152; // 2MB in Bytes
+    $max_file_size = env('UPLOAD_FILE_LIMIT');
     $location = env('PROMOTIONS_UPLOAD_DIR');
     $errors = 0;
 
@@ -700,7 +700,37 @@ class SellerController extends MyController
         if ($request->action == 'new') {
           $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
         } else if ($request->action == 'update') {
-          $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
+          $update_data = $request->except('_token');
+          $upload_image = $request->file('upload');
+          if ($request->has('upload')) {
+            $flash_id = 'bgs_msg';
+            $redirect_url = '/promotions';
+            $max_file_size = env('UPLOAD_FILE_LIMIT');
+            $location = env('PROMOTIONS_UPLOAD_DIR');
+            $organization_name = session()->get('organization.name');
+            $image_details = $this->getFileDetails($upload_image);
+
+            if (!$this->isValidExtension($image_details['extension'], ['jpeg', 'png'])) {
+              $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
+              $request->session()->flash($flash_id, $flash_msg);
+              return redirect($redirect_url);
+            }
+
+            if (!$this->isValidExtension($image_details['extension'], ['jpeg', 'png'])) {
+              $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
+              $request->session()->flash($flash_id, $flash_msg);
+              return redirect($redirect_url);
+            }
+
+            if (!$this->isAllowedSize($image_details['size'], $max_file_size)) {
+              $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> File too large. File must be less than 2MB');
+              $request->session()->flash($flash_id, $flash_msg);
+              return redirect($redirect_url);
+            }
+            $new_filename = strtolower($organization_name . '-' . $request->type . '-' . Str::random(6)) . '.' . $image_details['extension'];
+            $update_data['display_url'] = $this->saveFile($location, $upload_image, $new_filename);
+          }
+          $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $update_data);
         } else if ($request->action == 'delete') {
           $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
         }

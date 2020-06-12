@@ -1509,7 +1509,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Organization ProductPromos",
+					"name": "Get Organization Promotions",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1525,7 +1525,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/organization/3/productpromos",
+							"raw": "{{host}}{{port}}/api/organization/3/promotions",
 							"host": [
 								"{{host}}{{port}}"
 							],
@@ -1533,7 +1533,83 @@
 								"api",
 								"organization",
 								"3",
-								"productpromos"
+								"promotions"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization Slider Promotions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/promotions-slider",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"promotions-slider"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization Static Promotions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/organization/3/promotions-static",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"3",
+								"promotions-static"
 							],
 							"query": [
 								{
@@ -3134,44 +3210,6 @@
 					"response": []
 				},
 				{
-					"name": "Get Offer Promos",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/offer/1/promos",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"offer",
-								"1",
-								"promos"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get Offer Deals",
 					"request": {
 						"method": "GET",
@@ -4461,10 +4499,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "ProductPromos",
+			"name": "Promotions",
 			"item": [
 				{
-					"name": "All ProductPromos",
+					"name": "All Promotions",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -4480,20 +4518,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/productpromos",
+							"raw": "{{host}}{{port}}/api/promotions",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"productpromos"
+								"promotions"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get ProductPromo",
+					"name": "Get Promotion",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -4509,14 +4547,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/productpromo/1",
+							"raw": "{{host}}{{port}}/api/promotion/2",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"productpromo",
-								"1"
+								"promotion",
+								"2"
 							],
 							"query": [
 								{
@@ -4530,7 +4568,7 @@
 					"response": []
 				},
 				{
-					"name": "Add ProductPromo",
+					"name": "Add Promotion",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -4548,7 +4586,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"product_now_id\": \"1\",\n    \"promo_id\": \"1\"\n}",
+							"raw": "{\n    \"type\": \"slider\",\n    \"status\": \"booked\",\n    \"display_date\": \"2020-06-15\",\n    \"display_url\": \"kemsa-ad9jp01.jpg\",\n    \"product_now_id\": \"1\",\n    \"organization_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4556,20 +4594,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/productpromo",
+							"raw": "{{host}}{{port}}/api/promotion",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"productpromo"
+								"promotion"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update ProductPromo",
+					"name": "Update Promotion",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -4587,7 +4625,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"product_now_id\": \"1\",\n    \"promo_id\": \"1\"\n}",
+							"raw": "{   \n    \"type\": \"slider\",\n    \"status\": \"paid\",\n    \"display_date\": \"2020-06-15\",\n    \"display_url\": \"kemsa-ad9jp01.jpg\",\n    \"product_now_id\": \"1\",\n    \"organization_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4595,21 +4633,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/productpromo/1",
+							"raw": "{{host}}{{port}}/api/promotion/2",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"productpromo",
-								"1"
+								"promotion",
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete ProductPromo",
+					"name": "Delete Promotion",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -4625,13 +4663,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/productpromo/1",
+							"raw": "{{host}}{{port}}/api/promotion/1",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"productpromo",
+								"promotion",
 								"1"
 							]
 						}
@@ -5070,10 +5108,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "PaymentPromos",
+			"name": "PaymentPromotions",
 			"item": [
 				{
-					"name": "All PaymentPromos",
+					"name": "All PaymentPromotions",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -5089,20 +5127,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentpromos",
+							"raw": "{{host}}{{port}}/api/paymentpromotions",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentpromos"
+								"paymentpromotions"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get PaymentPromo",
+					"name": "Get PaymentPromotion",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -5118,13 +5156,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentpromo/1",
+							"raw": "{{host}}{{port}}/api/paymentpromotion/1",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentpromo",
+								"paymentpromotion",
 								"1"
 							],
 							"query": [
@@ -5139,7 +5177,7 @@
 					"response": []
 				},
 				{
-					"name": "Add PaymentPromo",
+					"name": "Add PaymentPromotion",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -5157,7 +5195,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"payment_id\": \"1\",\n    \"product_promo_id\": \"1\"\n}",
+							"raw": "{\n    \"payment_id\": \"1\",\n    \"promotion_id\": \"2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5165,20 +5203,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentpromo",
+							"raw": "{{host}}{{port}}/api/paymentpromotion",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentpromo"
+								"paymentpromotion"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update PaymentPromo",
+					"name": "Update PaymentPromotion",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -5196,7 +5234,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"payment_id\": \"1\",\n    \"product_promo_id\": \"1\"\n}",
+							"raw": "{\n    \"payment_id\": \"1\",\n    \"promotion_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5204,13 +5242,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentpromo/1",
+							"raw": "{{host}}{{port}}/api/paymentpromotion/1",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentpromo",
+								"paymentpromotion",
 								"1"
 							]
 						}
@@ -5218,7 +5256,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete PaymentPromo",
+					"name": "Delete PaymentPromotion",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -5234,13 +5272,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentpromo/1",
+							"raw": "{{host}}{{port}}/api/paymentpromotion/1",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentpromo",
+								"paymentpromotion",
 								"1"
 							]
 						}
@@ -8756,26 +8794,6 @@
 			"name": "Marketing",
 			"item": [
 				{
-					"name": "Get All Promos on Specified Date",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}{{port}}/api/marketing/promos/2020-04-18",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"marketing",
-								"promos",
-								"2020-04-18"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get All Deals on Specified Date",
 					"request": {
 						"method": "GET",
@@ -8823,19 +8841,19 @@
 	],
 	"variable": [
 		{
-			"id": "c71dc462-2812-4198-b47b-8441e6195f09",
+			"id": "befd47e4-c3b9-4ab1-87b1-dfa62c170561",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "aa1ce583-0005-4340-ab52-bf4c31629479",
+			"id": "c7d0e199-6c28-4d46-9bb7-0574ccbf56ca",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "625be238-ca07-4f71-b477-a8d23f628100",
+			"id": "b166c788-c969-43c3-9c99-c41c60abf893",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

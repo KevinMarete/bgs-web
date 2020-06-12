@@ -289,9 +289,7 @@ class AdminController extends MyController
 	public function get_promos_deals($period_date)
 	{
 		$mailing_list = new \stdClass();
-
-		$promos_request = $this->client->get('marketing/promos/' . $period_date);
-		$mailing_list->promos = json_decode($promos_request->getBody(), true);
+		$mailing_list->promos = [];
 
 		$deals_request = $this->client->get('marketing/deals/' . $period_date);
 		$mailing_list->deals = json_decode($deals_request->getBody(), true);

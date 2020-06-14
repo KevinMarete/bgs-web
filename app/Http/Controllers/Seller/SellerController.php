@@ -545,15 +545,34 @@ class SellerController extends MyController
     return $bookings_totals;
   }
 
+  public function getOrganizationSubscriptionDetails($token, $organization_id)
+  {
+    $subscription_details = [];
+    $response = $this->getResourceData($token, 'organization/' . $organization_id . '/subscription');
+    if (empty($response)) {
+      $response['package']['name'] = 'No';
+      $response['package']['details'] = '{"promotions":{"value":"1","description":"0% Discount on Promotions"}}';
+    }
+    $subscription_details['name'] = $response['package']['name'];
+    $subscription_details['details'] = json_decode($response['package']['details'], true);
+    return $subscription_details;
+  }
+
   public function displayNewPromotionView(Request $request)
   {
     $token = session()->get('token');
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
     $type = $request->type;
+
+    $subscription_detail = $this->getOrganizationSubscriptionDetails($token, $organization_id);
+    $promotion_cost = $subscription_detail['details']['promotions']['value'] * env('PROMOTIONS_' . strtoupper($type) . '_COST');
+
     $view_data = [
       'type' => $type,
       'booking_limit' => env('PROMOTIONS_' . strtoupper($type) . '_LIMIT'),
+      'promotion_cost' => $promotion_cost,
+      'promotion_discount_description' => $subscription_detail['name'] . ' Package : ' . $subscription_detail['details']['promotions']['description'] . ' at KES.' . number_format($promotion_cost) . ' per Day',
       'bookings' => json_encode($this->getPromotionBookingTotals($token, $organization_id, $type)),
       'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/published')
     ];
@@ -580,7 +599,7 @@ class SellerController extends MyController
 
     $flash_id = 'bgs_msg';
     $redirect_url = '/promotions';
-    $promotion_cost = env('PROMOTIONS_' . strtoupper($type) . '_COST');
+    $promotion_cost = $request->promotion_cost;
     $max_file_size = env('UPLOAD_FILE_LIMIT');
     $location = env('PROMOTIONS_UPLOAD_DIR');
     $errors = 0;
@@ -601,6 +620,28 @@ class SellerController extends MyController
       return redirect($redirect_url);
     }
 
+    if (!$request->has('upload')) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> No image selected for upload');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $image_details = $this->getFileDetails($upload_image);
+    if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    if (!$this->isAllowedSize($image_details['size'], $max_file_size)) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> File too large. File must be less than 2MB');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $new_filename = strtolower($organization_name . '-' . $type . '-' . Str::random(6)) . '.' . $image_details['extension'];
+    $display_url = $this->saveFile($location, $upload_image, $new_filename);
+
     //Make payment
     $payment_data = [
       'method' => $source_response['payment_type']['name'],
@@ -618,28 +659,6 @@ class SellerController extends MyController
       return redirect($redirect_url);
     }
     $payment_id = $payment_response['id'];
-
-    if (!$request->has('upload')) {
-      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> No image selected for upload');
-      $request->session()->flash($flash_id, $flash_msg);
-      return redirect($redirect_url);
-    }
-
-    $image_details = $this->getFileDetails($upload_image);
-    if (!$this->isValidExtension($image_details['extension'], ['jpeg', 'png'])) {
-      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
-      $request->session()->flash($flash_id, $flash_msg);
-      return redirect($redirect_url);
-    }
-
-    if (!$this->isAllowedSize($image_details['size'], $max_file_size)) {
-      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> File too large. File must be less than 2MB');
-      $request->session()->flash($flash_id, $flash_msg);
-      return redirect($redirect_url);
-    }
-
-    $new_filename = strtolower($organization_name . '-' . $type . '-' . Str::random(6)) . '.' . $image_details['extension'];
-    $display_url = $this->saveFile($location, $upload_image, $new_filename);
 
     //Loop through display_dates
     foreach ($display_dates as $display_date) {
@@ -710,13 +729,7 @@ class SellerController extends MyController
             $organization_name = session()->get('organization.name');
             $image_details = $this->getFileDetails($upload_image);
 
-            if (!$this->isValidExtension($image_details['extension'], ['jpeg', 'png'])) {
-              $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
-              $request->session()->flash($flash_id, $flash_msg);
-              return redirect($redirect_url);
-            }
-
-            if (!$this->isValidExtension($image_details['extension'], ['jpeg', 'png'])) {
+            if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
               $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
               $request->session()->flash($flash_id, $flash_msg);
               return redirect($redirect_url);

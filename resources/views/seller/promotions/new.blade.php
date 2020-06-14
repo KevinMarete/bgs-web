@@ -20,8 +20,12 @@
                         <input class="form-control" type="hidden" id="booking_Limit" value="{{ $booking_limit }}" />
                         <input class="form-control" type="hidden" id="bookings" value="{{ $bookings }}" />
                         <input class="form-control" type="hidden" name="type" value="{{ $type }}" />
+                        <input class="form-control" type="hidden" name="promotion_cost" value="{{ $promotion_cost }}" />
                         <input class="form-control" type="hidden" name="display_date" value="" />
                         <div class="display_date"></div>
+                        <p class="bg-info mt-2 p-2">
+                            {!!$promotion_discount_description!!}
+                        </p>
                     </div>
                 </div>
                 <div class="form-group row">

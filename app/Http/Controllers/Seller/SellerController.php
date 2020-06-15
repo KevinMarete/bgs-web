@@ -594,7 +594,8 @@ class SellerController extends MyController
   public function savePromotions(Request $request)
   {
     $type = $request->type;
-    $display_dates = explode(',', $request->display_date);
+    $display_date_str = $request->display_date;
+    $display_dates = explode(',', $display_date_str);
     $upload_image = $request->file('upload');
 
     $flash_id = 'bgs_msg';
@@ -608,6 +609,13 @@ class SellerController extends MyController
     $organization_id = session()->get('organization_id');
     $organization_name = session()->get('organization.name');
     $user_id = session()->get('id');
+
+    //Redirect if no display_dates
+    if (strlen($display_date_str) == 0) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Please select a display_date');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect('promotions/new/' . $type);
+    }
 
     //Get organization payment_type
     $source_url = 'organization/' . $organization_id . '/payment-type';

@@ -182,8 +182,15 @@
                     display_date
                 );
             }
-            $("input:hidden[name=display_date]").val(
-                $(".display_date").multiDatesPicker("value")
+            //Add dates to hidden submission field
+            let dates = $(".display_date").multiDatesPicker("value");
+            $("input:hidden[name=display_date]").val(dates);
+            //Display total promotion cost
+            let dates_arr = dates.split(",");
+            let num_of_dates = dates != "" ? dates_arr.length : 0;
+            let promotion_cost = $("#promotion_cost").val();
+            $("#total_promotion_cost").text(
+                (promotion_cost * num_of_dates).toLocaleString()
             );
         },
     });

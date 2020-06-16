@@ -6,25 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Offer extends Model
-{	
-	use SoftDeletes;
+{
+    use SoftDeletes;
 
     protected $table = 'tbl_offer';
 
-    protected $fillable = ['description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization_id'];
+    protected $fillable = ['status', 'valid_from', 'valid_until', 'display_url', 'discount', 'min_order_quantity', 'max_discount_amount', 'product_now_id', 'organization_id'];
 
     public static $rules = [
-        "description" => "required",
+        "status" => "required",
         "valid_from" => "required",
         "valid_until" => "required",
+        "display_url" => "required",
         "discount" => "required|numeric",
-        "max_discount_amount" => "required|numeric",
+        "min_order_quantity" => "required|numeric",
+        "product_now_id" => "required|numeric",
         "organization_id" => "required|numeric"
-	];
+    ];
+
+    public function product_now()
+    {
+        return $this->belongsTo('App\ProductNow');
+    }
 
     public function organization()
     {
         return $this->belongsTo('App\Organization');
     }
-    
 }

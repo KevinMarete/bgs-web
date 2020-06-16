@@ -31,24 +31,6 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function displayDealView()
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $view_data = [
-            'products_per_page' => env('PRODUCTS_PER_PAGE'),
-            'products' => $this->getResourceData($token, 'productdeals')
-        ];
-        $data = [
-            'page_title' => 'Deals',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.deal', $view_data)
-        ];
-        session()->put('cart_title', $data['page_title']);
-
-        return view('template.main', $data);
-    }
-
     public function displayCartView(Request $request)
     {
         $token = session()->get('token');

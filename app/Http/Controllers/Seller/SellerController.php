@@ -594,7 +594,8 @@ class SellerController extends MyController
   public function savePromotions(Request $request)
   {
     $type = $request->type;
-    $display_dates = explode(',', $request->display_date);
+    $display_date_str = $request->display_date;
+    $display_dates = explode(',', $display_date_str);
     $upload_image = $request->file('upload');
 
     $flash_id = 'bgs_msg';
@@ -608,6 +609,13 @@ class SellerController extends MyController
     $organization_id = session()->get('organization_id');
     $organization_name = session()->get('organization.name');
     $user_id = session()->get('id');
+
+    //Redirect if no display_dates
+    if (strlen($display_date_str) == 0) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Please select a display_date');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect('promotions/new/' . $type);
+    }
 
     //Get organization payment_type
     $source_url = 'organization/' . $organization_id . '/payment-type';
@@ -780,18 +788,15 @@ class SellerController extends MyController
 
   public function displayOffersTableView(Request $request)
   {
-    $resources = ['offers', 'productdeals'];
+    $resource = 'offers';
     $token = session()->get('token');
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
 
-    $view_data = [];
-    foreach ($resources as $resource) {
-      $view_data[$resource] = [
-        'table_headers' => $this->getResourceKeys($resource),
-        'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
-      ];
-    }
+    $view_data = [
+      'table_headers' => $this->getResourceKeys($resource),
+      'table_data' => $this->getResourceData($token, 'organization/' . $organization_id . '/' . $resource)
+    ];
 
     $data = [
       'page_title' => 'Offers',
@@ -802,84 +807,22 @@ class SellerController extends MyController
     return view('template.main', $data);
   }
 
-  public function manageOffers(Request $request)
+  public function saveOffers(Request $request)
   {
-    $resource_name = 'offers';
-    $singular_resource_name = Str::singular($resource_name);
-    $token = session()->get('token');
-    $role_id = session()->get('organization.organization_type.role_id');
-    $view_data = $this->getDropDownData($token, $resource_name);
-    $view_data['manage_label'] = 'new';
+    $upload_image = $request->file('upload');
 
-    if ($request->action) {
-      if ($request->action == 'edit') {
-        $view_data['manage_label'] = 'update';
-        $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
-      } else {
-        if ($request->action == 'new') {
-          $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
-        } else if ($request->action == 'update') {
-          $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-        } else if ($request->action == 'delete') {
-          $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-        }
-
-        //Handle response
-        if (isset($response['error'])) {
-          $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> ' . $response["error"] . '
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-        } else {
-          $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success!</strong> Offer was managed successfully
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-        }
-        $request->session()->flash('bgs_msg', $flash_msg);
-        return redirect('/offers');
-      }
-    }
-
-    $data = [
-      'page_title' => ucwords($resource_name),
-      'menus' => $this->getRoleMenus($token, $role_id),
-      'content_view' => View::make('seller.offers.add_edit', $view_data)
-    ];
-
-    return view('template.main', $data);
-  }
-
-  public function displayNewDealView(Request $request)
-  {
-    $token = session()->get('token');
-    $role_id = session()->get('organization.organization_type.role_id');
-    $organization_id = session()->get('organization_id');
-    $view_data = [
-      'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/activeoffers'),
-      'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows')
-    ];
-    $data = [
-      'page_title' => 'offers',
-      'content_view' => View::make('seller.deals.new', $view_data),
-      'menus' => $this->getRoleMenus($token, $role_id),
-    ];
-
-    return view('template.main', $data);
-  }
-
-  public function saveDeals(Request $request)
-  {
-    $token = session()->get('token');
-    $post_data = $request->all();
-    $organization_id = session()->get('organization_id');
-    $user_id = session()->get('id');
+    $flash_id = 'bgs_msg';
+    $redirect_url = '/offers';
+    $product_ids = $request->product_now_ids;
+    $total_offer_cost = $request->total_offer_cost;
+    $max_file_size = env('UPLOAD_FILE_LIMIT');
+    $location = env('OFFER_UPLOAD_DIR');
     $errors = 0;
-    $cost_per_product = env('DEAL_COST');
+
+    $token = session()->get('token');
+    $organization_id = session()->get('organization_id');
+    $organization_name = session()->get('organization.name');
+    $user_id = session()->get('id');
 
     //Get organization payment_type
     $source_url = 'organization/' . $organization_id . '/payment-type';
@@ -887,20 +830,37 @@ class SellerController extends MyController
 
     //Redirect if no payment-type configured
     if (empty($source_response)) {
-      $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> Please configure payment-type under account tab!
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-      $request->session()->flash('bgs_msg', $flash_msg);
-      return redirect('/offers');
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Please configure payment-type under account tab');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
     }
+
+    if (!$request->has('upload')) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> No image selected for upload');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $image_details = $this->getFileDetails($upload_image);
+    if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    if (!$this->isAllowedSize($image_details['size'], $max_file_size)) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> File too large. File must be less than 2MB');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
+
+    $new_filename = strtolower($organization_name . '-' . Str::random(6)) . '.' . $image_details['extension'];
+    $display_url = $this->saveFile($location, $upload_image, $new_filename);
 
     //Make payment
     $payment_data = [
       'method' => $source_response['payment_type']['name'],
-      'amount' => ($cost_per_product * sizeof($post_data['product_now_id'])),
+      'amount' => $total_offer_cost,
       'source' => $source_response['payment_type']['details'],
       'destination' => [
         'paybill_number' => env('PAYBILL_NUMBER'),
@@ -908,113 +868,123 @@ class SellerController extends MyController
       ]
     ];
     $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
+    if (!array_key_exists('id', $payment_response)) {
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Payment was not successful, promotion could not be booked');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
+    }
     $payment_id = $payment_response['id'];
 
-    foreach ($post_data['product_now_id'] as $key => $product_now_id) {
-      //Build request object
-      $request_data = [
-        'minimum_order_quantity' => $post_data['minimum_order_quantity'][$key],
-        'offer_id' => $post_data['offer_id'][$key],
-        'product_now_id' => $product_now_id
+    //Loop through display_dates
+    foreach ($product_ids as $product_id) {
+      //Add offer
+      $offer_data = [
+        'status' => 'paid',
+        'valid_from' => $request->valid_from,
+        'valid_until' => $request->valid_until,
+        'display_url' => $display_url,
+        'discount' => $request->discount,
+        'min_order_quantity' => $request->min_order_quantity,
+        'max_discount_amount' => $request->max_discount_amount,
+        'product_now_id' => $product_id,
+        'organization_id' => $organization_id
       ];
+      $offer_response = $this->manageResourceData($token, 'POST', 'offer', $offer_data);
+      if (!array_key_exists('id', $offer_response)) {
+        $errors++;
+        continue;
+      }
+      $offer_id = $offer_response['id'];
 
-      //Send request data to Api
-      $response = $this->client->post("productdeal", [
-        'headers' => [
-          'Authorization' => 'Bearer ' . session()->get('token')
-        ],
-        'json' => $request_data
-      ]);
-
-      $response = json_decode($response->getBody(), true);
-
-      //Check success
-      if (isset($response['error'])) {
-        $errors += 1;
-      } else {
-        $product_now_id = $response['id'];
-        //Send request data to Api for payment
-        $response = $this->client->post("paymentdeal", [
-          'headers' => [
-            'Authorization' => 'Bearer ' . session()->get('token')
-          ],
-          'json' => ['payment_id' => $payment_id, 'product_deal_id' => $product_now_id]
-        ]);
+      //Add payment_offer
+      $payment_offer_data = ['payment_id' => $payment_id, 'offer_id' => $offer_id];
+      $payment_offer_response = $this->manageResourceData($token, 'POST', 'paymentoffer', $payment_offer_data);
+      if (!array_key_exists('id', $payment_offer_response)) {
+        $errors++;
+        continue;
       }
     }
 
     if ($errors > 0) {
-      $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error!</strong> ' . $errors . ' transactions were not added successfully
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>';
-    } else {
-      $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your deal item(s) were added successfully
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
+      $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> ' . $errors . ' offer(s) were not added successfully');
+      $request->session()->flash($flash_id, $flash_msg);
+      return redirect($redirect_url);
     }
 
-    $request->session()->flash('bgs_msg', $flash_msg);
-
-    return redirect('/offers');
+    $flash_msg = $this->getAlertMessage('success', '<strong>Success!</strong> Your offer(s) were added successfully');
+    $request->session()->flash($flash_id, $flash_msg);
+    return redirect($redirect_url);
   }
 
-  public function manageDeals(Request $request)
+  public function manageOffers(Request $request)
   {
-    $resource_name = 'productdeals';
+    $resource_name = 'offers';
     $singular_resource_name = Str::singular($resource_name);
+    $action = $request->action;
+
     $token = session()->get('token');
     $role_id = session()->get('organization.organization_type.role_id');
     $organization_id = session()->get('organization_id');
-    $view_data = [
-      'productnows' => $this->getResourceData($token, 'organization/' . $organization_id . '/productnows'),
-      'offers' => $this->getResourceData($token, 'organization/' . $organization_id . '/offers')
-    ];
-    $view_data['manage_label'] = 'new';
 
-    if ($request->action) {
-      if ($request->action == 'edit') {
-        $view_data['manage_label'] = 'update';
-        $view_data['edit'] = $this->getResourceData($token, $singular_resource_name . '/' . $request->id);
-      } else {
-        if ($request->action == 'new') {
-          $response = $this->manageResourceData($token, 'POST', $singular_resource_name, $request->except('_token'));
-        } else if ($request->action == 'update') {
-          $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-        } else if ($request->action == 'delete') {
-          $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
-        }
+    if ($action == 'new') {
+      $view_data = [
+        'productnows' =>  $this->getResourceData($token, 'organization/' . $organization_id . '/published'),
+        'offer_cost' => env('OFFER_COST'),
+        'manage_label' => 'save'
+      ];
+      $content_page = 'seller.offers.new';
+    } else if ($action == 'edit') {
+      $view_data = [
+        'edit' => $this->getResourceData($token, $singular_resource_name . '/' . $request->id),
+        'productnows' =>  $this->getResourceData($token, 'organization/' . $organization_id . '/published'),
+        'manage_label' => 'update'
+      ];
+      $content_page = 'seller.offers.edit';
+    } else {
+      if ($action == 'update') {
+        $update_data = $request->except('_token');
+        $upload_image = $request->file('upload');
+        if ($request->has('upload')) {
+          $flash_id = 'bgs_msg';
+          $redirect_url = '/offers';
+          $max_file_size = env('UPLOAD_FILE_LIMIT');
+          $location = env('OFFER_UPLOAD_DIR');
+          $organization_name = session()->get('organization.name');
+          $image_details = $this->getFileDetails($upload_image);
 
-        //Handle response
-        if (isset($response['error'])) {
-          $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> ' . $response["error"] . '
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-        } else {
-          $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success!</strong> Deal was managed successfully
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
+          if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
+            $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
+            $request->session()->flash($flash_id, $flash_msg);
+            return redirect($redirect_url);
+          }
+
+          if (!$this->isAllowedSize($image_details['size'], $max_file_size)) {
+            $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> File too large. File must be less than 2MB');
+            $request->session()->flash($flash_id, $flash_msg);
+            return redirect($redirect_url);
+          }
+          $new_filename = strtolower($organization_name . '-' . $request->type . '-' . Str::random(6)) . '.' . $image_details['extension'];
+          $update_data['display_url'] = $this->saveFile($location, $upload_image, $new_filename);
         }
-        $request->session()->flash('bgs_msg', $flash_msg);
-        return redirect('/offers');
+        $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $update_data);
+      } else if ($action == 'delete') {
+        $response = $this->manageResourceData($token, 'DELETE', $singular_resource_name . '/' . $request->id, $request->except('_token'));
       }
+
+      //Handle response
+      if (isset($response['error'])) {
+        $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> ' . $response["error"]);
+      } else {
+        $flash_msg = $this->getAlertMessage('success', '<strong>Success!</strong> Offer was managed successfully');
+      }
+      $request->session()->flash('bgs_msg', $flash_msg);
+      return redirect('/offers');
     }
 
     $data = [
-      'page_title' => 'Offers',
+      'page_title' => ucwords($resource_name),
       'menus' => $this->getRoleMenus($token, $role_id),
-      'content_view' => View::make('seller.deals.edit', $view_data)
+      'content_view' => View::make($content_page, $view_data)
     ];
 
     return view('template.main', $data);
@@ -1041,11 +1011,10 @@ class SellerController extends MyController
     $header_data = [];
     if ($resource != null) {
       $headers = [
-        'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
+        'offers' => ['id', 'valid from', 'valid until', 'discount', 'min order qty', 'product'],
         'stockbalances' => ['brand_name', 'molecular_name', 'pack_size', 'balance'],
         'productnows' => ['id', 'brand_name', 'molecular_name', 'pack_size', 'published'],
         'promotions' => ['id', 'status', 'display_date', 'product'],
-        'productdeals' => ['id', 'brand_name', 'molecular_name', 'min_quantity', 'unit_price', 'discount', 'max_amount']
       ];
       $header_data = $headers[$resource];
     }
@@ -1058,7 +1027,6 @@ class SellerController extends MyController
     $dropdown_data = [];
     $organization_id = session()->get('organization_id');
     $data_sources = [
-      'offers' => ['organizations' => 'organizations'],
       'stockbalances' => ['products' => 'organization/' . $organization_id . '/products', 'stocktypes' => 'stocktypes']
     ];
 

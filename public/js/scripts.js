@@ -182,8 +182,15 @@
                     display_date
                 );
             }
-            $("input:hidden[name=display_date]").val(
-                $(".display_date").multiDatesPicker("value")
+            //Add dates to hidden submission field
+            let dates = $(".display_date").multiDatesPicker("value");
+            $("input:hidden[name=display_date]").val(dates);
+            //Display total promotion cost
+            let dates_arr = dates.split(",");
+            let num_of_dates = dates != "" ? dates_arr.length : 0;
+            let promotion_cost = $("#promotion_cost").val();
+            $("#total_promotion_cost").text(
+                (promotion_cost * num_of_dates).toLocaleString()
             );
         },
     });
@@ -200,4 +207,76 @@
         }
         return true;
     }
+
+    //Add multiselect dropdown
+    $("#offer_productnows").multiselect({
+        disableIfEmpty: true,
+        disabledText: "No Products Selected...",
+        buttonWidth: "100%",
+        enableFiltering: true,
+        includeSelectAllOption: true,
+        maxHeight: 200,
+        inheritClass: true,
+        numberDisplayed: 1,
+        enableCaseInsensitiveFiltering: true,
+        onChange: function () {
+            const offerTotal = calculateOfferTotal();
+            $("#total_offer_cost_display").text(offerTotal.toLocaleString());
+            $("#total_offer_cost").val(offerTotal);
+        },
+    });
+
+    function calculateOfferTotal() {
+        const productCount = $("#offer_productnows option:selected").length;
+        const offerCost = $("#offer_cost").val();
+
+        const startDate = $("#valid_from").val();
+        const endDate = $("#valid_until").val();
+
+        const periodDays = countDays(startDate, endDate);
+
+        $("#total_offer_cost").val(total_offer_cost);
+
+        return periodDays * productCount * offerCost;
+    }
+
+    function countDays(startDate, endDate) {
+        let days = 0;
+        if (startDate != "" || endDate != "") {
+            days = Math.round(
+                moment
+                    .duration(moment(endDate).diff(moment(startDate)))
+                    .asDays()
+            );
+        }
+        return days;
+    }
+
+    //Add valid period daterangepicker
+    $(".valid_period").daterangepicker({
+        timePicker: true,
+        showDropdowns: true,
+        autoUpdateInput: false,
+        timePickerSeconds: true,
+        minDate: moment().startOf("day"),
+        locale: {
+            cancelLabel: "Clear",
+        },
+    });
+
+    //Datepicker apply event
+    $(".valid_period").on("apply.daterangepicker", function (ev, picker) {
+        $(this).val(
+            picker.startDate.format("MM/DD/YYYY hh:mm A") +
+                " - " +
+                picker.endDate.format("MM/DD/YYYY hh:mm A")
+        );
+
+        $("#valid_from").val(picker.startDate.format("YYYY-MM-DD HH:mm:ss"));
+        $("#valid_until").val(picker.endDate.format("YYYY-MM-DD HH:mm:ss"));
+
+        const offerTotal = calculateOfferTotal();
+        $("#total_offer_cost_display").text(offerTotal.toLocaleString());
+        $("#total_offer_cost").val(offerTotal);
+    });
 })(jQuery);

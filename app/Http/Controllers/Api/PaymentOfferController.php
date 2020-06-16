@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\PaymentDeal;
+use App\PaymentOffer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PaymentDealController extends Controller
+class PaymentOfferController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class PaymentDealController extends Controller
      */
     public function index()
     {
-        $paymentdeals = PaymentDeal::with('payment', 'product_deal', 'product_deal.product_now', 'product_deal.deal', 'product_deal.product_now.product')->get();
-        return response()->json($paymentdeals);
+        $paymentoffers = PaymentOffer::with('payment', 'offer', 'offer.product_now', 'offer.product_now.product')->get();
+        return response()->json($paymentoffers);
     }
 
     /**
@@ -27,9 +27,9 @@ class PaymentDealController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, PaymentDeal::$rules);
-        $paymentdeal = PaymentDeal::firstOrCreate($request->all(), $request->all());
-        return response()->json($paymentdeal);
+        $this->validate($request, PaymentOffer::$rules);
+        $paymentoffer = PaymentOffer::firstOrCreate($request->all(), $request->all());
+        return response()->json($paymentoffer);
     }
 
     /**
@@ -40,11 +40,11 @@ class PaymentDealController extends Controller
      */
     public function show($id)
     {
-        $paymentdeal = PaymentDeal::with('payment', 'product_deal', 'product_deal.product_now', 'product_deal.deal', 'product_deal.product_now.product')->find($id);
-        if(is_null($paymentdeal)){
+        $paymentoffer = PaymentOffer::with('payment', 'offer', 'offer.product_now', 'offer.product_now.product')->find($id);
+        if (is_null($paymentoffer)) {
             return response()->json(['error' => 'not_found']);
         }
-        return response()->json($paymentdeal);
+        return response()->json($paymentoffer);
     }
 
     /**
@@ -56,13 +56,13 @@ class PaymentDealController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, PaymentDeal::$rules);
-        $paymentdeal  = PaymentDeal::find($id);
-        if(is_null($paymentdeal)){
+        $this->validate($request, PaymentOffer::$rules);
+        $paymentoffer  = PaymentOffer::find($id);
+        if (is_null($paymentoffer)) {
             return response()->json(['error' => 'not_found']);
         }
-        $paymentdeal->update($request->all());
-        return response()->json($paymentdeal);
+        $paymentoffer->update($request->all());
+        return response()->json($paymentoffer);
     }
 
     /**
@@ -73,11 +73,11 @@ class PaymentDealController extends Controller
      */
     public function destroy($id)
     {
-        $paymentdeal = PaymentDeal::find($id);
-        if(is_null($paymentdeal)){
+        $paymentoffer = PaymentOffer::find($id);
+        if (is_null($paymentoffer)) {
             return response()->json(['error' => 'not_found']);
         }
-        $paymentdeal->delete();
+        $paymentoffer->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
 }

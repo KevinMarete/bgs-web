@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Offer;
-use App\Deal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -16,7 +15,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::with('organization')->get();
+        $offers = Offer::with('product_now', 'product_now.product', 'organization')->get();
         return response()->json($offers);
     }
 
@@ -30,7 +29,12 @@ class OfferController extends Controller
     {
         $this->validate($request, Offer::$rules);
         $offer = Offer::firstOrCreate([
-            'description' => $request->description,
+            'status' => $request->status,
+            'valid_from' => $request->valid_from,
+            'valid_until' => $request->valid_until,
+            'discount' => $request->discount,
+            'min_order_quantity' => $request->min_order_quantity,
+            'product_now_id' => $request->product_now_id,
             'organization_id' => $request->organization_id
         ], $request->all());
         return response()->json($offer);
@@ -44,7 +48,7 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        $offer = Offer::with('organization')->find($id);
+        $offer = Offer::with('product_now', 'product_now.product', 'organization')->find($id);
         if (is_null($offer)) {
             return response()->json(['error' => 'not_found']);
         }
@@ -86,14 +90,14 @@ class OfferController extends Controller
     }
 
     /**
-     * Display the specified Offer's deals.
+     * Display all offers based on specified_date
      *
-     * @param  int  $id
+     * @param  date  $created_period_datedate
      * @return \Illuminate\Http\Response
      */
-    public function getOfferDeals($id)
+    public function getOffersByDate($period_date)
     {
-        $deals = Deal::with('offer')->where('offer_id', $id)->get();
-        return response()->json($deals);
+        $promos = Offer::with('product_now', 'product_now.product', 'organization')->whereDate('valid_from', '<=', $period_date)->whereDate('valid_until', '>=', $period_date)->get();
+        return response()->json($promos);
     }
 }

@@ -103,7 +103,7 @@ class OrganizationController extends Controller
    */
   public function getOrganizationOffers($id)
   {
-    $offers = Offer::with('organization')->where('organization_id', $id)->get();
+    $offers = Offer::with('product_now', 'product_now.product', 'organization')->where('organization_id', $id)->get();
     return response()->json($offers);
   }
 
@@ -115,7 +115,7 @@ class OrganizationController extends Controller
    */
   public function getOrganizationActiveOffers($id)
   {
-    $offers = Offer::with('organization')->where('organization_id', $id)->whereDate('valid_until', '>=', date('Y-m-d'))->get();
+    $offers = Offer::with('product_now', 'product_now.product', 'organization')->where('organization_id', $id)->whereDate('valid_until', '>=', date('Y-m-d'))->get();
     return response()->json($offers);
   }
 
@@ -256,20 +256,6 @@ class OrganizationController extends Controller
   {
     $promotions = Promotion::with(['product_now', 'product_now.product'])->where('type', 'static')->where('organization_id', $id)->get();
     return response()->json($promotions);
-  }
-
-  /**
-   * Display the specified Organization's product deals.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function getOrganizationProductDeals($id)
-  {
-    $productdeals = ProductDeal::with(['product_now', 'product_now.product', 'product_now.organization', 'product_now.user', 'offer'])->whereHas('product_now', function ($query) use ($id) {
-      $query->where('organization_id', $id);
-    })->get();
-    return response()->json($productdeals);
   }
 
   /**

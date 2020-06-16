@@ -35,12 +35,14 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label form-control-label">Product</label>
+                    <label class="col-lg-3 col-form-label form-control-label">PricelistProduct</label>
                     <div class="col-lg-9">
-                        <select class="form-control" size="0" name="product_now_id" readonly>
+                        <select class="form-control" size="0" name="product_now_id">
                             @foreach ($productnows as $productnow)
                             @if ($productnow['product']['id'] === $edit['product_now']['product_id'])
                             <option value="{{ $productnow['id'] }}" selected>{{ $productnow['product']['molecular_name'].'-'.$productnow['product']['brand_name'] }}</option>
+                            @else
+                            <option value="{{ $productnow['id'] }}">{{ $productnow['product']['molecular_name'].'-'.$productnow['product']['brand_name'] }}</option>
                             @endif
                             @endforeach
                         </select>

@@ -1623,44 +1623,6 @@
 					"response": []
 				},
 				{
-					"name": "Get Organization ProductDeals",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/organization/3/productdeals",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"organization",
-								"3",
-								"productdeals"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get Organization Orders",
 					"request": {
 						"method": "GET",
@@ -3119,7 +3081,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"description\": \"Test Offer\",\n    \"valid_from\": \"2020-02-01 00:00:00\",\n    \"valid_until\": \"2020-02-28 23:59:59\",\n    \"discount\": \"10\",\n    \"max_discount_amount\": \"500\",\n    \"organization_id\": \"1\"\n}",
+							"raw": "{\n    \"status\": \"paid\",\n    \"valid_from\": \"2020-02-01 00:00:00\",\n    \"valid_until\": \"2020-02-28 23:59:59\",\n    \"display_url\": \"test-01820.jpeg\",\n    \"discount\": \"10\",\n    \"min_order_quantity\": \"50\",\n    \"max_discount_amount\": \"500\",\n    \"product_now_id\": \"1\",\n    \"organization_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3158,7 +3120,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"description\": \"Test Offer Updated\",\n    \"valid_from\": \"2020-02-01 00:00:00\",\n    \"valid_until\": \"2020-02-28 23:59:59\",\n    \"discount\": \"10\",\n    \"max_discount_amount\": \"500\",\n    \"organization_id\": \"1\"\n}",
+							"raw": "{\n    \"status\": \"paid\",\n    \"valid_from\": \"2020-07-01 00:00:00\",\n    \"valid_until\": \"2020-07-31 23:59:00\",\n    \"display_url\": \"assets/img/offers/kemsa-rgxs0e.jpeg\",\n    \"discount\": \"15\",\n    \"min_order_quantity\": \"50\",\n    \"max_discount_amount\": \"400\",\n    \"product_now_id\": \"105\",\n    \"organization_id\": \"3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3204,44 +3166,6 @@
 								"api",
 								"offer",
 								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Offer Deals",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/offer/1/deals",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"offer",
-								"1",
-								"deals"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -4702,209 +4626,6 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "ProductDeals",
-			"item": [
-				{
-					"name": "All ProductDeals",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/productdeals",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"productdeals"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get ProductDeal",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/productdeal/1",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"productdeal",
-								"1"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add ProductDeal",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"product_now_id\": \"1\",\n    \"deal_id\": \"1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}{{port}}/api/productdeal",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"productdeal"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update ProductDeal",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"product_now_id\": \"1\",\n    \"deal_id\": \"1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}{{port}}/api/productdeal/1",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"productdeal",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete ProductDeal",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{host}}{{port}}/api/productdeal/1",
-							"host": [
-								"{{host}}{{port}}"
-							],
-							"path": [
-								"api",
-								"productdeal",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "bc30ccc4-dd56-44e0-8791-285ac212f6b0",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "faf00664-fb65-4293-956b-3e7de1e12fde",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
 			"name": "Payments",
 			"item": [
 				{
@@ -5311,10 +5032,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "PaymentDeals",
+			"name": "PaymentOffers",
 			"item": [
 				{
-					"name": "All PaymentDeals",
+					"name": "All PaymentOffers",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -5330,20 +5051,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentdeals",
+							"raw": "{{host}}{{port}}/api/paymentoffers",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentdeals"
+								"paymentoffers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get PaymentDeal",
+					"name": "Get PaymentOffer",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -5359,13 +5080,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentdeal/1",
+							"raw": "{{host}}{{port}}/api/paymentoffer/1",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentdeal",
+								"paymentoffer",
 								"1"
 							],
 							"query": [
@@ -5380,7 +5101,7 @@
 					"response": []
 				},
 				{
-					"name": "Add PaymentDeal",
+					"name": "Add PaymentOffer",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -5398,7 +5119,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"payment_id\": \"1\",\n    \"product_deal_id\": \"1\"\n}",
+							"raw": "{\n    \"payment_id\": \"1\",\n    \"offer_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5406,20 +5127,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentdeal",
+							"raw": "{{host}}{{port}}/api/paymentoffer",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentdeal"
+								"paymentoffer"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update PaymentDeal",
+					"name": "Update PaymentOffer",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -5437,7 +5158,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"payment_id\": \"1\",\n    \"product_deal_id\": \"1\"\n}",
+							"raw": "{\n    \"payment_id\": \"1\",\n    \"offer_id\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5445,13 +5166,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentdeal/1",
+							"raw": "{{host}}{{port}}/api/paymentoffer/1",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentdeal",
+								"paymentoffer",
 								"1"
 							]
 						}
@@ -5459,7 +5180,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Payment",
+					"name": "Delete PaymentOffer",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -5475,13 +5196,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}{{port}}/api/paymentdeal/1",
+							"raw": "{{host}}{{port}}/api/paymentoffer/1",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
-								"paymentdeal",
+								"paymentoffer",
 								"1"
 							]
 						}
@@ -8794,19 +8515,19 @@
 			"name": "Marketing",
 			"item": [
 				{
-					"name": "Get All Deals on Specified Date",
+					"name": "Get All Offers on Specified Date",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}{{port}}/api/marketing/deals/2020-04-18",
+							"raw": "{{host}}{{port}}/api/marketing/offers/2020-04-18",
 							"host": [
 								"{{host}}{{port}}"
 							],
 							"path": [
 								"api",
 								"marketing",
-								"deals",
+								"offers",
 								"2020-04-18"
 							]
 						}
@@ -8841,19 +8562,19 @@
 	],
 	"variable": [
 		{
-			"id": "befd47e4-c3b9-4ab1-87b1-dfa62c170561",
+			"id": "6ab8c611-0f46-4a40-bf36-de29b8f2325f",
 			"key": "host",
 			"value": "localhost",
 			"type": "string"
 		},
 		{
-			"id": "c7d0e199-6c28-4d46-9bb7-0574ccbf56ca",
+			"id": "59479b47-aa8f-460e-aa28-d2568ac3cbe6",
 			"key": "port",
 			"value": "8000",
 			"type": "string"
 		},
 		{
-			"id": "b166c788-c969-43c3-9c99-c41c60abf893",
+			"id": "bc13b137-8a29-433e-8c83-6bbcbbf9b202",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ",
 			"type": "string"

@@ -880,7 +880,7 @@ class SellerController extends MyController
     $header_data = [];
     if ($resource != null) {
       $headers = [
-        'offers' => ['id', 'description', 'valid_from', 'valid_until', 'discount', 'max_discount_amount', 'organization'],
+        'offers' => ['id', 'valid from', 'valid until', 'discount', 'min order qty', 'product'],
         'stockbalances' => ['brand_name', 'molecular_name', 'pack_size', 'balance'],
         'productnows' => ['id', 'brand_name', 'molecular_name', 'pack_size', 'published'],
         'promotions' => ['id', 'status', 'display_date', 'product'],

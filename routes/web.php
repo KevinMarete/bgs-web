@@ -79,10 +79,6 @@ Route::get('/offers', 'Seller\SellerController@displayOffersTableView');
 Route::get('/offers/new', 'Seller\SellerController@manageOffers');
 Route::post('/offers/{action}', 'Seller\SellerController@manageOffers');
 Route::get('/offers/{action}/{id}', 'Seller\SellerController@manageOffers');
-Route::get('/deals/new', 'Seller\SellerController@displayNewDealView');
-Route::post('/deals/save', 'Seller\SellerController@saveDeals');
-Route::post('/deals/{action}', 'Seller\SellerController@manageDeals');
-Route::get('/deals/{action}/{id}', 'Seller\SellerController@manageDeals');
 
 /*Admin Routes*/
 Route::get('/dashboard', 'Admin\AdminController@displayDashboardView');
@@ -105,7 +101,6 @@ Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
 
 /*Buyer Routes*/
 Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView');
-Route::get('/deals', 'Buyer\BuyerController@displayDealView');
 Route::post('/add-cart', 'Buyer\BuyerController@addCart');
 Route::get('/cart', 'Buyer\BuyerController@displayCartView');
 Route::post('/update-cart/{id}', 'Buyer\BuyerController@updateCart');
@@ -119,4 +114,4 @@ Route::post('/action-order/{id}', 'Buyer\BuyerController@actionOrder');
 
 /*Email Routes*/
 Route::get('/email/metrics/{period_date?}', 'Admin\AdminController@sendBusinessMetrics');
-Route::get('/email/promos-deals/{period_date?}', 'Admin\AdminController@sendPromosDeals');
+Route::get('/email/offers/{period_date?}', 'Admin\AdminController@sendOffers');

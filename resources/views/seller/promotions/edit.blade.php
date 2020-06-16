@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label form-control-label">Product</label>
+                    <label class="col-lg-3 col-form-label form-control-label">PricelistProduct</label>
                     <div class="col-lg-9">
                         <select class="form-control" size="0" name="product_now_id">
                             @foreach ($productnows as $productnow)

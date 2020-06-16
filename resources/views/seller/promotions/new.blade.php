@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label form-control-label">Pricelist Product</label>
+                    <label class="col-lg-3 col-form-label form-control-label">PricelistProduct</label>
                     <div class="col-lg-6">
                         <select class="form-control" size="0" name="product_now_id" required>
                             <option value="">Select Product</option>

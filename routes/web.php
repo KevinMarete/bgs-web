@@ -76,9 +76,10 @@ Route::post('/promotions/save', 'Seller\SellerController@savePromotions');
 Route::post('/promotions/{action}', 'Seller\SellerController@managePromotions');
 Route::get('/promotions/{action}/{type}/{id}', 'Seller\SellerController@managePromotions');
 Route::get('/offers', 'Seller\SellerController@displayOffersTableView');
-Route::get('/offers/new', 'Seller\SellerController@manageOffers');
-Route::post('/offers/{action}', 'Seller\SellerController@manageOffers');
-Route::get('/offers/{action}/{id}', 'Seller\SellerController@manageOffers');
+Route::post('/offers/save', 'Seller\SellerController@saveOffers');
+Route::get('/offers/{action}', 'Seller\SellerController@manageOffers'); //new
+Route::post('/offers/{action}', 'Seller\SellerController@manageOffers'); //update 
+Route::get('/offers/{action}/{id}', 'Seller\SellerController@manageOffers'); //edit or delete
 
 /*Admin Routes*/
 Route::get('/dashboard', 'Admin\AdminController@displayDashboardView');

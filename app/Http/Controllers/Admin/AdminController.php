@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BusinessMetricsEmail;
-use App\Mail\PromosDealsEmail;
+use App\Mail\OffersEmail;
 
 class AdminController extends MyController
 {
@@ -252,18 +252,18 @@ class AdminController extends MyController
 		return $metric;
 	}
 
-	public function sendPromosDeals(Request $request)
+	public function sendOffers(Request $request)
 	{
 		$period_date = ($request->period_date ? $request->period_date : date('Y-m-d'));
 
 		if ($this->validateDate($period_date)) {
-			$mailing_list = $this->get_promos_deals($period_date);
+			$mailing_list = $this->get_offers($period_date);
 			$mailing_list->email = $this->get_mailing_list_emails();
 			$mailing_list->date = $period_date;
 
-			$promo_deal_count = sizeof($mailing_list->promos) + sizeof($mailing_list->deals);
-			if ($promo_deal_count > 0) {
-				Mail::send(new PromosDealsEmail($mailing_list));
+			$offers_count = sizeof($mailing_list->offers);
+			if ($offers_count > 0) {
+				Mail::send(new OffersEmail($mailing_list));
 				return response(['msg' => 'Mail sent'], 200);
 			} else {
 				return response(['msg' => 'No Promos or Deals be sent'], 401);
@@ -286,13 +286,12 @@ class AdminController extends MyController
 		return $emails;
 	}
 
-	public function get_promos_deals($period_date)
+	public function get_offers($period_date)
 	{
 		$mailing_list = new \stdClass();
-		$mailing_list->promos = [];
 
-		$deals_request = $this->client->get('marketing/deals/' . $period_date);
-		$mailing_list->deals = json_decode($deals_request->getBody(), true);
+		$offers_request = $this->client->get('marketing/offers/' . $period_date);
+		$mailing_list->offers = json_decode($offers_request->getBody(), true);
 
 		return $mailing_list;
 	}

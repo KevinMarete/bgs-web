@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PromosDealsEmail extends Mailable
+class OffersEmail extends Mailable
 {
   use Queueable, SerializesModels;
   public $mailing_list;
@@ -28,8 +28,8 @@ class PromosDealsEmail extends Mailable
    */
   public function build()
   {
-    $this->view('emails/promos_deals_mailing_list');
+    $this->view('emails/offers_mailing_list');
     return $this->bcc($this->mailing_list->email)
-      ->subject('BGS Promos & Deals # ' . $this->mailing_list->date);
+      ->subject('BGS Offers # ' . $this->mailing_list->date);
   }
 }

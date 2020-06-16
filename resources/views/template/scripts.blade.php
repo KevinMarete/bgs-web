@@ -3,6 +3,9 @@
 <script src="/libs/jplist/1.2.0/jplist.min.js" crossorigin="anonymous"></script>
 <script src="/libs/jquery-ui/jquery-ui.min.js"></script>
 <script src="/libs/multidatespicker/jquery-ui.multidatespicker.js"></script>
+<script src="/libs/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+<script src="/libs/daterangepicker/js/moment.min.js"></script>
+<script src="/libs/daterangepicker/js/daterangepicker.js"></script>
 <script src="/js/scripts.js"></script>
 <script src="/libs/datatables/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script src="/libs/datatables/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>

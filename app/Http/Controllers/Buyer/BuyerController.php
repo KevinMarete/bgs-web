@@ -12,6 +12,23 @@ use App\Mail\NotificationEmail;
 
 class BuyerController extends MyController
 {
+    public function displayMarketplaceView()
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $view_data = [
+            'products_per_page' => env('PRODUCTS_PER_PAGE'),
+            'products' => $this->getResourceData($token, 'productnows')
+        ];
+        $data = [
+            'page_title' => 'Ordernow',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.marketplace', $view_data)
+        ];
+        session()->put('cart_title', $data['page_title']);
+
+        return view('template.main', $data);
+    }
 
     public function displayOrderNowView()
     {

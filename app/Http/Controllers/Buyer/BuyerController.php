@@ -21,7 +21,7 @@ class BuyerController extends MyController
             'products' => $this->getResourceData($token, 'productnows')
         ];
         $data = [
-            'page_title' => 'Ordernow',
+            'page_title' => 'Marketplace',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.marketplace', $view_data)
         ];
@@ -48,6 +48,24 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
+    public function displayOffersDayView()
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $view_data = [
+            'products_per_page' => env('PRODUCTS_PER_PAGE'),
+            'products' => $this->getResourceData($token, 'offers')
+        ];
+        $data = [
+            'page_title' => 'Offers-day',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.offers_day', $view_data)
+        ];
+        session()->put('cart_title', $data['page_title']);
+
+        return view('template.main', $data);
+    }
+
     public function displayCartView(Request $request)
     {
         $token = session()->get('token');
@@ -59,7 +77,7 @@ class BuyerController extends MyController
             'total' => 0
         ];
         $data = [
-            'page_title' => $cart_title,
+            'page_title' => 'Cart',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.cart', $view_data)
         ];
@@ -438,6 +456,40 @@ class BuyerController extends MyController
             'page_title' => 'orders',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.manage.view_order', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayFaqsView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $order_id = $request->id;
+
+        $view_data = [];
+        $data = [
+            'page_title' => 'faqs',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.faqs', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayContactUsView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $order_id = $request->id;
+
+        $view_data = [];
+        $data = [
+            'page_title' => 'contact-us',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.contact_us', $view_data)
         ];
 
         return view('template.main', $data);

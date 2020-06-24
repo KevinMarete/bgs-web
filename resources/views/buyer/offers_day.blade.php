@@ -51,8 +51,8 @@
                 </div>
                 <div class="col">
                   <p class="btn btn-warning btn-block">KES
-                    <del>{{ number_format($product['product_now']['unit_price']) }}</del>
-                    {{ number_format($product['product_now']['unit_price'] - ($product['discount'] * $product['product_now']['unit_price'])/100) }}
+                    <del>{{ number_format($product['product_now']['unit_price'], 2) }}</del>
+                    {{ number_format($product['product_now']['unit_price'] - ($product['discount'] * $product['product_now']['unit_price'])/100, 2) }}
                   </p>
                 </div>
               </div>

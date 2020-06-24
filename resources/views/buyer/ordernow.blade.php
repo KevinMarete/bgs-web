@@ -51,7 +51,7 @@
                   <img class="card-img-top img-thumbnail mx-auto d-block" src="/assets/img/medicine.png" alt="Card image cap">
                 </div>
                 <div class="col">
-                  <p class="btn btn-sm btn-warning btn-block">KES {{ number_format($product['unit_price']) }}</p>
+                  <p class="btn btn-sm btn-warning btn-block">KES {{ number_format($product['unit_price'], 2) }}</p>
                 </div>
               </div>
               <div class="row">

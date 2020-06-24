@@ -16,9 +16,18 @@ class BuyerController extends MyController
     {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+
+        $display_product_limit = env('DISPLAY_PRODUCT_LIMIT');
+        $promotion_slider_limit = env('PROMOTIONS_SLIDER_LIMIT');
+        $promotion_static_limit = env('PROMOTIONS_STATIC_LIMIT');
+
         $view_data = [
-            'products_per_page' => env('PRODUCTS_PER_PAGE'),
-            'products' => $this->getResourceData($token, 'productnows')
+            'promotions' => [
+                'slider' => $this->getActiveSliderPromotions($token, $promotion_slider_limit),
+                'static' => $this->getActiveStaticPromotions($token, $promotion_static_limit)
+            ],
+            'offers' => $this->getActiveOffers($token, $display_product_limit),
+            'top_products' => $this->getTopProducts($token, $display_product_limit)
         ];
         $data = [
             'page_title' => 'Marketplace',
@@ -28,6 +37,89 @@ class BuyerController extends MyController
         session()->put('cart_title', $data['page_title']);
 
         return view('template.main', $data);
+    }
+
+    public function getActiveSliderPromotions($token, $number_of_promotions)
+    {
+        $active_promotions = [];
+        $promotions = $this->getResourceData($token, 'promotions');
+        $count = 0;
+        foreach ($promotions as $promotion) {
+            if ($promotion['display_date'] == date('Y-m-d') && $promotion['type'] == 'slider' && $count < $number_of_promotions) {
+                $active_promotions[] = $promotion;
+                $count++;
+            }
+            if ($count >= $number_of_promotions) {
+                break;
+            }
+        }
+        return $active_promotions;
+    }
+
+    public function getActiveStaticPromotions($token, $number_of_promotions)
+    {
+        $active_promotions = [];
+        $promotions = $this->getResourceData($token, 'promotions');
+        $count = 0;
+        foreach ($promotions as $promotion) {
+            if ($promotion['display_date'] == date('Y-m-d') && $promotion['type'] == 'static' && $count < $number_of_promotions) {
+                $active_promotions[] = $promotion;
+                $count++;
+            }
+            if ($count >= $number_of_promotions) {
+                break;
+            }
+        }
+
+        $count = ($number_of_promotions - sizeof($active_promotions));
+        if ($count != 0) {
+            $product_nows = $this->getResourceData($token, 'productnows');
+            //Randomize the order of array items
+            shuffle($product_nows);
+            while ($count != 0) {
+                $active_promotions[] = [
+                    'display_url' => env('PRODUCT_DEFAULT_IMAGE'),
+                    'product_now' => $product_nows[$count]
+                ];
+                $count--;
+            }
+        }
+        return $active_promotions;
+    }
+
+    public function getActiveOffers($token, $number_of_offers)
+    {
+        $active_offers = [];
+        $offers = $this->getResourceData($token, 'offers');
+        $count = 0;
+        foreach ($offers as $offer) {
+            if ($offer['valid_from'] >= now() && $count < $number_of_offers) {
+                $active_offers[] = $offer;
+                $count++;
+            }
+            if ($count >= $number_of_offers) {
+                break;
+            }
+        }
+        return $active_offers;
+    }
+
+    public function getTopProducts($token, $number_of_products)
+    {
+        $top_products = [];
+        $orderitems = $this->getResourceData($token, 'orderitems');
+        $orderitems_count = array_count_values(array_column($orderitems, 'product_now_id'));
+        //Sort by value in descending order
+        arsort($orderitems_count);
+        //Get product_ids from array keys
+        $product_ids = array_keys($orderitems_count);
+        //Get only products based on limit
+        $product_ids = array_slice($product_ids, 0, $number_of_products);
+
+        foreach ($product_ids as $product_id) {
+            $top_products[] = $this->getResourceData($token, 'productnow/' . $product_id);
+        }
+        return $top_products;
     }
 
     public function displayOrderNowView()

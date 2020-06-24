@@ -13,26 +13,18 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-3 col-md-3 col-12 p-2">
+              @foreach (array_slice($promotions['static'], 0, 2) as $promotion)
               <div class="row p-2">
                 <div class="col-6 d-flex justify-content-center align-self-center">
-                  <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1571750967/Ecommerce/ef192a21ec96.jpg" alt="camera" class="img-fluid">
+                  <img src="{{ $promotion['display_url'] }}" alt="camera" class="img-fluid">
                 </div>
                 <div class="col-6">
-                  <h6><small>Asus Laptop with 500GB HDD 8GB RAM</small></h6>
-                  <p class="text-primary mb-1">KES 1,200</p>
-                  <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
+                  <h6><small>{{ $promotion['product_now']['product']['brand_name'] }}</small></h6>
+                  <p class="text-primary mb-1">KES {{ number_format($promotion['product_now']['unit_price'], 2) }}</p>
+                  <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
                 </div>
               </div>
-              <div class="row p-2">
-                <div class="col-6 d-flex justify-content-center align-self-center">
-                  <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1571750967/Ecommerce/ef192a21ec96.jpg" alt="camera" class="img-fluid">
-                </div>
-                <div class="col-6">
-                  <h6><small>Asus Laptop with 500GB HDD 8GB RAM</small></h6>
-                  <p class="text-primary mb-1">KES 1,200</p>
-                  <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-                </div>
-              </div>
+              @endforeach
             </div>
             <div class="col-lg-6 col-md-6 col-12 p-2">
               <div class="row">
@@ -40,31 +32,22 @@
                   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
                       <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                      <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                      @foreach ($promotions['slider'] as $key=>$promotion)
+                      <li data-target="#carouselExampleIndicators" data-slide-to="{{ $key+1 }}"></li>
+                      @endforeach
                     </ol>
                     <div class="carousel-inner">
                       <div class="carousel-item active">
-                        <img class="d-block w-100 rounded mx-auto" src="assets/img/promotions/kemsa-slider-4j47ey.jpeg" alt="First slide" height="280">
-                        <div class="carousel-caption d-none d-md-block">
-                          <h5>First Image</h5>
-                          <p>First Paragraph</p>
-                        </div>
+                        <img class="d-block w-100 rounded mx-auto" src="{{ env('PROMOTIONS_DEFAULT_IMAGE') }}" alt="Default Promotion" height="280">
                       </div>
+                      @foreach ($promotions['slider'] as $promotion)
                       <div class="carousel-item">
-                        <img class="d-block w-100 rounded mx-auto" src="assets/img/promotions/kemsa-slider-4j47ey.jpeg" alt="Second slide" height="280">
-                        <div class="carousel-caption d-none d-md-block">
-                          <h5>Second Image</h5>
-                          <p>Second Paragraph</p>
+                        <img class="d-block w-100 rounded mx-auto" src="{{ $promotion['display_url'] }}" alt="Promotion Image" height="280">
+                        <div class="carousel-caption d-none d-md-block text-right">
+                          <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
                         </div>
                       </div>
-                      <div class="carousel-item">
-                        <img class="d-block w-100 rounded mx-auto" src="assets/img/promotions/kemsa-slider-4j47ey.jpeg" alt="Third slide" height="280">
-                        <div class="carousel-caption d-none d-md-block">
-                          <h5>Third Image</h5>
-                          <p>Third Paragraph</p>
-                        </div>
-                      </div>
+                      @endforeach
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -79,26 +62,18 @@
               </div>
             </div>
             <div class="col-lg-3 col-md-3 col-12 p-2">
+              @foreach (array_slice($promotions['static'], 2, 4) as $promotion)
               <div class="row p-2">
                 <div class="col-6 d-flex justify-content-center align-self-center">
-                  <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1571750967/Ecommerce/ef192a21ec96.jpg" alt="camera" class="img-fluid">
+                  <img src="{{ $promotion['display_url'] }}" alt="camera" class="img-fluid">
                 </div>
                 <div class="col-6">
-                  <h6><small>Asus Laptop with 500GB HDD 8GB RAM</small></h6>
-                  <p class="text-primary mb-1">KES 1,200</p>
-                  <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
+                  <h6><small>{{ $promotion['product_now']['product']['brand_name'] }}</small></h6>
+                  <p class="text-primary mb-1">KES {{ number_format($promotion['product_now']['unit_price'], 2) }}</p>
+                  <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
                 </div>
               </div>
-              <div class="row p-2">
-                <div class="col-6 d-flex justify-content-center align-self-center">
-                  <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1571750967/Ecommerce/ef192a21ec96.jpg" alt="camera" class="img-fluid">
-                </div>
-                <div class="col-6">
-                  <h6><small>Asus Laptop with 500GB HDD 8GB RAM</small></h6>
-                  <p class="text-primary mb-1">KES 1,200</p>
-                  <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-                </div>
-              </div>
+              @endforeach
             </div>
           </div>
         </div>
@@ -114,60 +89,30 @@
         </div>
         <div class="card-body">
           <div class="row">
+            @if(empty($offers))
+            <p class="bg-info p-2">
+              There are no offers at the moment!
+            </p>
+            @endif
+            @foreach ($offers as $offer)
             <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-1.jpg" alt="" height="80"></a>
+              <div class="product tumbnail thumbnail-3"><a href="#"><img src="{{ $offer['display_url'] }}" alt="" height="80" width="100%"></a>
                 <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">
-                    <del>$24.99</del></span><span class="price sale">$12.49</span>
+                  <h6 class="text-truncate" data-toggle="tooltip" data-placement="top" title="{{ $offer['product_now']['product']['brand_name'] }}">
+                    <small>{{ $offer['product_now']['product']['brand_name'] }}</small>
+                  </h6>
+                  <h6><small><b>Valid Until:</b> {{ $offer['valid_until'] }}</small></h6>
+                  <h6><small><b>Organization:</b> {{ $offer['organization']['name'] }}</small></h6>
+                  <hr />
+                  <span class="price">
+                    <del class="text-danger">KES {{ number_format($offer['product_now']['unit_price'], 2) }}</del>
+                  </span>
+                  <span class="price sale">KES {{ number_format(((100 - $offer['discount'])/100) * $offer['product_now']['unit_price'], 2) }}</span>
                 </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
+                <a href="/offer-day" class="btn btn-sm btn-warning">Shop Now</a>
               </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-1.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">
-                    <del>$24.99</del></span><span class="price sale">$12.49</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-1.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">
-                    <del>$24.99</del></span><span class="price sale">$12.49</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-2.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">
-                    <del>$24.99</del></span><span class="price sale">$12.49</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-3.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">
-                    <del>$12.49</del></span><span class="price sale">$12.49</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-4.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">
-                    <del>$24.99</del></span><span class="price sale">$12.49</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
+            @endforeach
           </div>
         </div>
       </div>
@@ -182,54 +127,16 @@
         </div>
         <div class="card-body">
           <div class="row">
+            @foreach ($top_products as $top_product)
             <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-1.jpg" alt="" height="80"></a>
+              <div class="product tumbnail thumbnail-3"><a href="#"><img src="{{ env('PRODUCT_DEFAULT_IMAGE') }}" alt="" height="80"></a>
                 <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">$24.99</span>
+                  <h6 class="text-truncate" data-toggle="tooltip" data-placement="top" title="{{ $top_product['product']['brand_name'] }}"><small>{{ $top_product['product']['brand_name'] }}</small></h6><span class="price">KES {{ number_format($top_product['unit_price'], 2) }}</span>
                 </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
+                <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
               </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-2.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">$24.99</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-3.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">$12.49</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-4.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">$24.99</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-3.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">$12.49</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">
-              <div class="product tumbnail thumbnail-3"><a href="#"><img src="http://static.livedemo00.template-help.com/wt_58434/images/shop-4.jpg" alt="" height="80"></a>
-                <div class="caption">
-                  <h6><a href="#">Short Sleeve T-Shirt</a></h6><span class="price">$24.99</span>
-                </div>
-                <a href="#" class="btn btn-sm btn-warning">Shop Now</a>
-              </div>
-            </div>
+            @endforeach
           </div>
         </div>
       </div>

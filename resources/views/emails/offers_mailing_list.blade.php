@@ -11,7 +11,7 @@
       Please see below various offers from BGS available on {{ $mailing_list->date }}: <br /><br />
     </div>
     @if (sizeof($mailing_list->offers) > 0)
-    <b>Available Deals({{ sizeof($mailing_list->offers) }}) Click <a href="www.bgsmeds.com" target="_blank">Here</a> to Purchase Deal Item(s)</b>
+    <b>Available Offers({{ sizeof($mailing_list->offers) }}) Click <a href="www.bgsmeds.com" target="_blank">Here</a> to Purchase Deal Item(s)</b>
     <table style="width: 100%;font-size: smaller;border: 1px solid #c0c0c0;" cellspacing="0">
       <tbody>
         <tr style="border-bottom: : 1px solid #c0c0c0;">

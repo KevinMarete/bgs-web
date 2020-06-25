@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderEmail;
 use App\Mail\CourierEmail;
 use App\Mail\NotificationEmail;
+use PHPUnit\Framework\Constraint\IsTrue;
 
 class BuyerController extends MyController
 {
@@ -16,12 +17,25 @@ class BuyerController extends MyController
     {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+
+        $display_product_limit = env('DISPLAY_PRODUCT_LIMIT');
+        $promotion_slider_limit = env('PROMOTIONS_SLIDER_LIMIT');
+        $promotion_static_limit = env('PROMOTIONS_STATIC_LIMIT');
+        $display_promotion_static_limit = round(env('PROMOTIONS_STATIC_LIMIT') / 2);
+
+        $static_promotions = $this->getActiveStaticPromotions($token, $promotion_static_limit);
+
         $view_data = [
-            'products_per_page' => env('PRODUCTS_PER_PAGE'),
-            'products' => $this->getResourceData($token, 'productnows')
+            'promotions' => [
+                'slider' => $this->getActiveSliderPromotions($token, $promotion_slider_limit),
+                'static-left' => array_slice($static_promotions, 0, $display_promotion_static_limit),
+                'static-right' => array_slice($static_promotions, $display_promotion_static_limit, $promotion_static_limit),
+            ],
+            'offers' => $this->getActiveOffers($token, $display_product_limit),
+            'top_products' => $this->getTopProducts($token, $display_product_limit)
         ];
         $data = [
-            'page_title' => 'Ordernow',
+            'page_title' => 'Marketplace',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.marketplace', $view_data)
         ];
@@ -30,18 +44,189 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function displayOrderNowView()
+    public function getActiveSliderPromotions($token, $number_of_promotions)
+    {
+        $active_promotions = [];
+        $promotions = $this->getResourceData($token, 'promotions');
+        $count = 0;
+        foreach ($promotions as $promotion) {
+            if ($promotion['display_date'] == date('Y-m-d') && $promotion['type'] == 'slider' && $count < $number_of_promotions) {
+                $active_promotions[] = $promotion;
+                $count++;
+            }
+            if ($count >= $number_of_promotions) {
+                break;
+            }
+        }
+        return $active_promotions;
+    }
+
+    public function getActiveStaticPromotions($token, $number_of_promotions)
+    {
+        $active_promotions = [];
+        $promotions = $this->getResourceData($token, 'promotions');
+        $count = 0;
+        foreach ($promotions as $promotion) {
+            if ($promotion['display_date'] == date('Y-m-d') && $promotion['type'] == 'static' && $count < $number_of_promotions) {
+                $active_promotions[] = $promotion;
+                $count++;
+            }
+            if ($count >= $number_of_promotions) {
+                break;
+            }
+        }
+
+        $count = ($number_of_promotions - sizeof($active_promotions));
+        if ($count != 0) {
+            $product_nows = $this->getResourceData($token, 'productnows');
+            //Get only published productnows
+            $published_product_nows = array_filter($product_nows, function ($product_now) {
+                return ($product_now['is_published'] == true);
+            });
+            //Randomize the order of array items
+            shuffle($published_product_nows);
+            while ($count != 0 && sizeof($published_product_nows) >= $count) {
+                $active_promotions[] = [
+                    'display_url' => env('PRODUCT_DEFAULT_IMAGE'),
+                    'product_now' => $published_product_nows[$count]
+                ];
+                $count--;
+            }
+        }
+        return $active_promotions;
+    }
+
+    public function getActiveOffers($token, $number_of_offers)
+    {
+        $active_offers = [];
+        $offers = $this->getResourceData($token, 'offers');
+        $count = 0;
+        foreach ($offers as $offer) {
+            if ($offer['valid_from'] >= now() && $count < $number_of_offers) {
+                $active_offers[] = $offer;
+                $count++;
+            }
+            if ($count >= $number_of_offers) {
+                break;
+            }
+        }
+        return $active_offers;
+    }
+
+    public function getTopProducts($token, $number_of_products)
+    {
+        $top_products = [];
+        $orderitems = $this->getResourceData($token, 'orderitems');
+        $orderitems_count = array_count_values(array_column($orderitems, 'product_now_id'));
+        //Sort by value in descending order
+        arsort($orderitems_count);
+        //Get product_ids from array keys
+        $product_ids = array_keys($orderitems_count);
+        //Get only products based on limit
+        $product_ids = array_slice($product_ids, 0, $number_of_products);
+
+        foreach ($product_ids as $product_id) {
+            $top_products[] = $this->getResourceData($token, 'productnow/' . $product_id);
+        }
+        return $top_products;
+    }
+
+    public function sortMultiArray($array, $mapping_keys, $sorting_key, $order = SORT_ASC)
+    {
+        $mapped_array = array_map(function ($sub_array) use ($mapping_keys) {
+            $tmp_map = $sub_array;
+            foreach ($mapping_keys as $index => $mapping_key) {
+                $tmp_map = $tmp_map[$mapping_key];
+                if ((sizeof($mapping_keys) - 1) == $index) {
+                    return $tmp_map;
+                }
+            }
+        }, $array);
+        $columns = array_column($mapped_array, $sorting_key);
+        array_multisort($columns, $order, $array);
+
+        return $array;
+    }
+
+    public function displayOrderNowView(Request $request)
     {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+
+        //Sort data flag
+        $is_sort = true;
+
+        if ($request->organizationId) {
+            $products = $this->getResourceData($token, 'organization/' . $request->organizationId . '/published');
+        } else {
+            $products = $this->getResourceData($token, 'productnows');
+        }
+
+        if ($request->productId) {
+            //Sorting 
+            $products = $this->sortMultiArray($products, ['product'], 'brand_name', SORT_ASC);
+            //Find product in product array
+            $key = array_search($request->productId, array_column($products, 'product_id'));
+            $tempProduct = $products[$key];
+            //Remove product from product array
+            unset($products[$key]);
+            //Add product to beginning of array
+            array_unshift($products, $tempProduct);
+            //No sorting of data
+            $is_sort = false;
+        }
+
         $view_data = [
             'products_per_page' => env('PRODUCTS_PER_PAGE'),
-            'products' => $this->getResourceData($token, 'productnows')
+            'products' => $products,
+            'is_sort' => $is_sort,
         ];
         $data = [
             'page_title' => 'Ordernow',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.ordernow', $view_data)
+        ];
+        session()->put('cart_title', $data['page_title']);
+
+        return view('template.main', $data);
+    }
+
+    public function displayOffersDayView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+
+        //Sort data flag
+        $is_sort = true;
+
+        $products = $this->getResourceData($token, 'offers');
+
+        if ($request->productId) {
+            //Sorting 
+            $products = $this->sortMultiArray($products, ['product_now', 'product'], 'brand_name', SORT_ASC);
+            //Find product in product array
+            $productNows = array_map(function ($product) {
+                return $product['product_now'];
+            }, $products);
+            $key = array_search($request->productId, array_column($productNows, 'id'));
+            $tempProduct = $products[$key];
+            //Remove product from product array
+            unset($products[$key]);
+            //Add product to beginning of array
+            array_unshift($products, $tempProduct);
+            //No sorting of data
+            $is_sort = false;
+        }
+
+        $view_data = [
+            'products_per_page' => env('PRODUCTS_PER_PAGE'),
+            'products' => $products,
+            'is_sort' => $is_sort,
+        ];
+        $data = [
+            'page_title' => 'Offers-day',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.offers_day', $view_data)
         ];
         session()->put('cart_title', $data['page_title']);
 
@@ -59,7 +244,7 @@ class BuyerController extends MyController
             'total' => 0
         ];
         $data = [
-            'page_title' => $cart_title,
+            'page_title' => 'Cart',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.cart', $view_data)
         ];
@@ -438,6 +623,40 @@ class BuyerController extends MyController
             'page_title' => 'orders',
             'menus' => $this->getRoleMenus($token, $role_id),
             'content_view' => View::make('buyer.manage.view_order', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayFaqsView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $order_id = $request->id;
+
+        $view_data = [];
+        $data = [
+            'page_title' => 'faqs',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.faqs', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayContactUsView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $order_id = $request->id;
+
+        $view_data = [];
+        $data = [
+            'page_title' => 'contact-us',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.contact_us', $view_data)
         ];
 
         return view('template.main', $data);

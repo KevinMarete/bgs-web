@@ -17,8 +17,10 @@
       <div class="container">
         <form class="form-inline my-2 my-lg-0 row">
           <!-- hidden sort control -->
+          @if($is_sort)
           <div style="display: none" data-jplist-control="hidden-sort" data-group="products" data-path=".molecular_name" data-order="asc" data-type="text">
           </div>
+          @endif
 
           <!-- text filter control -->
           <div class="input-group input-group-md col-md-11">
@@ -51,7 +53,7 @@
                   <img class="card-img-top img-thumbnail mx-auto d-block" src="/assets/img/medicine.png" alt="Card image cap">
                 </div>
                 <div class="col">
-                  <p class="btn btn-sm btn-warning btn-block">KES {{ number_format($product['unit_price']) }}</p>
+                  <p class="btn btn-sm btn-warning btn-block">KES {{ number_format($product['unit_price'], 2) }}</p>
                 </div>
               </div>
               <div class="row">
@@ -75,11 +77,11 @@
               </div>
               <div class="card-body">
                 <h4 class="card-title product-title">
-                  <a href="#" title="View Product" class="molecular_name">{{ strtoupper($product['product']['molecular_name']) }}</a>
+                  <a href="#" title="View Product" class="molecular_name">{{ strtoupper($product['product']['brand_name']) }}</a>
                 </h4>
                 <hr />
                 <p class="card-text product-description">
-                  <strong class="brand_name">{{ strtoupper($product['product']['brand_name']) }}</strong> <br />
+                  <strong class="brand_name">{{ strtoupper($product['product']['molecular_name']) }}</strong> <br />
                   <strong>Packsize:</strong> {{ $product['product']['pack_size'] }} <br />
                   <strong>Vendor:</strong> {{ $product['organization']['name'] }}
                 </p>

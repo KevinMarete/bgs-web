@@ -103,6 +103,10 @@ Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
 /*Buyer Routes*/
 Route::get('/marketplace', 'Buyer\BuyerController@displayMarketplaceView');
 Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView');
+Route::get('/ordernow/{productId}', 'Buyer\BuyerController@displayOrderNowView');
+Route::get('/ordernow/{productId}/{organizationId}', 'Buyer\BuyerController@displayOrderNowView');
+Route::get('/offers-day', 'Buyer\BuyerController@displayOffersDayView');
+Route::get('/offers-day/{productId}', 'Buyer\BuyerController@displayOffersDayView');
 Route::post('/add-cart', 'Buyer\BuyerController@addCart');
 Route::get('/cart', 'Buyer\BuyerController@displayCartView');
 Route::post('/update-cart/{id}', 'Buyer\BuyerController@updateCart');
@@ -113,6 +117,8 @@ Route::get('/orders', 'Buyer\BuyerController@displayOrderView');
 Route::get('/view-order/{id}', 'Buyer\BuyerController@displayViewOrder');
 Route::get('/action-order/{id}', 'Buyer\BuyerController@displayActionOrder');
 Route::post('/action-order/{id}', 'Buyer\BuyerController@actionOrder');
+Route::get('/faqs', 'Buyer\BuyerController@displayFaqsView');
+Route::get('/contact-us', 'Buyer\BuyerController@displayContactUsView');
 
 /*Email Routes*/
 Route::get('/email/metrics/{period_date?}', 'Admin\AdminController@sendBusinessMetrics');

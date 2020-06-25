@@ -15,7 +15,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::with('product_now', 'product_now.product', 'organization')->get();
+        $offers = Offer::with('product_now', 'product_now.product', 'organization', 'product_now.organization', 'product_now.user')->get();
         return response()->json($offers);
     }
 
@@ -48,7 +48,7 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        $offer = Offer::with('product_now', 'product_now.product', 'organization')->find($id);
+        $offer = Offer::with('product_now', 'product_now.product', 'organization', 'product_now.organization', 'product_now.user')->find($id);
         if (is_null($offer)) {
             return response()->json(['error' => 'not_found']);
         }
@@ -97,7 +97,7 @@ class OfferController extends Controller
      */
     public function getOffersByDate($period_date)
     {
-        $promos = Offer::with('product_now', 'product_now.product', 'organization')->whereDate('valid_from', '<=', $period_date)->whereDate('valid_until', '>=', $period_date)->get();
+        $promos = Offer::with('product_now', 'product_now.product', 'organization', 'product_now.organization', 'product_now.user')->whereDate('valid_from', '<=', $period_date)->whereDate('valid_until', '>=', $period_date)->get();
         return response()->json($promos);
     }
 }

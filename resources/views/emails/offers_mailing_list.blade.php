@@ -36,7 +36,7 @@
           </td>
           <td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">
             <strong>
-              <span style="color: #7c7c7c;">{{ strtoupper($offer['minimum_order_quantity']) }}</span>
+              <span style="color: #7c7c7c;">{{ strtoupper($offer['min_order_quantity']) }}</span>
             </strong>
           </td>
           <td style="text-align: left; border: 1px dotted #ccbcbc;" colspan="1" bgcolor="#ffffff" height="20">

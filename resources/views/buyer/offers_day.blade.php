@@ -17,8 +17,10 @@
       <div class="container">
         <form class="form-inline my-2 my-lg-0 row">
           <!-- hidden sort control -->
+          @if($is_sort)
           <div style="display: none" data-jplist-control="hidden-sort" data-group="products" data-path=".molecular_name" data-order="asc" data-type="text">
           </div>
+          @endif
 
           <!-- text filter control -->
           <div class="input-group input-group-md col-md-11">
@@ -77,11 +79,11 @@
               </div>
               <div class="card-body">
                 <h4 class="card-title product-title">
-                  <a href="#" title="View Product" class="molecular_name">{{ strtoupper($product['product_now']['product']['molecular_name']) }}</a>
+                  <a href="#" title="View Product" class="molecular_name">{{ strtoupper($product['product_now']['product']['brand_name']) }}</a>
                 </h4>
                 <hr />
                 <p class="card-text product-description">
-                  <strong class="brand_name">{{ strtoupper($product['product_now']['product']['brand_name']) }}</strong> <br />
+                  <strong class="brand_name">{{ strtoupper($product['product_now']['product']['molecular_name']) }}</strong> <br />
                   <strong>Packsize:</strong> {{ $product['product_now']['product']['pack_size'] }} <br />
                   <strong>Discount:</strong> {{ $product['discount']. '%'}} <br />
                   <strong>MinimumOrderQTY:</strong> {{ $product['min_order_quantity'] }} <br />

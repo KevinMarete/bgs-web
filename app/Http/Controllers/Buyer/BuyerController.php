@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderEmail;
 use App\Mail\CourierEmail;
 use App\Mail\NotificationEmail;
+use PHPUnit\Framework\Constraint\IsTrue;
 
 class BuyerController extends MyController
 {
@@ -20,11 +21,15 @@ class BuyerController extends MyController
         $display_product_limit = env('DISPLAY_PRODUCT_LIMIT');
         $promotion_slider_limit = env('PROMOTIONS_SLIDER_LIMIT');
         $promotion_static_limit = env('PROMOTIONS_STATIC_LIMIT');
+        $display_promotion_static_limit = round(env('PROMOTIONS_STATIC_LIMIT') / 2);
+
+        $static_promotions = $this->getActiveStaticPromotions($token, $promotion_static_limit);
 
         $view_data = [
             'promotions' => [
                 'slider' => $this->getActiveSliderPromotions($token, $promotion_slider_limit),
-                'static' => $this->getActiveStaticPromotions($token, $promotion_static_limit)
+                'static-left' => array_slice($static_promotions, 0, $display_promotion_static_limit),
+                'static-right' => array_slice($static_promotions, $display_promotion_static_limit, $promotion_static_limit),
             ],
             'offers' => $this->getActiveOffers($token, $display_product_limit),
             'top_products' => $this->getTopProducts($token, $display_product_limit)
@@ -74,12 +79,16 @@ class BuyerController extends MyController
         $count = ($number_of_promotions - sizeof($active_promotions));
         if ($count != 0) {
             $product_nows = $this->getResourceData($token, 'productnows');
+            //Get only published productnows
+            $published_product_nows = array_filter($product_nows, function ($product_now) {
+                return ($product_now['is_published'] == true);
+            });
             //Randomize the order of array items
-            shuffle($product_nows);
-            while ($count != 0) {
+            shuffle($published_product_nows);
+            while ($count != 0 && sizeof($published_product_nows) >= $count) {
                 $active_promotions[] = [
                     'display_url' => env('PRODUCT_DEFAULT_IMAGE'),
-                    'product_now' => $product_nows[$count]
+                    'product_now' => $published_product_nows[$count]
                 ];
                 $count--;
             }
@@ -122,13 +131,55 @@ class BuyerController extends MyController
         return $top_products;
     }
 
-    public function displayOrderNowView()
+    public function sortMultiArray($array, $mapping_keys, $sorting_key, $order = SORT_ASC)
+    {
+        $mapped_array = array_map(function ($sub_array) use ($mapping_keys) {
+            $tmp_map = $sub_array;
+            foreach ($mapping_keys as $index => $mapping_key) {
+                $tmp_map = $tmp_map[$mapping_key];
+                if ((sizeof($mapping_keys) - 1) == $index) {
+                    return $tmp_map;
+                }
+            }
+        }, $array);
+        $columns = array_column($mapped_array, $sorting_key);
+        array_multisort($columns, $order, $array);
+
+        return $array;
+    }
+
+    public function displayOrderNowView(Request $request)
     {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+
+        //Sort data flag
+        $is_sort = true;
+
+        if ($request->organizationId) {
+            $products = $this->getResourceData($token, 'organization/' . $request->organizationId . '/published');
+        } else {
+            $products = $this->getResourceData($token, 'productnows');
+        }
+
+        if ($request->productId) {
+            //Sorting 
+            $products = $this->sortMultiArray($products, ['product'], 'brand_name', SORT_ASC);
+            //Find product in product array
+            $key = array_search($request->productId, array_column($products, 'product_id'));
+            $tempProduct = $products[$key];
+            //Remove product from product array
+            unset($products[$key]);
+            //Add product to beginning of array
+            array_unshift($products, $tempProduct);
+            //No sorting of data
+            $is_sort = false;
+        }
+
         $view_data = [
             'products_per_page' => env('PRODUCTS_PER_PAGE'),
-            'products' => $this->getResourceData($token, 'productnows')
+            'products' => $products,
+            'is_sort' => $is_sort,
         ];
         $data = [
             'page_title' => 'Ordernow',
@@ -140,13 +191,37 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function displayOffersDayView()
+    public function displayOffersDayView(Request $request)
     {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
+
+        //Sort data flag
+        $is_sort = true;
+
+        $products = $this->getResourceData($token, 'offers');
+
+        if ($request->productId) {
+            //Sorting 
+            $products = $this->sortMultiArray($products, ['product_now', 'product'], 'brand_name', SORT_ASC);
+            //Find product in product array
+            $productNows = array_map(function ($product) {
+                return $product['product_now'];
+            }, $products);
+            $key = array_search($request->productId, array_column($productNows, 'id'));
+            $tempProduct = $products[$key];
+            //Remove product from product array
+            unset($products[$key]);
+            //Add product to beginning of array
+            array_unshift($products, $tempProduct);
+            //No sorting of data
+            $is_sort = false;
+        }
+
         $view_data = [
             'products_per_page' => env('PRODUCTS_PER_PAGE'),
-            'products' => $this->getResourceData($token, 'offers')
+            'products' => $products,
+            'is_sort' => $is_sort,
         ];
         $data = [
             'page_title' => 'Offers-day',

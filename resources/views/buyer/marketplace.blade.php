@@ -13,7 +13,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-3 col-md-3 col-12 p-2">
-              @foreach (array_slice($promotions['static'], 0, 2) as $promotion)
+              @foreach ($promotions['static-left'] as $promotion)
               <div class="row p-2">
                 <div class="col-6 d-flex justify-content-center align-self-center">
                   <img src="{{ $promotion['display_url'] }}" alt="camera" class="img-fluid">
@@ -21,7 +21,7 @@
                 <div class="col-6">
                   <h6><small>{{ $promotion['product_now']['product']['brand_name'] }}</small></h6>
                   <p class="text-primary mb-1">KES {{ number_format($promotion['product_now']['unit_price'], 2) }}</p>
-                  <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
+                  <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
                 </div>
               </div>
               @endforeach
@@ -44,7 +44,7 @@
                       <div class="carousel-item">
                         <img class="d-block w-100 rounded mx-auto" src="{{ $promotion['display_url'] }}" alt="Promotion Image" height="280">
                         <div class="carousel-caption d-none d-md-block text-right">
-                          <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
+                          <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
                         </div>
                       </div>
                       @endforeach
@@ -62,7 +62,7 @@
               </div>
             </div>
             <div class="col-lg-3 col-md-3 col-12 p-2">
-              @foreach (array_slice($promotions['static'], 2, 4) as $promotion)
+              @foreach ($promotions['static-right'] as $promotion)
               <div class="row p-2">
                 <div class="col-6 d-flex justify-content-center align-self-center">
                   <img src="{{ $promotion['display_url'] }}" alt="camera" class="img-fluid">
@@ -70,7 +70,7 @@
                 <div class="col-6">
                   <h6><small>{{ $promotion['product_now']['product']['brand_name'] }}</small></h6>
                   <p class="text-primary mb-1">KES {{ number_format($promotion['product_now']['unit_price'], 2) }}</p>
-                  <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
+                  <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
                 </div>
               </div>
               @endforeach
@@ -109,7 +109,7 @@
                   </span>
                   <span class="price sale">KES {{ number_format(((100 - $offer['discount'])/100) * $offer['product_now']['unit_price'], 2) }}</span>
                 </div>
-                <a href="/offer-day" class="btn btn-sm btn-warning">Shop Now</a>
+                <a href="/offers-day/{{ $offer['product_now']['product_id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
               </div>
             </div>
             @endforeach
@@ -133,7 +133,7 @@
                 <div class="caption">
                   <h6 class="text-truncate" data-toggle="tooltip" data-placement="top" title="{{ $top_product['product']['brand_name'] }}"><small>{{ $top_product['product']['brand_name'] }}</small></h6><span class="price">KES {{ number_format($top_product['unit_price'], 2) }}</span>
                 </div>
-                <a href="/ordernow" class="btn btn-sm btn-warning">Shop Now</a>
+                <a href="/ordernow/{{ $top_product['product']['id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
               </div>
             </div>
             @endforeach

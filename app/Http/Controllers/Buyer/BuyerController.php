@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderEmail;
 use App\Mail\CourierEmail;
 use App\Mail\NotificationEmail;
-use PHPUnit\Framework\Constraint\IsTrue;
 
 class BuyerController extends MyController
 {
@@ -68,6 +67,7 @@ class BuyerController extends MyController
         $count = 0;
         foreach ($promotions as $promotion) {
             if ($promotion['display_date'] == date('Y-m-d') && $promotion['type'] == 'static' && $count < $number_of_promotions) {
+                $promotion['is_promotion'] = true;
                 $active_promotions[] = $promotion;
                 $count++;
             }
@@ -87,6 +87,7 @@ class BuyerController extends MyController
             shuffle($published_product_nows);
             while ($count != 0 && sizeof($published_product_nows) >= $count) {
                 $active_promotions[] = [
+                    'is_promotion' => false,
                     'display_url' => env('PRODUCT_DEFAULT_IMAGE'),
                     'product_now' => $published_product_nows[$count]
                 ];
@@ -102,7 +103,7 @@ class BuyerController extends MyController
         $offers = $this->getResourceData($token, 'offers');
         $count = 0;
         foreach ($offers as $offer) {
-            if ($offer['valid_from'] >= now() && $count < $number_of_offers) {
+            if (now() >= $offer['valid_from'] && now() <= $offer['valid_until'] && $count < $number_of_offers) {
                 $active_offers[] = $offer;
                 $count++;
             }

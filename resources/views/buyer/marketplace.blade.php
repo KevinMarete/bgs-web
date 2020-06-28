@@ -10,7 +10,7 @@
         <div class="card-header p-2">
           <h6 class="mb-0">PROMOTIONS</h6>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-marketplace">
           <div class="row">
             <div class="col-lg-2 col-md-2 col-12 p-0">
               @foreach ($promotions['static-left'] as $promotion)
@@ -109,7 +109,7 @@
           <h6 class="mb-0">OFFERS OF THE DAY</h6>
           <a href="/offers-day" class="ml-auto p-2">View All Offers</a>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-marketplace">
           <div class="row">
             @if(empty($offers))
             <p class="bg-info p-2">
@@ -147,7 +147,7 @@
           <h6 class="mb-0">TOP SELLING PRODUCTS</h6>
           <a href="/ordernow" class="ml-auto p-2">View All Products</a>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-marketplace">
           <div class="row">
             @foreach ($top_products as $top_product)
             <div class="col-lg-2 col-md-2 col-sm-4 col-6 p-2">

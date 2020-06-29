@@ -17,8 +17,10 @@
       <div class="container">
         <form class="form-inline my-2 my-lg-0 row">
           <!-- hidden sort control -->
+          @if($is_sort)
           <div style="display: none" data-jplist-control="hidden-sort" data-group="products" data-path=".molecular_name" data-order="asc" data-type="text">
           </div>
+          @endif
 
           <!-- text filter control -->
           <div class="input-group input-group-md col-md-11">
@@ -42,17 +44,19 @@
       <div class="col">
         <div class="row" data-jplist-group="products">
           @foreach ($products as $product)
-          @if ($product['offer']['valid_until'] >= now())
+          @if (now() >= $product['valid_from'] && now() <= $product['valid_until']) 
           <div class="col-12 col-md-4 col-lg-3 mb-4" data-jplist-item>
             <div class="card">
               <div class="row">
                 <div class="col">
-                  <img class="card-img-top img-thumbnail" src="/assets/img/medicine.png" alt="Card image cap" width="300" height="200">
+                  <img class="card-img-top img-thumbnail" src="{{ $product['display_url'] }}" alt="Card image cap" style="max-width: 100%;">
                 </div>
+              </div>
+              <div class="row">
                 <div class="col">
-                  <p class="btn btn-warning btn-block">KES
-                    <del>{{ number_format($product['product_now']['unit_price']) }}</del>
-                    {{ number_format($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100) }}
+                  <p class="btn btn-sm btn-warning btn-block mt-1 mb-1">KES
+                    <del>{{ number_format($product['product_now']['unit_price'], 2) }}</del>
+                    {{ number_format($product['product_now']['unit_price'] - ($product['discount'] * $product['product_now']['unit_price'])/100, 2) }}
                   </p>
                 </div>
               </div>
@@ -61,69 +65,69 @@
                   <form role="form" action="/add-cart" method="POST">
                     @csrf
                     <input type="hidden" class="form-control" name="product_id" value="{{ $product['product_now']['id'] }}">
-                    <input type="hidden" class="form-control" name="quantity" value="{{ $product['minimum_order_quantity'] }}">
-                    <input type="hidden" class="form-control" name="price" value="{{ ($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100) }}">
+                    <input type="hidden" class="form-control" name="quantity" value="{{ $product['min_order_quantity'] }}">
+                    <input type="hidden" class="form-control" name="price" value="{{ ($product['product_now']['unit_price'] - ($product['discount'] * $product['product_now']['unit_price'])/100) }}">
                     <input type="hidden" class="form-control" name="delivery" value="{{ $product['product_now']['delivery_cost'] }}">
-                    <input type="hidden" class="form-control" name="discount" value="{{ round(($product['offer']['discount']/100), 2) }}">
-                    <input type="hidden" class="form-control" name="sub_total" value="{{ ($product['product_now']['unit_price'] - ($product['offer']['discount'] * $product['product_now']['unit_price'])/100)*$product['minimum_order_quantity'] }}">
+                    <input type="hidden" class="form-control" name="discount" value="{{ round(($product['discount']/100), 2) }}">
+                    <input type="hidden" class="form-control" name="sub_total" value="{{ ($product['product_now']['unit_price'] - ($product['discount'] * $product['product_now']['unit_price'])/100)*$product['min_order_quantity'] }}">
                     <input type="hidden" class="form-control" name="product_name" value="{{ $product['product_now']['product']['molecular_name'] }}">
                     <input type="hidden" class="form-control" name="product_description" value="{{ $product['product_now']['product']['brand_name'].' Packsize:'.$product['product_now']['product']['pack_size'].' Strength:'.$product['product_now']['product']['strength'] }}">
                     <input type="hidden" class="form-control" name="organization_id" value="{{ $product['product_now']['organization_id'] }}">
                     <input type="hidden" class="form-control" name="organization_name" value="{{ $product['product_now']['organization']['name'] }}">
                     <input type="hidden" class="form-control" name="organization_email" value="{{ $product['product_now']['user']['email'] }}">
-                    <button type="submit" class="btn btn-success btn-block">Add to cart</button>
+                    <button type="submit" class="btn btn-sm btn-success btn-block">Add to cart</button>
                   </form>
                 </div>
               </div>
               <div class="card-body">
                 <h4 class="card-title product-title">
-                  <a href="#" title="View Product" class="molecular_name">{{ strtoupper($product['product_now']['product']['molecular_name']) }}</a>
+                  <a href="#" title="View Product" class="molecular_name">{{ strtoupper($product['product_now']['product']['brand_name']) }}</a>
                 </h4>
                 <hr />
                 <p class="card-text product-description">
-                  <strong class="brand_name">{{ strtoupper($product['product_now']['product']['brand_name']) }}</strong> <br />
+                  <strong class="brand_name">{{ strtoupper($product['product_now']['product']['molecular_name']) }}</strong> <br />
                   <strong>Packsize:</strong> {{ $product['product_now']['product']['pack_size'] }} <br />
-                  <strong>Discount:</strong> {{ $product['offer']['discount']. '%'}} <br />
-                  <strong>MinimumOrderQTY:</strong> {{ $product['minimum_order_quantity'] }} <br />
+                  <strong>Discount:</strong> {{ $product['discount']. '%'}} <br />
+                  <strong>MinimumOrderQTY:</strong> {{ $product['min_order_quantity'] }} <br />
                   <strong>Vendor:</strong> {{ $product['product_now']['organization']['name'] }}
                 </p>
               </div>
             </div>
-          </div>
-          @endif
-          @endforeach
-          <!-- no results control -->
-          <div data-jplist-control="no-results" data-group="products" data-name="no-results">No Results Found</div>
         </div>
-        <!-- pagination control -->
-        <div class="row justify-content-center">
-          <nav class="mt-3" data-jplist-control="pagination" data-group="products" data-items-per-page="{{ $products_per_page }}" data-current-page="0" data-disabled-class="disabled" data-selected-class="active" data-name="pagination1">
+        @endif
+        @endforeach
+        <!-- no results control -->
+        <div data-jplist-control="no-results" data-group="products" data-name="no-results">No Results Found</div>
+      </div>
+      <!-- pagination control -->
+      <div class="row justify-content-center">
+        <nav class="mt-3" data-jplist-control="pagination" data-group="products" data-items-per-page="{{ $products_per_page }}" data-current-page="0" data-disabled-class="disabled" data-selected-class="active" data-name="pagination1">
 
-            <!-- first and previous buttons -->
-            <ul class="pagination d-inline-flex">
-              <li class="page-item" data-type="first"><a class="page-link" href="#">First</a></li>
-              <li class="page-item" data-type="prev"><a class="page-link" href="#">Previous</a></li>
-            </ul>
+          <!-- first and previous buttons -->
+          <ul class="pagination d-inline-flex">
+            <li class="page-item" data-type="first"><a class="page-link" href="#">First</a></li>
+            <li class="page-item" data-type="prev"><a class="page-link" href="#">Previous</a></li>
+          </ul>
 
-            <!-- pages buttons -->
-            <ul class="pagination d-inline-flex" data-type="pages">
-              <li class="page-item" data-type="page"><a class="page-link" href="#">{pageNumber}</a></li>
-            </ul>
+          <!-- pages buttons -->
+          <ul class="pagination d-inline-flex" data-type="pages">
+            <li class="page-item" data-type="page"><a class="page-link" href="#">{pageNumber}</a></li>
+          </ul>
 
-            <!-- next and last buttons -->
-            <ul class="pagination d-inline-flex">
-              <li class="page-item" data-type="next"><a class="page-link" href="#">Next</a></li>
-              <li class="page-item" data-type="last"><a class="page-link" href="#">Last</a></li>
-            </ul>
+          <!-- next and last buttons -->
+          <ul class="pagination d-inline-flex">
+            <li class="page-item" data-type="next"><a class="page-link" href="#">Next</a></li>
+            <li class="page-item" data-type="last"><a class="page-link" href="#">Last</a></li>
+          </ul>
 
-            <!-- information labels -->
-            <span data-type="info" class="badge badge-warning ml-3 p-2">
-              Page {pageNumber} of {pagesNumber}
-            </span>
+          <!-- information labels -->
+          <span data-type="info" class="badge badge-warning ml-3 p-2">
+            Page {pageNumber} of {pagesNumber}
+          </span>
 
-          </nav>
-        </div>
+        </nav>
       </div>
     </div>
   </div>
+</div>
 </div>

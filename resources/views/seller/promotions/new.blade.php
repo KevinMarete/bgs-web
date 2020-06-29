@@ -34,7 +34,7 @@
                 <div class="form-group row">
                     <label class="col-lg-3 col-form-label form-control-label">DisplayImage</label>
                     <div class="col-lg-6">
-                        <input type="file" name="upload" accept="image/x-png,image/jpeg" required />
+                        <input type="file" name="upload" accept="{{ env('UPLOAD_IMAGE_ACCEPT_FORM') }}" required />
                     </div>
                 </div>
                 <div class="form-group row">

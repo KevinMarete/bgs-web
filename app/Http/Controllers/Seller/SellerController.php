@@ -138,7 +138,7 @@ class SellerController extends MyController
     }
 
     $file_details = $this->getFileDetails($upload_file);
-    if (!$this->isValidExtension($file_details['extension'], ['csv'])) {
+    if (!$this->isValidExtension($file_details['extension'], explode(',', env('UPLOAD_FILE_ACCEPT_EXTENSION')))) {
       $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid File Extension');
       $request->session()->flash($flash_id, $flash_msg);
       return redirect($redirect_url);
@@ -635,7 +635,7 @@ class SellerController extends MyController
     }
 
     $image_details = $this->getFileDetails($upload_image);
-    if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
+    if (!$this->isValidExtension($image_details['extension'], explode(',', env('UPLOAD_IMAGE_ACCEPT_EXTENSION')))) {
       $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
       $request->session()->flash($flash_id, $flash_msg);
       return redirect($redirect_url);
@@ -737,7 +737,7 @@ class SellerController extends MyController
             $organization_name = session()->get('organization.name');
             $image_details = $this->getFileDetails($upload_image);
 
-            if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
+            if (!$this->isValidExtension($image_details['extension'], explode(',', env('UPLOAD_IMAGE_ACCEPT_EXTENSION')))) {
               $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
               $request->session()->flash($flash_id, $flash_msg);
               return redirect($redirect_url);
@@ -842,7 +842,7 @@ class SellerController extends MyController
     }
 
     $image_details = $this->getFileDetails($upload_image);
-    if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
+    if (!$this->isValidExtension($image_details['extension'], explode(',', env('UPLOAD_IMAGE_ACCEPT_EXTENSION')))) {
       $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
       $request->session()->flash($flash_id, $flash_msg);
       return redirect($redirect_url);
@@ -952,7 +952,7 @@ class SellerController extends MyController
           $organization_name = session()->get('organization.name');
           $image_details = $this->getFileDetails($upload_image);
 
-          if (!$this->isValidExtension($image_details['extension'], ['jpg', 'jpeg', 'png'])) {
+          if (!$this->isValidExtension($image_details['extension'], explode(',', env('UPLOAD_IMAGE_ACCEPT_EXTENSION')))) {
             $flash_msg = $this->getAlertMessage('danger', '<strong>Error!</strong> Invalid Image Extension');
             $request->session()->flash($flash_id, $flash_msg);
             return redirect($redirect_url);

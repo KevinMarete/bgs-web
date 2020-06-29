@@ -50,7 +50,7 @@
             <img src="{{ isset($edit['display_url']) ? '/'.$edit['display_url'] : '' }}" alt="Image not loaded" width="100" height="100" class="img-fluid img-thumbnail">
           </div>
           <div class="col-lg-3">
-            <input type="file" name="upload" accept="image/x-png,image/jpeg" />
+            <input type="file" name="upload" accept="{{ env('UPLOAD_IMAGE_ACCEPT_FORM') }}" />
           </div>
         </div>
         <div class="form-group row">

@@ -32,7 +32,7 @@
                   </div>
                   <div class="form-group">
                     <label for="upload">Upload</label>
-                    <input type="file" class="form-control" id="upload" name="upload" accept=".csv" required>
+                    <input type="file" class="form-control" id="upload" name="upload" accept="{{ env('UPLOAD_FILE_ACCEPT_FORM') }}" required>
                   </div>
                   <div class="mx-auto">
                     <button type="submit" class="btn btn-primary text-right">Import File</button></div>

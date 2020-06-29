@@ -279,4 +279,7 @@
         $("#total_offer_cost_display").text(offerTotal.toLocaleString());
         $("#total_offer_cost").val(offerTotal);
     });
+
+    //Add Promotion Carousel
+    $(".carousel").carousel();
 })(jQuery);

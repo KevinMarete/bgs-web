@@ -663,6 +663,30 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
+    public function displayRFQView()
+    {
+        $resource = 'rfq';
+        $resource_name = ucwords(str_replace('-', ' ', $resource));
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $organization_id = session()->get('organization_id');
+        $resource_url = $this->getOrderUrl($role_name, $organization_id);
+        $view_data = [
+            'role_name' => $role_name,
+            'resource_name' => $resource_name,
+            'table_headers' => $this->getOrderHeaders($role_name),
+            'table_data' => $this->getResourceData($token, $resource_url)
+        ];
+        $data = [
+            'page_title' => $resource_name,
+            'content_view' => View::make('buyer.rfq', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
+    }
+
     public function displayActionOrder(Request $request)
     {
         $token = session()->get('token');

@@ -10,7 +10,7 @@
 </div>
 <div class="container-fluid mt-n10">
     @if (Session::has('bgs_msg'))
-        {!! session('bgs_msg') !!}
+    {!! session('bgs_msg') !!}
     @endif
     <div class="card mb-4">
         <div class="card-header"> </div>
@@ -28,15 +28,15 @@
                     </thead>
                     <tbody>
                         @foreach ($cart_items as $cart_item)
-                            <tr>
-                                <form role="form" action="/update-cart/{{ $cart_item['product_id'] }}" method="POST">
+                        <tr>
+                            <form role="form" action="/update-cart/{{ $cart_item['product_id'] }}" method="POST">
                                 @csrf
                                 <td data-th="Product">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <h4 class="nomargin">{{ $cart_item['product_name'] }}</h4>
                                             <p>
-                                                {{ $cart_item['product_description'] }} <br/>
+                                                {{ $cart_item['product_description'] }} <br />
                                                 {{ 'Organization: '.$cart_item['organization_name'] }}</p>
                                         </div>
                                     </div>
@@ -47,22 +47,27 @@
                                 </td>
                                 <td data-th="Subtotal" class="text-center">KES {{ number_format($cart_item['sub_total']) }}</td>
                                 <td class="actions" data-th="">
-                                    <input type="hidden" name="price" value="{{ $cart_item['price'] }}"/>
-                                    <input type="hidden" value="{{ $total += $cart_item['sub_total'] }}"/>
-                                    <button type="submit" class="btn btn-info btn-sm"><i data-feather="edit"></i></button>								
-                                    <a href="remove-cart/{{ $cart_item['product_id'] }}" class="btn btn-danger btn-sm delete"><i data-feather="trash"></i></button>								
+                                    <input type="hidden" name="price" value="{{ $cart_item['price'] }}" />
+                                    <input type="hidden" value="{{ $total += $cart_item['sub_total'] }}" />
+                                    <button type="submit" class="btn btn-info btn-sm"><i data-feather="edit"></i></button>
+                                    <a href="remove-cart/{{ $cart_item['product_id'] }}" class="btn btn-danger btn-sm delete"><i data-feather="trash"></i></button>
                                 </td>
-                                </form>
-                            </tr>
+                            </form>
+                        </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td><a href="/{{ $back_to_link }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+                            <td><a href="/{{ $back_to_link }}" class="btn btn-sm btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
                             <td colspan="2" class="hidden-xs"></td>
                             <td class="hidden-xs text-center"><strong> KES {{ number_format($total) }} </strong></td>
                             @if (sizeof($cart_items) > 0)
-                                <td><a href="/checkout" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="CartOptions">
+                                    <a href="/submit-rfq" class="btn btn-sm btn-info"><i class="fa fa-angle-up"></i> SubmitRFQ</a>
+                                    <a href="/checkout" class="btn btn-sm btn-success">Checkout <i class="fa fa-angle-right"></i></a>
+                                </div>
+                            </td>
                             @endif
                         </tr>
                     </tfoot>

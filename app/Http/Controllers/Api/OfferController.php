@@ -15,7 +15,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::with('product_now', 'product_now.product', 'organization', 'product_now.organization', 'product_now.user')->get();
+        $offers = Offer::with('product_now', 'product_now.product', 'product_now.product.product_category', 'organization', 'product_now.organization', 'product_now.user')->get();
         return response()->json($offers);
     }
 
@@ -48,7 +48,7 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        $offer = Offer::with('product_now', 'product_now.product', 'organization', 'product_now.organization', 'product_now.user')->find($id);
+        $offer = Offer::with('product_now', 'product_now.product', 'product_now.product.product_category', 'organization', 'product_now.organization', 'product_now.user')->find($id);
         if (is_null($offer)) {
             return response()->json(['error' => 'not_found']);
         }

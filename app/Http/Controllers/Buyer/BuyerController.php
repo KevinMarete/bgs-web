@@ -180,6 +180,8 @@ class BuyerController extends MyController
         $view_data = [
             'products_per_page' => env('PRODUCTS_PER_PAGE'),
             'products' => $products,
+            'productcategories' => $this->getResourceData($token, 'product-categories'),
+            'organizations' => $this->getResourceData($token, 'sellers'),
             'is_sort' => $is_sort,
         ];
         $data = [
@@ -222,6 +224,8 @@ class BuyerController extends MyController
         $view_data = [
             'products_per_page' => env('PRODUCTS_PER_PAGE'),
             'products' => $products,
+            'productcategories' => $this->getResourceData($token, 'product-categories'),
+            'organizations' => $this->getResourceData($token, 'sellers'),
             'is_sort' => $is_sort,
         ];
         $data = [

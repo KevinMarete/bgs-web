@@ -129,4 +129,5 @@ Route::middleware('usersession')->group(function () {
     Route::get('/faqs', 'Buyer\BuyerController@displayFaqsView');
     Route::get('/contact-us', 'Buyer\BuyerController@displayContactUsView');
     Route::get('/rfq', 'Buyer\BuyerController@displayRFQView');
+    Route::get('/submit-rfq', 'Buyer\BuyerController@submitRFQ');
 });

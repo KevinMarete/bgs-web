@@ -330,5 +330,42 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::post('/paymentpayout', 'Api\PaymentPayoutController@store');
     Route::put('/paymentpayout/{id}', 'Api\PaymentPayoutController@update');
     Route::delete('/paymentpayout/{id}', 'Api\PaymentPayoutController@destroy');
+
+    /*Rfq endpoints*/
+    Route::get('/rfqs', 'Api\RfqController@index');
+    Route::get('/rfq/{id}', 'Api\RfqController@show');
+    Route::post('/rfq', 'Api\RfqController@store');
+    Route::put('/rfq/{id}', 'Api\RfqController@update');
+    Route::delete('/rfq/{id}', 'Api\RfqController@destroy');
+    Route::get('/rfq/{id}/rfqitems', 'Api\RfqController@getRfqItems');
+    Route::get('/rfq/{id}/rfqlogs', 'Api\RfqController@getRfqLogs');
+
+    /*RfqItems endpoints*/
+    Route::get('/rfqitems', 'Api\RfqItemController@index');
+    Route::get('/rfqitem/{id}', 'Api\RfqItemController@show');
+    Route::post('/rfqitem', 'Api\RfqItemController@store');
+    Route::put('/rfqitem/{id}', 'Api\RfqItemController@update');
+    Route::delete('/rfqitem/{id}', 'Api\RfqItemController@destroy');
+
+    /*RfqLogs endpoints*/
+    Route::get('/rfqlogs', 'Api\RfqLogController@index');
+    Route::get('/rfqlog/{id}', 'Api\RfqLogController@show');
+    Route::post('/rfqlog', 'Api\RfqLogController@store');
+    Route::put('/rfqlog/{id}', 'Api\RfqLogController@update');
+    Route::delete('/rfqlog/{id}', 'Api\RfqLogController@destroy');
+
+    /*RejectReason endpoints*/
+    Route::get('/rejectreasons', 'Api\RejectReasonController@index');
+    Route::get('/rejectreason/{id}', 'Api\RejectReasonController@show');
+    Route::post('/rejectreason', 'Api\RejectReasonController@store');
+    Route::put('/rejectreason/{id}', 'Api\RejectReasonController@update');
+    Route::delete('/rejectreason/{id}', 'Api\RejectReasonController@destroy');
+
+    /*RfqReject endpoints*/
+    Route::get('/rfqrejects', 'Api\RfqRejectController@index');
+    Route::get('/rfqreject/{id}', 'Api\RfqRejectController@show');
+    Route::post('/rfqreject', 'Api\RfqRejectController@store');
+    Route::put('/rfqreject/{id}', 'Api\RfqRejectController@update');
+    Route::delete('/rfqreject/{id}', 'Api\RfqRejectController@destroy');
   });
 });

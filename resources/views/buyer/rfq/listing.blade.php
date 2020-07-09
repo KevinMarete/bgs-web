@@ -14,7 +14,8 @@
     @endif
     <div class="card mb-4">
         <div class="card-header">
-            {{ $resource_name }} Listing
+            RFQs Listing
+            <a href="/rfq/new" class="btn btn-primary ml-auto"><i data-feather="plus"></i> New RFQ</a>
         </div>
         <div class="card-body">
             <div class="sb-datatable table-responsive">
@@ -39,16 +40,15 @@
                         @foreach ($table_data as $row)
                         <tr>
                             <td>{{ $row['id'] }}</td>
-                            @if($role_name !== 'buyer')
-                            <td>{{ $row['organization']['name'] }}</td>
-                            @endif
                             <td>{{ $row['status'] }}</td>
                             <td>{{ $row['created_at'] }}</td>
-                            <td>KES {{ number_format($row['product_total']) }}</td>
-                            <td>KES {{ number_format($row['shipping_total']) }}</td>
-                            <td>KES {{ number_format($row['product_total'] + $row['shipping_total']) }}</td>
+                            @if($role_name !== 'buyer')
+                            <td>{{ $row['organization']['name'] }}</td>
+                            @else
+                            <td>{{ $row['rfq_items'][0]['organization']['name'] }}</td>
+                            @endif
                             <td>
-                                <a href="/view-order/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                <a href="/rfq/view/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
                                     <i data-feather="more-vertical"></i>
                                 </a>
                             </td>

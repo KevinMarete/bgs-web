@@ -667,179 +667,56 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function displayRFQView()
+    public function displayRFQTableView()
     {
         $resource = 'rfq';
-        $resource_name = ucwords(str_replace('-', ' ', $resource));
+
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
         $role_name = strtolower(session()->get('organization.organization_type.role.name'));
-        $organization_id = session()->get('organization_id');
-        $resource_url = $this->getOrderUrl($role_name, $organization_id);
+
         $view_data = [
             'role_name' => $role_name,
-            'resource_name' => $resource_name,
-            'table_headers' => $this->getOrderHeaders($role_name),
-            'table_data' => $this->getResourceData($token, $resource_url)
+            'resource_name' => $resource,
+            'table_headers' => ['status', 'created_at', 'organization'],
+            'table_data' => $this->getResourceData($token, 'rfqs')
         ];
         $data = [
-            'page_title' => $resource_name,
-            'content_view' => View::make('buyer.rfq', $view_data),
+            'page_title' => $resource,
+            'content_view' => View::make('buyer.rfq.listing', $view_data),
             'menus' => $this->getRoleMenus($token, $role_id),
         ];
 
         return view('template.main', $data);
     }
 
-    public function submitRFQ(Request $request)
+    public function displayNewRFQView()
     {
-        $cart_items = session()->get('cart');
-        $orders = $this->splitOrder($cart_items);
+        $resource = 'rfq';
 
-        echo '<pre>';
-        print_r($orders);
-        die();
         $token = session()->get('token');
-        $transaction_type = $request->type;
-        $organization_id = session()->get('organization_id');
-        $user_id = session()->get('id');
-        $user_points = 0;
-        $points_per_order = env('POINTS_PER_ORDER');
+        $role_id = session()->get('organization.organization_type.role_id');
 
-        //Get user credits
-        $credit_response = $this->getResourceData($token, 'user/' . $user_id . '/credit');
-        $credits = (empty($credit_response) ? 0 : $credit_response['amount']);
-        $order_size = sizeof($orders);
-        $cart_size = sizeof($cart_items);
-        $credits_per_order = round(($credits / $order_size), 2);
-        $credits_per_item = round(($credits / $cart_size), 2);
-        $credits_balance = $credits;
+        $view_data = [
+            'productnows' =>  $this->getResourceData($token, 'productnows'),
+            'organizations' =>  $this->getResourceData($token, 'sellers'),
+            'rfq_cost' => env('RFQ_COST'),
+            'rfq_discount' => env('RFQ_DISCOUNT_COUNT'),
+        ];
+        $data = [
+            'page_title' => ucwords($resource),
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.rfq.new', $view_data)
+        ];
 
-        foreach ($orders as $order) {
-            $orderitems = [];
-            $supplier_emails = [];
-            $credits_balance = round(($credits_balance - $credits_per_order), 2);
-
-            //Add Order 
-            $order_data = [
-                'status' => $order['status'],
-                'product_total' => round(($order['product_total'] - $credits_per_order), 2),
-                'shipping_total' => $order['shipping_total'],
-                'organization_id' => $order['organization_id']
-            ];
-            $order_response = $this->manageResourceData($token, "POST", "order", $order_data);
-            $order_id = $order_response['id'];
-
-            //Add OrderLog
-            $orderlog_data = $order['order_log'];
-            $orderlog_data['order_id'] = $order_id;
-            $this->manageResourceData($token, "POST", "orderlog", $orderlog_data);
-
-            //Add OrderItems
-            foreach ($order['order_items'] as $order_item) {
-                $orderitem_data = [
-                    'quantity' => $order_item['quantity'],
-                    'unit_price' => $order_item['unit_price'],
-                    'shipping_price' => $order_item['shipping_price'],
-                    'sub_total' => round(($order_item['sub_total'] - $credits_per_item), 2),
-                    'shipping_total' => $order_item['shipping_total'],
-                    'discount' => $order_item['discount'],
-                    'total_cost' => $order_item['total_cost'],
-                    'product_now_id' => $order_item['product_now_id'],
-                    'organization_id' => $order_item['organization_id'],
-                    'order_id' => $order_id
-                ];
-                $this->manageResourceData($token, "POST", "orderitem", $orderitem_data);
-
-                //Add mail orderitems
-                $orderitems[] = [
-                    'product_name' => $order_item['product_name'],
-                    'quantity' => $order_item['quantity'],
-                    'unit_price' => $order_item['unit_price'],
-                    'sub_total' => round(($order_item['sub_total'] - $credits_per_item), 2),
-                ];
-
-                //Add supplier emails
-                $supplier_emails[] = $order_item['organization_email'];
-            }
-
-            //Add payment
-            $payment_data = [
-                'method' => $transaction_type,
-                'amount' => round(($order['product_total'] + $order['shipping_total'] - $credits_per_order), 2),
-                'source' => $request->source,
-                'destination' => $request->destination
-            ];
-            $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
-            $payment_id = $payment_response['id'];
-
-            //Add payment order
-            $paymentorder_data = ['payment_id' => $payment_id, 'order_id' => $order_id];
-            $this->manageResourceData($token, "POST", "paymentorder", $paymentorder_data);
-
-            //Get user loyalty points
-            $loyalty_response = $this->manageResourceData($token, "GET", "user/" . $user_id . "/loyalty", []);
-            if ($loyalty_response) {
-                $user_points = $loyalty_response['points'];
-            }
-
-            //Add Loyalty Points
-            $loyalty_data = ['points' => ($user_points + $points_per_order), 'user_id' => $user_id];
-            $loyalty_response = $this->manageResourceData($token, "POST", "loyalty", $loyalty_data);
-            $loyalty_id = $loyalty_response['id'];
-
-            //Add Loyalty Points Log
-            $loyaltylog_data = [
-                'status' => 'earned_from_order',
-                'points' => $points_per_order,
-                'order_id' => $order_id,
-                'loyalty_id' => $loyalty_id
-            ];
-            $this->manageResourceData($token, "POST", "loyaltylog", $loyaltylog_data);
-
-            //Update Credits if credits_per_order > 0
-            if ($credits_per_order > 0) {
-                $credit_data = ['amount' => $credits_balance, 'user_id' => $user_id];
-                $credit_response = $this->manageResourceData($token, "POST", "credit", $credit_data);
-                $credit_id = $credit_response['id'];
-
-                //Add Credit Log
-                $creditlog_data = [
-                    'status' => 'used_on_order_#' . $order_id,
-                    'amount' => $credits_per_order,
-                    'credit_id' => $credit_id
-                ];
-                $this->manageResourceData($token, "POST", "creditlog", $creditlog_data);
-            }
-
-            //Send Order Email to Buyer Copy Sellers
-            $email_data = [
-                'id' => $order_id,
-                'product_total' => $order['product_total'],
-                'shipping_total' => $order['shipping_total'],
-                'orderitems' => $orderitems,
-                'user' => ['firstname' => session()->get('firstname'), 'email' => session()->get('email')],
-                'supplier_emails' => $supplier_emails,
-                'payment_type' => $transaction_type
-            ];
-            $email_dataobj = json_decode(json_encode($email_data));
-            $this->send_mail($email_dataobj);
-        }
-
-        //Clear cart
-        session()->put('cart', []);
-
-        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your Order(s) have been created successfully.
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-
-        $request->session()->flash('bgs_msg', $flash_msg);
-
-        return redirect('/orders');
+        return view('template.main', $data);
     }
+
+    public function saveRFQ(Request $request)
+    { }
+
+    public function manageRFQ(Request $request)
+    { }
 
     public function displayActionOrder(Request $request)
     {

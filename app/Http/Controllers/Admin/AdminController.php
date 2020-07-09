@@ -110,7 +110,8 @@ class AdminController extends MyController
 				'menus' => ['id', 'name'],
 				'menu-roles' => ['id', 'menu', 'role'],
 				'couriers' => ['id', 'name', 'phone', 'email', 'contact'],
-				'users' => ['id', 'firstname', 'lastname', 'email', 'phone', 'organization']
+				'users' => ['id', 'firstname', 'lastname', 'email', 'phone', 'organization'],
+				'rejectreasons' => ['id', 'name'],
 			];
 			$header_data = $headers[$resource];
 		}
@@ -184,7 +185,8 @@ class AdminController extends MyController
 			'menus' => [],
 			'menu-roles' => ['menus', 'roles'],
 			'couriers' => [],
-			'users' => ['admins']
+			'users' => ['admins'],
+			'rejectreasons' => [],
 		];
 
 		if ($token !== null && $resource !== null) {

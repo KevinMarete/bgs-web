@@ -63,10 +63,7 @@
                             <td class="hidden-xs text-center"><strong> KES {{ number_format($total) }} </strong></td>
                             @if (sizeof($cart_items) > 0)
                             <td>
-                                <div class="btn-group btn-group-sm" role="group" aria-label="CartOptions">
-                                    <a href="/submit-rfq" class="btn btn-sm btn-info"><i class="fa fa-angle-up"></i> SubmitRFQ</a>
-                                    <a href="/checkout" class="btn btn-sm btn-success">Checkout <i class="fa fa-angle-right"></i></a>
-                                </div>
+                                <a href="/checkout" class="btn btn-sm btn-success">Checkout <i class="fa fa-angle-right"></i></a>
                             </td>
                             @endif
                         </tr>

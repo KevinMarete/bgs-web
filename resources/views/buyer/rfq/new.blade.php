@@ -61,7 +61,7 @@
                       <select class="product col-md-12" size="0" name="product_id[]" required>
                         <option value="">Select Product</option>
                         @foreach ($productnows as $productnow)
-                        <option value="{{ $productnow['product']['id'] }}">{{ $productnow['product']['brand_name'].'-'.$productnow['product']['molecular_name'].' ['.$productnow['organization']['name'].']' }}</option>
+                        <option value="{{ $productnow['id'] }}">{{ mb_strtoupper($productnow['product']['brand_name']).'-'.mb_strtoupper($productnow['product']['molecular_name']).' ['.mb_strtoupper($productnow['organization']['name']).']' }}</option>
                         @endforeach
                       </select>
                     </td>

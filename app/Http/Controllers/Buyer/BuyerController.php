@@ -1254,7 +1254,114 @@ class BuyerController extends MyController
 
     public function actionRFQ(Request $request)
     {
-        echo '<pre>';
-        print_r($request->all());
+        $rfq_id = $request->id;
+        $status = $request->status;
+        $rfq_organization_id = $request->organization_id;
+
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+
+        //Trigger Actions based on status
+        $trigger_response = $this->triggerRfqStatusAction($token, $status, $request->all());
+        if ($trigger_response['status'] == 'success') {
+            //Update RFQ 
+            $rfq_data = [
+                'status' => $status,
+                'terms' => $request->terms,
+                'organization_id' => $rfq_organization_id
+            ];
+            $rfq_response = $this->manageResourceData($token, "PUT", "rfq/" . $rfq_id, $rfq_data);
+            $rfq_id = $rfq_response['id'];
+
+            //Add RfqLog
+            $rfqlog_data = [
+                'status' => $status,
+                'user_id' => $user_id,
+                'organization_id' => $organization_id,
+                'rfq_id' => $rfq_id
+            ];
+            $this->manageResourceData($token, "POST", "rfqlog", $rfqlog_data);
+
+            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your action was successful on RFQ#' . $rfq_id . '
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        } else {
+            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> ' . $trigger_response['message'] . '
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+        }
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/rfq/view/' . $rfq_id);
+    }
+
+    public function triggerRfqStatusAction($token, $status = null, $request_data)
+    {
+        $response = [];
+        $rfq_id = $request_data['id'];
+
+        if ($status !== null) {
+            if ($status == 'created, awaiting_quotation') {
+                //Trigger SupplierEmail
+                $response = $this->sendRfqEmail('supplier');
+            } else if ($status == 'quotation_sent, awaiting_confirmation') {
+                //Update RfqItems
+                foreach ($request_data['product_now_id'] as $index => $product_now_id) {
+                    $item_id = $request_data['item_id'][$index];
+                    $quantity = $request_data['quantity'][$index];
+                    $unit_price = $request_data['unit_price'][$index];
+                    $shipping_price = $request_data['shipping_price'][$index];
+
+                    $rfqitem_data = [
+                        'id' => $item_id,
+                        'quantity' => $quantity,
+                        'unit_price' => $unit_price,
+                        'shipping_price' => $shipping_price,
+                        'sub_total' => ($quantity * $unit_price),
+                        'shipping_total' => ($quantity * $shipping_price),
+                        'total_cost' => ($quantity * $unit_price) + ($quantity * $shipping_price),
+                        'out_of_stock' => $request_data['out_of_stock'][$index],
+                        'product_now_id' => $product_now_id,
+                        'organization_id' => $request_data['seller_id'][$index],
+                        'rfq_id' => $rfq_id,
+                    ];
+                    $this->manageResourceData($token, "PUT", "rfqitem/" . $item_id, $rfqitem_data);
+                }
+                //Trigger QuotationEmail
+                $response = $this->sendRfqEmail('quotation');
+            } else if ($status == 'rejected, quotation_rejected') {
+                //Add RfqReject
+                $rfqreject_data = [
+                    'rfq_id' => $rfq_id,
+                    'reject_reason_id' => $request_data['reject_reason_id'],
+                ];
+                $this->manageResourceData($token, "POST", "rfqreject", $rfqreject_data);
+                //Trigger RejectionEmail
+                $response = $this->sendRfqEmail('reject');
+            } else if ($status == 'proforma_invoice_sent, awaiting_delivery') {
+                //Trigger ProformaEmail
+                $response = $this->sendRfqEmail('proforma');
+            } else {
+                $response = ['status' => 'success', 'message' => 'Action was successful!'];
+            }
+
+            //Notify Buyer
+            /*if ($response['status'] = 'success') {
+                $this->sendNotification($rfq_id, $status);
+            }*/
+        }
+        return $response;
+    }
+
+    public function sendRfqEmail($type)
+    {
+        return ['status' => 'success'];
     }
 }

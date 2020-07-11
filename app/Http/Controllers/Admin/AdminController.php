@@ -220,19 +220,6 @@ class AdminController extends MyController
 		return $d && $d->format($format) === $date;
 	}
 
-	public function get_admin_emails()
-	{
-		$emails = [];
-		$request = $this->client->get('emails/admin');
-		$admins = json_decode($request->getBody(), true);
-
-		foreach ($admins as $admin) {
-			array_push($emails, $admin['email']);
-		}
-
-		return $emails;
-	}
-
 	public function get_business_metrics($period_date)
 	{
 		$metric = new \stdClass();

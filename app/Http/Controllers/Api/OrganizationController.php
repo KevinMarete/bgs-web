@@ -303,7 +303,7 @@ class OrganizationController extends Controller
    */
   public function getSellerOrganizations()
   {
-    $seller_orgs = Organization::with(['organization_type', 'organization_type.role'])->whereHas('organization_type.role', function ($query) {
+    $seller_orgs = Organization::with(['organization_type', 'organization_type.role', 'users'])->whereHas('organization_type.role', function ($query) {
       $query->where('name', 'seller');
     })->get();
     return response()->json($seller_orgs);

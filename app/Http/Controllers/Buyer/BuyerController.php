@@ -633,196 +633,6 @@ class BuyerController extends MyController
         return view('template.main', $data);
     }
 
-    public function displayFaqsView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
-        $order_id = $request->id;
-
-        $view_data = [];
-        $data = [
-            'page_title' => 'faqs',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.faqs', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayContactUsView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
-        $order_id = $request->id;
-
-        $view_data = [];
-        $data = [
-            'page_title' => 'contact-us',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.contact_us', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayRFQTableView()
-    {
-        $resource = 'rfq';
-
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
-
-        $view_data = [
-            'role_name' => $role_name,
-            'resource_name' => $resource,
-            'table_headers' => ['Id', 'status', 'created_at', 'organization'],
-            'table_data' => $this->getResourceData($token, 'rfqs')
-        ];
-        $data = [
-            'page_title' => $resource,
-            'content_view' => View::make('buyer.rfq.listing', $view_data),
-            'menus' => $this->getRoleMenus($token, $role_id),
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayNewRFQView()
-    {
-        $resource = 'rfq';
-
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-
-        //Filter unique product nows
-        $product_nows = [];
-        $all_product_nows = $this->getResourceData($token, 'productnows');
-        $product_nows = array_reduce($all_product_nows, function ($product_nows, $item) {
-            $product_nows[mb_strtoupper($item['product']['brand_name']) . '-' . mb_strtoupper($item['product']['molecular_name'])] = $item['id'];
-            return $product_nows;
-        });
-
-        $view_data = [
-            'productnows' =>  array_flip($product_nows),
-            'organizations' =>  $this->getResourceData($token, 'sellers'),
-            'rfq_cost' => env('RFQ_COST'),
-            'rfq_discount' => env('RFQ_DISCOUNT_COUNT'),
-        ];
-        $data = [
-            'page_title' => ucwords($resource),
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.rfq.new', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function saveRFQ(Request $request)
-    {
-        $sellers = $request->organizations;
-        $product_nows = $request->product_nows;
-        $quantity = $request->quantity;
-        $total_rfq_cost = $request->total_rfq_cost;
-        $status = 'created, awaiting_quotation';
-        $transaction_type = 'phone';
-
-        $token = session()->get('token');
-        $organization_id = session()->get('organization_id');
-        $user_id = session()->get('id');
-
-        //Add payment
-        $payment_data = [
-            'method' => $transaction_type,
-            'amount' => $total_rfq_cost,
-            'source' => ['phone' => session()->get('phone')],
-            'destination' => ['paybill_number' => env('PAYBILL_NUMBER'), 'account_number' => env('ACCOUNT_NUMBER')]
-        ];
-        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
-        $payment_id = $payment_response['id'];
-
-        foreach ($sellers as $seller) {
-            $seller = explode('@', $seller);
-            $seller_id = $seller[0];
-            $seller_emails = $seller[1];
-
-            //Add Rfq 
-            $rfq_data = [
-                'status' => $status,
-                'terms' => '',
-                'organization_id' => $organization_id
-            ];
-            $rfq_response = $this->manageResourceData($token, "POST", "rfq", $rfq_data);
-            $rfq_id = $rfq_response['id'];
-
-            //Add RfqLog
-            $rfqlog_data = [
-                'status' => $status,
-                'user_id' => $user_id,
-                'organization_id' => $organization_id,
-                'rfq_id' => $rfq_id
-            ];
-            $this->manageResourceData($token, "POST", "rfqlog", $rfqlog_data);
-
-            //Add RfqItems
-            foreach ($product_nows as $index => $product_now) {
-                $product_now = explode('@', $product_now);
-                $product_now_id = $product_now[0];
-                $product_now_name = $product_now[1];
-                $product_qty = $quantity[$index];
-                $rfqitem_data = [
-                    'quantity' => $product_qty,
-                    'unit_price' => 0,
-                    'shipping_price' => 0,
-                    'sub_total' => 0,
-                    'shipping_total' => 0,
-                    'total_cost' => 0,
-                    'out_of_stock' => false,
-                    'product_now_id' => $product_now_id,
-                    'organization_id' => $seller_id,
-                    'rfq_id' => $rfq_id
-                ];
-                $this->manageResourceData($token, "POST", "rfqitem", $rfqitem_data);
-
-                //Add payment rfq
-                $paymentrfq_data = ['payment_id' => $payment_id, 'rfq_id' => $rfq_id];
-                $this->manageResourceData($token, "POST", "paymentrfq", $paymentrfq_data);
-
-                //Add mail rfqitems
-                $rfqitems = [
-                    'product_name' => $product_now_name,
-                    'quantity' => $product_qty,
-                ];
-            }
-
-            //Send RFQ Email to Seller Copy Buyer and BGS Admins
-            /*$email_data = [
-                'id' => $rfq_id,
-                'rfqitems' => $rfqitems,
-                'buyer_email' => session()->get('email'),
-                'seller_emails' => explode(',', $seller_emails),
-            ];
-            $email_dataobj = json_decode(json_encode($email_data));
-            Mail::send(new RFQEmail($email_dataobj));*/
-        }
-
-        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your RFQ(s) have been created successfully.
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-
-        $request->session()->flash('bgs_msg', $flash_msg);
-
-        return redirect('/rfq');
-    }
-
-    public function manageRFQ(Request $request)
-    { }
-
     public function displayActionOrder(Request $request)
     {
         $token = session()->get('token');
@@ -1162,5 +972,289 @@ class BuyerController extends MyController
         Mail::send(new NotificationEmail($email_dataobj));
 
         return ['status' => 'success', 'message' => 'Notification sent'];
+    }
+
+    public function displayFaqsView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $order_id = $request->id;
+
+        $view_data = [];
+        $data = [
+            'page_title' => 'faqs',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.faqs', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayContactUsView(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $order_id = $request->id;
+
+        $view_data = [];
+        $data = [
+            'page_title' => 'contact-us',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.contact_us', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayRFQTableView()
+    {
+        $resource = 'rfq';
+
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+
+        $rfqs_url = [
+            'admin' => 'rfqs',
+            'buyer' => 'organization/' . $organization_id . '/rfqs',
+            'seller' => 'organization/' . $organization_id . '/seller-rfqs'
+        ];
+
+        $view_data = [
+            'role_name' => $role_name,
+            'resource_name' => $resource,
+            'table_headers' => ['Id', 'status', 'created_at', 'organization'],
+            'table_data' => $this->getResourceData($token, $rfqs_url[$role_name])
+        ];
+        $data = [
+            'page_title' => $resource,
+            'content_view' => View::make('buyer.rfq.listing', $view_data),
+            'menus' => $this->getRoleMenus($token, $role_id),
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function displayNewRFQView()
+    {
+        $resource = 'rfq';
+
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+
+        //Filter unique product nows
+        $product_nows = [];
+        $all_product_nows = $this->getResourceData($token, 'productnows');
+        $product_nows = array_reduce($all_product_nows, function ($product_nows, $item) {
+            $product_nows[mb_strtoupper($item['product']['brand_name']) . '-' . mb_strtoupper($item['product']['molecular_name'])] = $item['id'];
+            return $product_nows;
+        });
+
+        $view_data = [
+            'productnows' =>  array_flip($product_nows),
+            'organizations' =>  $this->getResourceData($token, 'sellers'),
+            'rfq_cost' => env('RFQ_COST'),
+            'rfq_discount' => env('RFQ_DISCOUNT_COUNT'),
+        ];
+        $data = [
+            'page_title' => ucwords($resource),
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.rfq.new', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function saveRFQ(Request $request)
+    {
+        $sellers = $request->organizations;
+        $product_nows = $request->product_nows;
+        $quantity = $request->quantity;
+        $total_rfq_cost = $request->total_rfq_cost;
+        $status = 'created, awaiting_quotation';
+        $transaction_type = 'phone';
+
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $user_id = session()->get('id');
+
+        //Add payment
+        $payment_data = [
+            'method' => $transaction_type,
+            'amount' => $total_rfq_cost,
+            'source' => ['phone' => session()->get('phone')],
+            'destination' => ['paybill_number' => env('PAYBILL_NUMBER'), 'account_number' => env('ACCOUNT_NUMBER')]
+        ];
+        $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
+        $payment_id = $payment_response['id'];
+
+        foreach ($sellers as $seller) {
+            $seller = explode('@', $seller);
+            $seller_id = $seller[0];
+            $seller_emails = $seller[1];
+
+            //Add Rfq 
+            $rfq_data = [
+                'status' => $status,
+                'terms' => '',
+                'organization_id' => $organization_id
+            ];
+            $rfq_response = $this->manageResourceData($token, "POST", "rfq", $rfq_data);
+            $rfq_id = $rfq_response['id'];
+
+            //Add RfqLog
+            $rfqlog_data = [
+                'status' => $status,
+                'user_id' => $user_id,
+                'organization_id' => $organization_id,
+                'rfq_id' => $rfq_id
+            ];
+            $this->manageResourceData($token, "POST", "rfqlog", $rfqlog_data);
+
+            //Add RfqItems
+            foreach ($product_nows as $index => $product_now) {
+                $product_now = explode('@', $product_now);
+                $product_now_id = $product_now[0];
+                $product_now_name = $product_now[1];
+                $product_qty = $quantity[$index];
+                $rfqitem_data = [
+                    'quantity' => $product_qty,
+                    'unit_price' => 0,
+                    'shipping_price' => 0,
+                    'sub_total' => 0,
+                    'shipping_total' => 0,
+                    'total_cost' => 0,
+                    'out_of_stock' => false,
+                    'product_now_id' => $product_now_id,
+                    'organization_id' => $seller_id,
+                    'rfq_id' => $rfq_id
+                ];
+                $this->manageResourceData($token, "POST", "rfqitem", $rfqitem_data);
+
+                //Add payment rfq
+                $paymentrfq_data = ['payment_id' => $payment_id, 'rfq_id' => $rfq_id];
+                $this->manageResourceData($token, "POST", "paymentrfq", $paymentrfq_data);
+
+                //Add mail rfqitems
+                $rfqitems = [
+                    'product_name' => $product_now_name,
+                    'quantity' => $product_qty,
+                ];
+            }
+
+            //Send RFQ Email to Seller Copy Buyer and BGS Admins
+            /*$email_data = [
+                'id' => $rfq_id,
+                'rfqitems' => $rfqitems,
+                'buyer_email' => session()->get('email'),
+                'seller_emails' => explode(',', $seller_emails),
+            ];
+            $email_dataobj = json_decode(json_encode($email_data));
+            Mail::send(new RFQEmail($email_dataobj));*/
+        }
+
+        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Your RFQ(s) have been created successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+
+        $request->session()->flash('bgs_msg', $flash_msg);
+
+        return redirect('/rfq');
+    }
+
+    public function viewRFQ(Request $request)
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $rfq_id = $request->id;
+
+        $view_data = [
+            'role_name' => $role_name,
+            'rfq' => $this->getResourceData($token, 'rfq/' . $rfq_id)
+        ];
+        $data = [
+            'page_title' => 'rfq',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.rfq.view', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function manageRFQ(Request $request)
+    {
+        $token = session()->get('token');
+        $organization_id = session()->get('organization_id');
+        $role_id = session()->get('organization.organization_type.role_id');
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $rfq_id = $request->id;
+        $rfq = $this->getResourceData($token, 'rfq/' . $rfq_id);
+
+        $view_data = [
+            'rejectreasons' => $this->manageResourceData($token, "GET", "rejectreasons", []),
+            'actions' => $this->getRfqActions($role_name, $rfq['status']),
+            'organization_id' => $organization_id,
+            'role_name' => $role_name,
+            'rfq' => $rfq
+        ];
+        $data = [
+            'page_title' => 'rfq',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.rfq.manage', $view_data)
+        ];
+
+        return view('template.main', $data);
+    }
+
+    public function getRfqActions($role = null, $status = null)
+    {
+        $status_actions = [];
+        if ($role !== null & $status !== null) {
+            $actions = [
+                'admin' => [
+                    'created, awaiting_quotation' => [],
+                    'quotation_sent, awaiting_confirmation' => [],
+                    'rejected, quotation_rejected' => [],
+                    'accepted, quotation_accepted' => [],
+                    'proforma_invoice_sent, awaiting_delivery' => []
+                ],
+                'seller' => [
+                    'created, awaiting_quotation' => [
+                        'Send Quotation' => 'quotation_sent, awaiting_confirmation'
+                    ],
+                    'quotation_sent, awaiting_confirmation' => [],
+                    'rejected, quotation_rejected' => [],
+                    'accepted, quotation_accepted' => [
+                        'Send Proforma Invoice' => 'proforma_invoice_sent, awaiting_delivery',
+                    ],
+                    'proforma_invoice_sent, awaiting_delivery' => []
+                ],
+                'buyer' => [
+                    'created, awaiting_quotation' => [],
+                    'quotation_sent, awaiting_confirmation' => [
+                        'Reject' => 'rejected, quotation_rejected',
+                        'Accept' => 'accepted, quotation_accepted'
+                    ],
+                    'rejected, quotation_rejected' => [],
+                    'accepted, quotation_accepted' => [],
+                    'proforma_invoice_sent, awaiting_delivery' => []
+                ]
+            ];
+            $status_actions = $actions[$role][$status];
+        }
+        return $status_actions;
+    }
+
+    public function actionRFQ(Request $request)
+    {
+        echo '<pre>';
+        print_r($request->all());
     }
 }

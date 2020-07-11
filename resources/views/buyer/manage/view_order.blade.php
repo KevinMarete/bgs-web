@@ -89,7 +89,7 @@
                                 <caption style="caption-side: top">OrderItems</caption>
                                 <thead>
                                     <tr>
-                                        <th>Organization</th>
+                                        <th>Supplier</th>
                                         <th>ProductName</th>
                                         <th>Quantity</th>
                                         <th>UnitPrice</th>

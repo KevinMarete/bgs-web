@@ -22,8 +22,24 @@
           </div>
           @endif
 
+          <!-- select category filter control -->
+          <select data-jplist-control="select-filter" data-group="products" data-name="categoryfilter" class="form-control input-md input-group input-group-md col-md-3 mr-2">
+            <option value="0" data-path="default">Filter by Category</option>
+            @foreach ($productcategories as $index => $productcategory)
+            <option value="{{ $index + 1 }}" data-path=".{{ str_replace(' ', '_', $productcategory['name']) }}">{{ strtoupper($productcategory['name']) }}</option>
+            @endforeach
+          </select>
+
+          <!-- select organization filter control -->
+          <select data-jplist-control="select-filter" data-group="products" data-name="organizationfilter" class="form-control input-md input-group input-group-md col-md-3">
+            <option value="0" data-path="default">Filter by Organization</option>
+            @foreach ($organizations as $index => $organization)
+            <option value="{{ $index + 1 }}" data-path=".{{ str_replace(' ', '_', $organization['name']) }}">{{ strtoupper($organization['name']) }}</option>
+            @endforeach
+          </select>
+
           <!-- text filter control -->
-          <div class="input-group input-group-md col-md-11">
+          <div class="input-group input-group-md col-md-4">
             <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" data-jplist-control="textbox-filter" data-group="products" data-name="product-filter" data-path=".molecular_name, .brand_name" type="text" value="" data-clear-btn-id="name-clear-btn" placeholder="Search..." />
 
             <div class="input-group-append">
@@ -83,7 +99,8 @@
                 <p class="card-text product-description">
                   <strong class="brand_name">{{ strtoupper($product['product']['molecular_name']) }}</strong> <br />
                   <strong>Packsize:</strong> {{ $product['product']['pack_size'] }} <br />
-                  <strong>Vendor:</strong> {{ $product['organization']['name'] }}
+                  <strong>Category:</strong> <span class="{{ str_replace(' ', '_', $product['product']['product_category']['name']) }}">{{ $product['product']['product_category']['name'] }}</span> <br />
+                  <strong>Vendor:</strong> <span class="{{ $product['organization']['name'] }}">{{ $product['organization']['name'] }}</span>
                 </p>
               </div>
             </div>

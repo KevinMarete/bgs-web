@@ -208,7 +208,7 @@
         return true;
     }
 
-    //Add multiselect dropdown
+    //Add offer multiselect dropdown
     $("#offer_productnows").multiselect({
         disableIfEmpty: true,
         disabledText: "No Products Selected...",
@@ -220,9 +220,13 @@
         numberDisplayed: 1,
         enableCaseInsensitiveFiltering: true,
         onChange: function () {
-            const offerTotal = calculateOfferTotal();
-            $("#total_offer_cost_display").text(offerTotal.toLocaleString());
-            $("#total_offer_cost").val(offerTotal);
+            calculateOfferTotal();
+        },
+        onSelectAll: function () {
+            calculateOfferTotal();
+        },
+        onDeselectAll: function () {
+            calculateOfferTotal();
         },
     });
 
@@ -235,9 +239,12 @@
 
         const periodDays = countDays(startDate, endDate);
 
-        $("#total_offer_cost").val(total_offer_cost);
+        const offerTotal = periodDays * productCount * offerCost;
 
-        return periodDays * productCount * offerCost;
+        $("#total_offer_cost_display").text(offerTotal.toLocaleString());
+        $("#total_offer_cost").val(offerTotal);
+
+        return offerTotal;
     }
 
     function countDays(startDate, endDate) {
@@ -275,11 +282,63 @@
         $("#valid_from").val(picker.startDate.format("YYYY-MM-DD HH:mm:ss"));
         $("#valid_until").val(picker.endDate.format("YYYY-MM-DD HH:mm:ss"));
 
-        const offerTotal = calculateOfferTotal();
-        $("#total_offer_cost_display").text(offerTotal.toLocaleString());
-        $("#total_offer_cost").val(offerTotal);
+        calculateOfferTotal();
     });
 
     //Add Promotion Carousel
     $(".carousel").carousel();
+
+    //Add RFQ multiselect dropdown
+    $("#rfq_organizations").multiselect({
+        disableIfEmpty: true,
+        disabledText: "No Sellers Selected...",
+        buttonWidth: "100%",
+        enableFiltering: true,
+        includeSelectAllOption: true,
+        maxHeight: 200,
+        inheritClass: true,
+        numberDisplayed: 1,
+        enableCaseInsensitiveFiltering: true,
+        onChange: function () {
+            calculateRFQTotal();
+        },
+        onSelectAll: function () {
+            calculateRFQTotal();
+        },
+        onDeselectAll: function () {
+            calculateRFQTotal();
+        },
+    });
+
+    function calculateRFQTotal() {
+        const sellerSelected = $("#rfq_organizations option:selected").length;
+        const rfqCost = $("#rfq_cost").val();
+        const rfqDiscount = $("#rfq_discount").val();
+
+        const sellerCount =
+            sellerSelected - rfqDiscount >= 0
+                ? sellerSelected - rfqDiscount
+                : 0;
+
+        const totalRfqCost = sellerCount * rfqCost;
+
+        $("#total_rfq_cost_display").text(totalRfqCost.toLocaleString());
+        $("#total_rfq_cost").val(totalRfqCost);
+
+        return totalRfqCost;
+    }
+
+    /*Auto-hide reject reason dropdown*/
+    $(".reject_reason_container").hide();
+    $("#reject_reason").prop("required", false);
+    $(".rfq_status").on("change", function () {
+        var selectedText = $(":selected", this).text().toLowerCase().trim();
+        if (selectedText === "reject") {
+            $(".reject_reason_container").show();
+            $("#reject_reason").prop("required", true);
+        } else {
+            $(".reject_reason_container").hide();
+            $("#reject_reason").prop("required", false);
+        }
+    });
 })(jQuery);

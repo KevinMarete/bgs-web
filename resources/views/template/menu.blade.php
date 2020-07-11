@@ -12,7 +12,7 @@
         </em>
         <i data-feather="phone"></i>
         <em class="text-warning">
-            <a href="tel:+254722226549">(+254)722226549</a>
+            <a href="tel:{{ str_replace(['(', ')'], ['', ''], env('CONTACT_PHONE')) }}">{{ env('CONTACT_PHONE') }} </a>
         </em>
     </p>
     <form class="form-inline mr-auto d-none d-lg-block">

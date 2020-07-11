@@ -18,7 +18,7 @@
         <p>
           <i class="fas fa-envelope mr-3"></i> {{ env('CONTACT_EMAIL') }}</p>
         <p>
-          <i class="fas fa-phone mr-3"></i> {{ env('CONTACT_PHONE')}}</p>
+          <i class="fas fa-phone mr-3"></i> {{ env('CONTACT_PHONE') }}</p>
       </div>
       <!-- Grid column -->
 

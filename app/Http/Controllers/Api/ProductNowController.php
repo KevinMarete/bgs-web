@@ -18,7 +18,7 @@ class ProductNowController extends Controller
         $order = 'ASC';
         $productnows = ProductNow::with(['product' => function ($q) use ($order) {
             $q->orderBy('molecular_name', $order);
-        }, 'organization', 'user'])->orderBy('unit_price', $order)->get();
+        }, 'product.product_category', 'organization', 'user'])->orderBy('unit_price', $order)->get();
 
         return response()->json($productnows);
     }
@@ -47,7 +47,7 @@ class ProductNowController extends Controller
      */
     public function show($id)
     {
-        $productnow = ProductNow::with('product', 'organization', 'user')->find($id);
+        $productnow = ProductNow::with('product', 'product.product_category', 'organization', 'user')->find($id);
         if (is_null($productnow)) {
             return response()->json(['error' => 'not_found']);
         }

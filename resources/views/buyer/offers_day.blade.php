@@ -22,8 +22,24 @@
           </div>
           @endif
 
+          <!-- select category filter control -->
+          <select data-jplist-control="select-filter" data-group="products" data-name="categoryfilter" class="form-control input-md input-group input-group-md col-md-3 mr-2">
+            <option value="0" data-path="default">Filter by Category</option>
+            @foreach ($productcategories as $index => $productcategory)
+            <option value="{{ $index + 1 }}" data-path=".{{ str_replace(' ', '_', $productcategory['name']) }}">{{ strtoupper($productcategory['name']) }}</option>
+            @endforeach
+          </select>
+
+          <!-- select organization filter control -->
+          <select data-jplist-control="select-filter" data-group="products" data-name="organizationfilter" class="form-control input-md input-group input-group-md col-md-3">
+            <option value="0" data-path="default">Filter by Organization</option>
+            @foreach ($organizations as $index => $organization)
+            <option value="{{ $index + 1 }}" data-path=".{{ str_replace(' ', '_', $organization['name']) }}">{{ strtoupper($organization['name']) }}</option>
+            @endforeach
+          </select>
+
           <!-- text filter control -->
-          <div class="input-group input-group-md col-md-11">
+          <div class="input-group input-group-md col-md-4">
             <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" data-jplist-control="textbox-filter" data-group="products" data-name="product-filter" data-path=".molecular_name, .brand_name" type="text" value="" data-clear-btn-id="name-clear-btn" placeholder="Search..." />
 
             <div class="input-group-append">
@@ -44,8 +60,7 @@
       <div class="col">
         <div class="row" data-jplist-group="products">
           @foreach ($products as $product)
-          @if (now() >= $product['valid_from'] && now() <= $product['valid_until']) 
-          <div class="col-12 col-md-4 col-lg-3 mb-4" data-jplist-item>
+          @if (now() >= $product['valid_from'] && now() <= $product['valid_until']) <div class="col-12 col-md-4 col-lg-3 mb-4" data-jplist-item>
             <div class="card">
               <div class="row">
                 <div class="col">
@@ -89,7 +104,8 @@
                   <strong>Packsize:</strong> {{ $product['product_now']['product']['pack_size'] }} <br />
                   <strong>Discount:</strong> {{ $product['discount']. '%'}} <br />
                   <strong>MinimumOrderQTY:</strong> {{ $product['min_order_quantity'] }} <br />
-                  <strong>Vendor:</strong> {{ $product['product_now']['organization']['name'] }}
+                  <strong>Category:</strong> <span class="{{ str_replace(' ', '_', $product['product_now']['product']['product_category']['name']) }}">{{ $product['product_now']['product']['product_category']['name'] }}</span> <br />
+                  <strong>Vendor:</strong> <span class="{{ $product['product_now']['organization']['name'] }}">{{ $product['product_now']['organization']['name'] }}</span>
                 </p>
               </div>
             </div>

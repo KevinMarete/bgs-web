@@ -132,5 +132,7 @@ Route::middleware('usersession')->group(function () {
     Route::get('/rfq', 'Buyer\BuyerController@displayRFQTableView');
     Route::get('/rfq/new', 'Buyer\BuyerController@displayNewRFQView');
     Route::post('/rfq/save', 'Buyer\BuyerController@saveRFQ');
-    Route::get('/rfq/view/{id}', 'Buyer\BuyerController@manageRFQ');
+    Route::get('/rfq/view/{id}', 'Buyer\BuyerController@viewRFQ');
+    Route::get('/rfq/manage/{id}', 'Buyer\BuyerController@manageRFQ');
+    Route::post('/rfq/action/{id}', 'Buyer\BuyerController@actionRFQ');
 });

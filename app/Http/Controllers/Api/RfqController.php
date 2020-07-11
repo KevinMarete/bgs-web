@@ -30,7 +30,7 @@ class RfqController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, Rfq::$rules);
-        $rfq = Rfq::firstOrCreate($request->all(), $request->all());
+        $rfq = Rfq::create($request->all(), $request->all());
         return response()->json($rfq);
     }
 

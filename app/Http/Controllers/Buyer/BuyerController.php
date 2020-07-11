@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderEmail;
 use App\Mail\CourierEmail;
 use App\Mail\NotificationEmail;
+use App\Mail\RFQEmail;
 
 class BuyerController extends MyController
 {
@@ -1146,14 +1147,7 @@ class BuyerController extends MyController
             }
 
             //Send RFQ Email to Seller Copy Buyer and BGS Admins
-            /*$email_data = [
-                'id' => $rfq_id,
-                'rfqitems' => $rfqitems,
-                'buyer_email' => session()->get('email'),
-                'seller_emails' => explode(',', $seller_emails),
-            ];
-            $email_dataobj = json_decode(json_encode($email_data));
-            Mail::send(new RFQEmail($email_dataobj));*/
+            $this->sendRFQEmail($token, $rfq_id);
         }
 
         $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -1262,41 +1256,34 @@ class BuyerController extends MyController
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
 
+        //Update RFQ 
+        $rfq_data = [
+            'status' => $status,
+            'terms' => $request->terms,
+            'organization_id' => $rfq_organization_id
+        ];
+        $rfq_response = $this->manageResourceData($token, "PUT", "rfq/" . $rfq_id, $rfq_data);
+        $rfq_id = $rfq_response['id'];
+
+        //Add RfqLog
+        $rfqlog_data = [
+            'status' => $status,
+            'user_id' => $user_id,
+            'organization_id' => $organization_id,
+            'rfq_id' => $rfq_id
+        ];
+        $this->manageResourceData($token, "POST", "rfqlog", $rfqlog_data);
+
         //Trigger Actions based on status
-        $trigger_response = $this->triggerRfqStatusAction($token, $status, $request->all());
-        if ($trigger_response['status'] == 'success') {
-            //Update RFQ 
-            $rfq_data = [
-                'status' => $status,
-                'terms' => $request->terms,
-                'organization_id' => $rfq_organization_id
-            ];
-            $rfq_response = $this->manageResourceData($token, "PUT", "rfq/" . $rfq_id, $rfq_data);
-            $rfq_id = $rfq_response['id'];
+        $this->triggerRfqStatusAction($token, $status, $request->all());
 
-            //Add RfqLog
-            $rfqlog_data = [
-                'status' => $status,
-                'user_id' => $user_id,
-                'organization_id' => $organization_id,
-                'rfq_id' => $rfq_id
-            ];
-            $this->manageResourceData($token, "POST", "rfqlog", $rfqlog_data);
-
-            $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong>Success!</strong> Your action was successful on RFQ#' . $rfq_id . '
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>';
-        } else {
-            $flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> ' . $trigger_response['message'] . '
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-        }
+
         $request->session()->flash('bgs_msg', $flash_msg);
 
         return redirect('/rfq/view/' . $rfq_id);
@@ -1305,63 +1292,133 @@ class BuyerController extends MyController
     public function triggerRfqStatusAction($token, $status = null, $request_data)
     {
         $response = [];
-        $rfq_id = $request_data['id'];
-
         if ($status !== null) {
-            if ($status == 'created, awaiting_quotation') {
-                //Trigger SupplierEmail
-                $response = $this->sendRfqEmail('supplier');
-            } else if ($status == 'quotation_sent, awaiting_confirmation') {
-                //Update RfqItems
-                foreach ($request_data['product_now_id'] as $index => $product_now_id) {
-                    $item_id = $request_data['item_id'][$index];
-                    $quantity = $request_data['quantity'][$index];
-                    $unit_price = $request_data['unit_price'][$index];
-                    $shipping_price = $request_data['shipping_price'][$index];
-
-                    $rfqitem_data = [
-                        'id' => $item_id,
-                        'quantity' => $quantity,
-                        'unit_price' => $unit_price,
-                        'shipping_price' => $shipping_price,
-                        'sub_total' => ($quantity * $unit_price),
-                        'shipping_total' => ($quantity * $shipping_price),
-                        'total_cost' => ($quantity * $unit_price) + ($quantity * $shipping_price),
-                        'out_of_stock' => $request_data['out_of_stock'][$index],
-                        'product_now_id' => $product_now_id,
-                        'organization_id' => $request_data['seller_id'][$index],
-                        'rfq_id' => $rfq_id,
-                    ];
-                    $this->manageResourceData($token, "PUT", "rfqitem/" . $item_id, $rfqitem_data);
-                }
-                //Trigger QuotationEmail
-                $response = $this->sendRfqEmail('quotation');
+            if ($status == 'quotation_sent, awaiting_confirmation') {
+                $this->updateRfqItems($token, $request_data);
             } else if ($status == 'rejected, quotation_rejected') {
-                //Add RfqReject
-                $rfqreject_data = [
-                    'rfq_id' => $rfq_id,
-                    'reject_reason_id' => $request_data['reject_reason_id'],
-                ];
-                $this->manageResourceData($token, "POST", "rfqreject", $rfqreject_data);
-                //Trigger RejectionEmail
-                $response = $this->sendRfqEmail('reject');
-            } else if ($status == 'proforma_invoice_sent, awaiting_delivery') {
-                //Trigger ProformaEmail
-                $response = $this->sendRfqEmail('proforma');
-            } else {
-                $response = ['status' => 'success', 'message' => 'Action was successful!'];
+                $this->addRejectRfq($token, $request_data);
             }
-
-            //Notify Buyer
-            /*if ($response['status'] = 'success') {
-                $this->sendNotification($rfq_id, $status);
-            }*/
+            //Send email notification
+            $response = $this->sendRFQEmail($token, $request_data['id']);
         }
         return $response;
     }
 
-    public function sendRfqEmail($type)
+    public function updateRfqItems($token, $request_data)
     {
-        return ['status' => 'success'];
+        foreach ($request_data['product_now_id'] as $index => $product_now_id) {
+            $item_id = $request_data['item_id'][$index];
+            $quantity = $request_data['quantity'][$index];
+            $unit_price = $request_data['unit_price'][$index];
+            $shipping_price = $request_data['shipping_price'][$index];
+
+            $rfqitem_data = [
+                'id' => $item_id,
+                'quantity' => $quantity,
+                'unit_price' => $unit_price,
+                'shipping_price' => $shipping_price,
+                'sub_total' => ($quantity * $unit_price),
+                'shipping_total' => ($quantity * $shipping_price),
+                'total_cost' => ($quantity * $unit_price) + ($quantity * $shipping_price),
+                'out_of_stock' => $request_data['out_of_stock'][$index],
+                'product_now_id' => $product_now_id,
+                'organization_id' => $request_data['seller_id'][$index],
+                'rfq_id' => $request_data['id'],
+            ];
+            $this->manageResourceData($token, "PUT", "rfqitem/" . $item_id, $rfqitem_data);
+        }
+    }
+
+    public function addRejectRfq($token, $request_data)
+    {
+        $rfqreject_data = [
+            'rfq_id' => $request_data['id'],
+            'reject_reason_id' => $request_data['reject_reason_id'],
+        ];
+        $this->manageResourceData($token, "POST", "rfqreject", $rfqreject_data);
+    }
+
+    public function sendRFQEmail($token, $rfq_id)
+    {
+        //Get Rfq 
+        $rfq = $this->manageResourceData($token, "GET", "rfq/" . $rfq_id, []);
+
+        $rfq_status = [
+            'created, awaiting_quotation' => [
+                'to' => 'seller',
+                'from' => 'buyer',
+                'message' => 'I would like to request a quotation for the products listed below.'
+            ],
+            'quotation_sent, awaiting_confirmation' => [
+                'to' => 'buyer',
+                'from' => 'seller',
+                'message' => 'Please find the quotation as requested. Also note that we have only listed products in stock.'
+            ],
+            'rejected, quotation_rejected' => [
+                'to' => 'seller',
+                'from' => 'buyer',
+                'message' => 'Unfortunately, I will not be accepting the RFQ terms due to ' . mb_strtolower($rfq['rfq_reject']['reject_reason']['name']) . '.'
+            ],
+            'accepted, quotation_accepted' => [
+                'to' => 'seller',
+                'from' => 'buyer',
+                'message' => 'I am glad to confirm that we accept the terms of Quotation.'
+            ],
+            'proforma_invoice_sent, awaiting_delivery' => [
+                'to' => 'buyer',
+                'from' => 'seller',
+                'message' => 'We are glad to receive your confirmation and we shall proceed to deliver the products.'
+            ]
+        ];
+
+        //Set email data
+        $email_data = $rfq;
+        $email_data['to_user_description'] = ucwords($rfq_status[$rfq['status']]['to']);
+        $email_data['from_user_description'] = ucwords($rfq_status[$rfq['status']]['from']);
+        $email_data['overall_sub_total'] = array_reduce($rfq['rfq_items'], function ($tmp_items, $item) {
+            if (!$item['out_of_stock']) {
+                $tmp_items += $item['sub_total'];
+            }
+            return $tmp_items;
+        });
+        $email_data['overall_shipping_total'] = array_reduce($rfq['rfq_items'], function ($tmp_items, $item) {
+            if (!$item['out_of_stock']) {
+                $tmp_items += $item['shipping_total'];
+            }
+            return $tmp_items;
+        });
+        $email_data['overall_total'] = array_reduce($rfq['rfq_items'], function ($tmp_items, $item) {
+            if (!$item['out_of_stock']) {
+                $tmp_items += $item['total_cost'];
+            }
+            return $tmp_items;
+        });
+        $email_data['message'] = $rfq_status[$rfq['status']]['message'];
+        $email_data['to'] = $this->getRFQEmails($rfq, $rfq_status[$rfq['status']]['to']);
+        $email_data['cc'] = $this->getRFQEmails($rfq, $rfq_status[$rfq['status']]['from']);
+        $email_data['bcc'] = $this->getRFQEmails($rfq, 'admin');
+
+        $email_dataobj = json_decode(json_encode($email_data));
+
+        Mail::send(new RFQEmail($email_dataobj));
+
+        return ['status' => 'success', 'message' => 'Action was successful!'];
+    }
+
+    public function getRFQEmails($rfq, $description)
+    {
+        $emails = [];
+        if ($description == 'buyer') {
+            $emails = array_map(function ($user) {
+                return $user['email'];
+            }, $rfq['organization']['users']);
+        } else if ($description == 'seller') {
+            $emails = array_map(function ($user) {
+                return $user['email'];
+            }, $rfq['rfq_items'][0]['organization']['users']);
+        } else {
+            $emails = $this->get_admin_emails();
+        }
+        return $emails;
     }
 }

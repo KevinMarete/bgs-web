@@ -367,5 +367,12 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::post('/rfqreject', 'Api\RfqRejectController@store');
     Route::put('/rfqreject/{id}', 'Api\RfqRejectController@update');
     Route::delete('/rfqreject/{id}', 'Api\RfqRejectController@destroy');
+
+    /*PaymentRfqs endpoints*/
+    Route::get('/paymentrfqs', 'Api\PaymentRfqController@index');
+    Route::get('/paymentrfq/{id}', 'Api\PaymentRfqController@show');
+    Route::post('/paymentrfq', 'Api\PaymentRfqController@store');
+    Route::put('/paymentrfq/{id}', 'Api\PaymentRfqController@update');
+    Route::delete('/paymentrfq/{id}', 'Api\PaymentRfqController@destroy');
   });
 });

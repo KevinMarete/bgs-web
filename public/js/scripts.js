@@ -327,4 +327,18 @@
 
         return totalRfqCost;
     }
+
+    /*Auto-hide reject reason dropdown*/
+    $(".reject_reason_container").hide();
+    $("#reject_reason").prop("required", false);
+    $(".rfq_status").on("change", function () {
+        var selectedText = $(":selected", this).text().toLowerCase().trim();
+        if (selectedText === "reject") {
+            $(".reject_reason_container").show();
+            $("#reject_reason").prop("required", true);
+        } else {
+            $(".reject_reason_container").hide();
+            $("#reject_reason").prop("required", false);
+        }
+    });
 })(jQuery);

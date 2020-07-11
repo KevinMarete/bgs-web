@@ -23,23 +23,25 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-5">
-            <table class="table table-bordered table-hover" width="100%" cellspacing="0">
-              <caption style="caption-side: top">RFQSummary</caption>
-              <tbody>
-                <tr>
-                  <td>Status</td>
-                  <td><strong>{{ $rfq['status'] }}</strong></td>
-                </tr>
-                <tr>
-                  <td>RFQDate</td>
-                  <td>{{ $rfq['created_at'] }}</td>
-                </tr>
-                <tr>
-                  <td>Organization</td>
-                  <td><strong>{{ ($role_name == 'seller' ) ? $rfq['organization']['name'] : $rfq['rfq_items'][0]['organization']['name'] }}</strong></td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="sb-datatable table-responsive">
+              <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                <caption style="caption-side: top">RFQSummary</caption>
+                <tbody>
+                  <tr>
+                    <td>Status</td>
+                    <td><strong>{{ $rfq['status'] }}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>RFQDate</td>
+                    <td>{{ $rfq['created_at'] }}</td>
+                  </tr>
+                  <tr>
+                    <td>Organization</td>
+                    <td><strong>{{ ($role_name == 'seller' ) ? $rfq['organization']['name'] : $rfq['rfq_items'][0]['organization']['name'] }}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div class="col-md-7">
             <div class="sb-datatable table-responsive">

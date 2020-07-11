@@ -15,7 +15,9 @@
     <div class="card mb-4">
         <div class="card-header">
             RFQs Listing
+            @if($role_name == 'buyer')
             <a href="/rfq/new" class="btn btn-primary ml-auto"><i data-feather="plus"></i> New RFQ</a>
+            @endif
         </div>
         <div class="card-body">
             <div class="sb-datatable table-responsive">

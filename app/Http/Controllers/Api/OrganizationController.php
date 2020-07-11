@@ -8,11 +8,11 @@ use App\OrganizationPaymentType;
 use App\Stock;
 use App\StockBalance;
 use App\ProductNow;
-use App\ProductDeal;
 use App\Order;
 use App\Product;
 use App\Subscription;
 use App\Promotion;
+use App\Rfq;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -356,5 +356,31 @@ class OrganizationController extends Controller
   {
     $subscription = Subscription::with('organization', 'package')->where('organization_id', $id)->first();
     return response()->json($subscription);
+  }
+
+  /**
+   * Display the specified Organization's rfqs.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function getOrganizationRfqs($id)
+  {
+    $rfqs = Rfq::with('organization', 'rfq_items', 'rfq_items.organization', 'rfq_logs')->where('organization_id', $id)->get();
+    return response()->json($rfqs);
+  }
+
+  /**
+   * Display the specified Organization's Seller Rfqs.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function getOrganizationSellerRfqs($id)
+  {
+    $seller_rfqs = Rfq::with(['organization', 'rfq_items', 'rfq_logs'])->whereHas('rfq_items', function ($query) use ($id) {
+      $query->where('organization_id', $id);
+    })->get();
+    return response()->json($seller_rfqs);
   }
 }

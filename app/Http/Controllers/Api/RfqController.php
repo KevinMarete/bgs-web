@@ -42,7 +42,7 @@ class RfqController extends Controller
      */
     public function show($id)
     {
-        $rfq = Rfq::with('organization', 'rfq_items', 'rfq_items.organization', 'rfq_items.product_now.product', 'rfq_logs', 'rfq_logs.user')->find($id);
+        $rfq = Rfq::with('organization', 'organization.users', 'rfq_items', 'rfq_items.organization', 'rfq_items.organization.users', 'rfq_items.product_now.product', 'rfq_logs', 'rfq_logs.user', 'rfq_reject', 'rfq_reject.reject_reason')->find($id);
         if (is_null($rfq)) {
             return response()->json(['error' => 'not_found']);
         }

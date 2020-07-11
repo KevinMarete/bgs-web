@@ -22,7 +22,7 @@
             <input type="hidden" id="total_rfq_cost" name="total_rfq_cost" value="" />
             <select class="form-control btn btn-outline-primary" size="0" name="organizations[]" id="rfq_organizations" multiple="multiple" required>
               @foreach ($organizations as $organization)
-              <option value="{{ $organization['id'] }}">{{ strtoupper($organization['name']) }}</option>
+              <option value="{{ $organization['id'].'@'.implode(',', array_map(function($user){ return $user['email']; }, $organization['users'])) }}">{{ strtoupper($organization['name']) }}</option>
               @endforeach
             </select>
           </div>
@@ -58,10 +58,10 @@
                 <tbody>
                   <tr class="tr_clone">
                     <td>
-                      <select class="product col-md-12" size="0" name="product_id[]" required>
+                      <select class="product col-md-12" size="0" name="product_nows[]" required>
                         <option value="">Select Product</option>
-                        @foreach ($productnows as $productnow)
-                        <option value="{{ $productnow['id'] }}">{{ mb_strtoupper($productnow['product']['brand_name']).'-'.mb_strtoupper($productnow['product']['molecular_name']).' ['.mb_strtoupper($productnow['organization']['name']).']' }}</option>
+                        @foreach ($productnows as $productnow_id => $productnow_name)
+                        <option value="{{ $productnow_id.'@'.$productnow_name }}">{{ $productnow_name }}</option>
                         @endforeach
                       </select>
                     </td>

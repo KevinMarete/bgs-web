@@ -85,6 +85,8 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::get('/organization/{id}/unpublished', 'Api\OrganizationController@getUnpublishedProductNows');
     Route::get('/organization/{id}/published', 'Api\OrganizationController@getPublishedProductNows');
     Route::get('/organization/{id}/subscription', 'Api\OrganizationController@getOrganizationSubscription');
+    Route::get('/organization/{id}/rfqs', 'Api\OrganizationController@getOrganizationRfqs');
+    Route::get('/organization/{id}/seller-rfqs', 'Api\OrganizationController@getOrganizationSellerRfqs');
 
     /*Package endpoints*/
     Route::get('/packages', 'Api\PackageController@index');

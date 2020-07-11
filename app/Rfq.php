@@ -33,6 +33,11 @@ class Rfq extends Model
         return $this->hasMany('App\RfqLog');
     }
 
+    public function rfq_reject()
+    {
+        return $this->hasOne('App\RfqReject');
+    }
+
     public function rfq_rejects()
     {
         return $this->hasMany('App\RfqReject');

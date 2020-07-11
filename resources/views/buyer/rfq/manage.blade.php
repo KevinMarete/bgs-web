@@ -46,10 +46,12 @@
                 <label for="terms" class="col-form-label">RFQ Terms</label>
                 <textarea name="terms" id="terms" style="min-width: 100%" required>{{ $rfq['terms'] }}</textarea>
               </div>
+              @else
+              <input type="hidden" name="terms" value="{{ $rfq['terms'] }}" />
               @endif
               <div class="form-group">
                 <label for="status" class="col-form-label">RFQ Status</label>
-                <select class="form-control" name="status" id="status" required>
+                <select class="form-control rfq_status" name="status" id="status" required>
                   <option value="">Select Action</option>
                   @foreach($actions as $label => $action_status)
                   <option value="{{ $action_status }}"> {{ ucwords($label) }}</option>
@@ -57,9 +59,9 @@
                 </select>
               </div>
               @if($role_name == 'buyer' && $rfq['status'] == 'quotation_sent, awaiting_confirmation' )
-              <div class="form-group">
+              <div class="form-group reject_reason_container">
                 <label for="reject_reason" class="col-form-label">Reject Reason</label>
-                <select class="form-control" name="reject_reason_id" id="reject_reason" required>
+                <select class="form-control" name="reject_reason_id" id="reject_reason">
                   <option value="">Select Reject Reason</option>
                   @foreach($rejectreasons as $rejectreason)
                   <option value="{{ $rejectreason['id'] }}"> {{ $rejectreason['name'] }}</option>
@@ -90,6 +92,7 @@
                       <th>OutofStock</th>
                       <th>UnitPrice</th>
                       <th>ShippingPrice</th>
+                      <th>TotalCost</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -99,6 +102,7 @@
                       <th>OutofStock</th>
                       <th>UnitPrice</th>
                       <th>ShippingPrice</th>
+                      <th>TotalCost</th>
                     </tr>
                   </tfoot>
                   <tbody>
@@ -108,6 +112,10 @@
                       <td>{{ number_format($rfq_item['quantity']) }}</td>
                       @if($role_name == 'seller' && $rfq['status'] == 'created, awaiting_quotation')
                       <td>
+                        <input type="hidden" name="item_id[]" value="{{ $rfq_item['id'] }}" />
+                        <input type="hidden" name="quantity[]" value="{{ $rfq_item['quantity'] }}" />
+                        <input type="hidden" name="product_now_id[]" value="{{ $rfq_item['product_now_id'] }}" />
+                        <input type="hidden" name="seller_id[]" value="{{ $rfq_item['organization_id'] }}" />
                         <select name="out_of_stock[]">
                           <option value="0" {{ ($rfq_item['out_of_stock'] == 0) ? 'selected' : '' }}>No</option>
                           <option value="1" {{ ($rfq_item['out_of_stock'] == 1) ? 'selected' : '' }}>Yes</option>
@@ -119,6 +127,7 @@
                       <td>KES {{ number_format($rfq_item['unit_price']) }}</td>
                       <td>KES {{ number_format($rfq_item['shipping_price']) }}</td>
                       @endif
+                      <td>KES {{ number_format($rfq_item['total_cost']) }}</td>
                     </tr>
                     @endforeach
                   </tbody>

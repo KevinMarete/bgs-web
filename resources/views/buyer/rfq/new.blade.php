@@ -55,10 +55,11 @@
                     <th>Actions</th>
                   </tr>
                 </tfoot>
-                <tbody>
+                <tbody id="contents">
                   <tr class="tr_clone">
                     <td>
-                      <select class="product col-md-12" size="0" name="product_nows[]" required>
+                      <input type="hidden" id="rfq_product_list" data-products="[]" />
+                      <select class="rfq_product col-md-12" size="0" name="product_nows[]" required>
                         <option value="">Select Product</option>
                         @foreach ($productnows as $productnow_id => $productnow_name)
                         <option value="{{ $productnow_id.'@'.$productnow_name }}">{{ $productnow_name }}</option>
@@ -69,7 +70,7 @@
                       <input type="text" class="quantity" value="" name="quantity[]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
                     </td>
                     <td>
-                      <a href="#" class="add"><i class="fa fa-plus"></i></a> |
+                      <a href="#" class="add_rfq_product"><i class="fa fa-plus"></i></a> |
                       <a href="#" class="remove"><i class="fa fa-minus"></i></a>
                     </td>
                   </tr>

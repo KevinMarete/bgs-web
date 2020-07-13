@@ -341,4 +341,56 @@
             $("#reject_reason").prop("required", false);
         }
     });
+
+    /*Add search to rfq product select*/
+    $(".rfq_product").select2();
+
+    /*Add new rfq product row*/
+    $(document).on("click", ".add_rfq_product", function () {
+        var $tr = $(this).closest(".tr_clone");
+        //Current row values
+        var product = $tr.find(".product").val();
+        var quantity = $tr.find(".quantity").val();
+        if (product !== "" && quantity !== "") {
+            $("#contents").find(".rfq_product").select2("destroy");
+            var $clone = $tr.clone();
+            $clone.find(":text").val("");
+            $tr.after($clone);
+            $("#contents").find(".rfq_product").select2();
+            //Scoll to contents
+            $("body,html").animate(
+                {
+                    scrollTop: $("#contents").offset().top,
+                },
+                800 //speed
+            );
+        } else {
+            alert("Please ensure all inputs are filled!");
+        }
+    });
+
+    /*Rfq product selecting (unselect) event*/
+    $(document).on("select2:selecting", ".rfq_product", function (e) {
+        var rfqProducts = $("#rfq_product_list").data("products");
+        var index = rfqProducts.indexOf($(this).val());
+        if (index > -1) {
+            rfqProducts.splice(index, 1);
+            $("#rfq_product_list").data("products", rfqProducts);
+        }
+    });
+
+    /*Rfq product select event*/
+    $(document).on("select2:select", ".rfq_product", function (e) {
+        var rfqProducts = $("#rfq_product_list").data("products");
+        var data = e.params.data;
+        if (!rfqProducts.includes(data.id)) {
+            if (data.id != "") {
+                rfqProducts.push(data.id);
+                $("#rfq_product_list").data("products", rfqProducts);
+            }
+        } else {
+            $(this).closest(".rfq_product").val(null).trigger("change");
+            alert("You have already selected this product!");
+        }
+    });
 })(jQuery);

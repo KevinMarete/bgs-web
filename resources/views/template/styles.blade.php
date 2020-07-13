@@ -5,6 +5,7 @@
 <link href="/libs/multidatespicker/jquery-ui.multidatespicker.css" rel="stylesheet" crossorigin="anonymous" />
 <link href="/libs/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" crossorigin="anonymous" />
 <link href="/libs/daterangepicker/css/daterangepicker.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="/libs/select2/css/select2.min.css" rel="stylesheet" />
 <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
 <script data-search-pseudo-elements defer src="/libs/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
 <script src="/libs/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous"></script>

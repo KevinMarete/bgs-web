@@ -74,7 +74,7 @@
                 <input type="hidden" name="id" value="{{ $rfq['id'] }}" />
                 <input type="hidden" name="organization_id" value="{{ $rfq['organization_id'] }}" />
                 <button type="submit" class="form-control btn btn-primary">
-                  <i class="fa fa-save"></i> &nbsp; Save Action
+                  <i class="fa fa-save"></i> &nbsp; Next
                 </button>
               </div>
               @else

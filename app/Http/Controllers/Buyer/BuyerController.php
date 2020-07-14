@@ -1278,7 +1278,7 @@ class BuyerController extends MyController
         $this->triggerRfqStatusAction($token, $status, $request->all());
 
         $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> Your action was successful on RFQ#' . $rfq_id . '
+                            <strong>Success!</strong> Your quote has been successfully sent to the seller
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -1347,12 +1347,12 @@ class BuyerController extends MyController
             'created, awaiting_quotation' => [
                 'to' => 'seller',
                 'from' => 'buyer',
-                'message' => 'I would like to request a quotation for the products listed below.'
+                'message' => 'I would like to request a quotation for the products listed below. <br/> <br/> You can view the requested RFQ <a href="http://www.bgsmeds.com/rfq/manage/' . $rfq_id . '" target="_blank">here</a>.'
             ],
             'quotation_sent, awaiting_confirmation' => [
                 'to' => 'buyer',
                 'from' => 'seller',
-                'message' => 'Please find the quotation as requested. Also note that we have only listed products in stock.'
+                'message' => 'Please find the quotation as requested. Also note that we have only listed products in stock. <br/> <br/> You can accept/reject the quotation <a href="http://www.bgsmeds.com/rfq/manage/' . $rfq_id . '" target="_blank">here</a>.'
             ],
             'rejected, quotation_rejected' => [
                 'to' => 'seller',

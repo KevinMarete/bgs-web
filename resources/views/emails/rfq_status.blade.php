@@ -8,7 +8,7 @@
       Dear {{ $rfq->to_user_description }},
       <br />
       <br />
-      {{ $rfq->message }}
+      {!!$rfq->message!!}
       <br />
       <br />
       The current status for the RFQ is <b>{{ $rfq->status }}</b> <br /><br />
@@ -16,7 +16,7 @@
     </div>
     <table style="width: 100%;font-size: smaller;border: 1px solid #c0c0c0;" cellspacing="0">
       <tbody>
-        <tr style="border-bottom: : 1px solid #c0c0c0;">
+        <tr style="border-bottom:1px solid #c0c0c0;">
           <td style="color: #092d50;"><strong>ProductName</strong></td>
           <td style="color: #092d50;"><strong>Quantity</strong></td>
           <td style="color: #092d50;"><strong>UnitPrice</strong></td>
@@ -99,7 +99,6 @@
     Please note the terms of the quotation are as follows:<br />
     <b>{{ ucfirst($rfq->terms) }}</b>
     @endif
-    <br />
     <br />
     Regards,
     <br />

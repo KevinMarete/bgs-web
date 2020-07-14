@@ -16,7 +16,7 @@
         <div class="card-header">
             RFQs Listing
             @if($role_name == 'buyer')
-            <a href="/rfq/new" class="btn btn-primary ml-auto"><i data-feather="plus"></i> New RFQ</a>
+            <a href="/rfq/new" class="btn btn-primary ml-auto"><i data-feather="plus"></i> Create new RFQ</a>
             @endif
         </div>
         <div class="card-body">

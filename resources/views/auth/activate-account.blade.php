@@ -61,6 +61,12 @@
     <script src="libs/jquery/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="libs/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="libs/jplist/1.2.0/jplist.min.js"></script>
+    <script src="/libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/libs/multidatespicker/jquery-ui.multidatespicker.js"></script>
+    <script src="/libs/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+    <script src="/libs/daterangepicker/js/moment.min.js"></script>
+    <script src="/libs/daterangepicker/js/daterangepicker.js"></script>
+    <script src="/libs/select2/js/select2.min.js"></script>
     <script src="js/scripts.js"></script>
 
     <!--

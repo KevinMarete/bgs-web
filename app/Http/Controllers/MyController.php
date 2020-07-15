@@ -131,4 +131,17 @@ class MyController extends Controller
 
     return $csv_data;
   }
+
+  public function get_admin_emails()
+  {
+    $emails = [];
+    $request = $this->client->get('emails/admin');
+    $admins = json_decode($request->getBody(), true);
+
+    foreach ($admins as $admin) {
+      array_push($emails, $admin['email']);
+    }
+
+    return $emails;
+  }
 }

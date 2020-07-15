@@ -108,6 +108,7 @@ Route::middleware('usersession')->group(function () {
     Route::get('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
     Route::post('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
     Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
+    Route::get('/rejectreasons', 'Admin\AdminController@displayTableView');
 
     /*Buyer Routes*/
     Route::get('/marketplace', 'Buyer\BuyerController@displayMarketplaceView');
@@ -128,4 +129,10 @@ Route::middleware('usersession')->group(function () {
     Route::post('/action-order/{id}', 'Buyer\BuyerController@actionOrder');
     Route::get('/faqs', 'Buyer\BuyerController@displayFaqsView');
     Route::get('/contact-us', 'Buyer\BuyerController@displayContactUsView');
+    Route::get('/rfq', 'Buyer\BuyerController@displayRFQTableView');
+    Route::get('/rfq/new', 'Buyer\BuyerController@displayNewRFQView');
+    Route::post('/rfq/save', 'Buyer\BuyerController@saveRFQ');
+    Route::get('/rfq/view/{id}', 'Buyer\BuyerController@viewRFQ');
+    Route::get('/rfq/manage/{id}', 'Buyer\BuyerController@manageRFQ');
+    Route::post('/rfq/action/{id}', 'Buyer\BuyerController@actionRFQ');
 });

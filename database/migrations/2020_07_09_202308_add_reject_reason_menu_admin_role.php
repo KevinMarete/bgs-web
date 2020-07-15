@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddMyPromotionsSellerMenuRole extends Migration
+class AddRejectReasonMenuAdminRole extends Migration
 {
     /**
      * Run the migrations.
@@ -11,8 +11,8 @@ class AddMyPromotionsSellerMenuRole extends Migration
      */
     public function up()
     {
-        $menu = DB::table('tbl_menu')->where('name', 'My Promotions')->first();
-        $role = DB::table('tbl_role')->where('name', 'seller')->first();
+        $menu = DB::table('tbl_menu')->where('name', 'RejectReason')->first();
+        $role = DB::table('tbl_role')->where('name', 'admin')->first();
 
         DB::table('tbl_menu_role')->insert(
             ['menu_id' => $menu->id, 'role_id' => $role->id, 'created_at' => now()]
@@ -26,8 +26,8 @@ class AddMyPromotionsSellerMenuRole extends Migration
      */
     public function down()
     {
-        $menu = DB::table('tbl_menu')->where('name', 'My Promotions')->first();
-        $role = DB::table('tbl_role')->where('name', 'seller')->first();
+        $menu = DB::table('tbl_menu')->where('name', 'RejectReason')->first();
+        $role = DB::table('tbl_role')->where('name', 'admin')->first();
 
         DB::table('tbl_menu_role')->where('menu_id', $menu->id)->where('role_id', $role->id)->delete();
     }

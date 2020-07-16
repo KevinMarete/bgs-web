@@ -98,7 +98,7 @@
 
   <!-- Copyright -->
   <div class="footer-copyright text-center py-3 bg-primary">
-    <div>Copyright &copy; <a href="http://www.bgsmeds.com" target="_blank" class="text-white">BGS</a> {{date('Y')}}</div>
+    <div>Copyright &copy; <a href="http://www.pharmahub.africa" target="_blank" class="text-white">Pharmahub</a> {{date('Y')}}</div>
   </div>
   <!-- Copyright -->
 

@@ -50,7 +50,9 @@
   <div class="container">
     <div class="row align-items-center justify-content-center">
       <div class="col-md-9 col-lg-6 order-1 order-lg-0" data-aos="fade-right">
-        <div class="content-skewed content-skewed-right"><img class="content-skewed-item img-fluid shadow-lg rounded-lg" src="assets/img/screenshots/landing-portfolio.jpg" /></div>
+        <div class="content-skewed content-skewed-right">
+          <img class="content-skewed-item img-fluid shadow-lg rounded-lg" src="assets/img/landing-portfolio.jpg" />
+        </div>
       </div>
       <div class="col-lg-6 order-0 order-lg-1 mb-5 mb-lg-0" data-aos="fade-left">
         <div class="mb-5">

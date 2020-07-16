@@ -13,7 +13,6 @@
             Hospitals <i class="fas fa-clinic-medical ml-1"></i></a>
         </div>
         <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="50"><img class="img-fluid rounded" src="assets/img/landing.png" /></div>
-        <!--assets/img/drawkit/color/drawkit-content-man-color.svg-->
       </div>
     </div>
   </div>

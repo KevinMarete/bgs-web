@@ -3,11 +3,17 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-lg-6" data-aos="fade-up">
-          <h1 class="page-header-title">Build your next project faster with SB UI Kit Pro</h1>
-          <p class="page-header-text mb-5">Welcome to SB UI Kit Pro, a toolkit for building beautiful web interfaces, created by the developmet team at Start Bootstrap</p>
-          <a class="btn btn-teal btn-marketing rounded-pill lift lift-sm" href="index-2.html">View Pages<i class="fas fa-arrow-right ml-1"></i></a><a class="btn btn-link btn-marketing" href="https://docs.startbootstrap.com/sb-ui-kit-pro/quickstart">Documentation</a>
+          <h1 class="page-header-title">Welcome to Pharmahub</h1>
+          <p class="page-header-text mb-5">A marketplace for buyers (pharmacies, hospitals etc..) and sellers (suppliers, manufacturers etc..) to provide a variety of healthcare products that include offers and last mile delivery. </p>
+          <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#pharmacies">
+            Pharmacies <i class="fas fa-medkit ml-1"></i></a>
+          <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#suppliers">
+            Suppliers <i class="fas fa-industry ml-1"></i></a>
+          <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#hospitals">
+            Hospitals <i class="fas fa-clinic-medical ml-1"></i></a>
         </div>
-        <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="50"><img class="img-fluid" src="assets/img/drawkit/color/drawkit-content-man-color.svg" /></div>
+        <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="50"><img class="img-fluid rounded" src="assets/img/landing.png" /></div>
+        <!--assets/img/drawkit/color/drawkit-content-man-color.svg-->
       </div>
     </div>
   </div>

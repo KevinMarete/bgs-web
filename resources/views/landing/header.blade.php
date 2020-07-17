@@ -6,10 +6,10 @@
         <li class="nav-item"><a class="nav-link text-warning" href="/home">Home </a></li>
         <li class="nav-item"><a class="nav-link text-warning" href="/about">About Us </a></li>
         <li class="nav-item"><a class="nav-link text-warning" href="/solution">Our Solutions </a></li>
-        <li class="nav-item"><a class="nav-link text-warning" href="/registration" target="_blank">Join Us </a></li>
-        <li class="nav-item"><a class="nav-link text-warning" href="/sign-in" target="_blank">Sign In </a></li>
+        <li class="nav-item"><a class="nav-link text-warning" href="/registration">Join Us </a></li>
+        <li class="nav-item"><a class="nav-link text-warning" href="/sign-in">Sign In </a></li>
       </ul>
-      <a class="btn-warning btn rounded-pill px-4 ml-lg-4" href="/sign-up" target="_blank">Sign Up<i class="fas fa-arrow-right ml-1"></i></a>
+      <a class="btn-warning btn rounded-pill px-4 ml-lg-4" href="/sign-up">Sign Up<i class="fas fa-arrow-right ml-1"></i></a>
     </div>
   </div>
 </nav>

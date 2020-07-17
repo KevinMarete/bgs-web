@@ -4,7 +4,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-8">
           <h1 class="page-header-title mb-3">About Us</h1>
-          <p class="page-header-text">Our company culture, and how we do things</p>
+          <p class="page-header-text">Who we are, and our business model</p>
         </div>
       </div>
     </div>
@@ -17,52 +17,41 @@
 <section class="bg-white py-10">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="mb-4">A quick guide to our company culture</h2>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolor, eos quisquam expedita quo officiis porro provident laborum. Earum, consequatur provident, ipsam at excepturi rerum laborum aliquam facere molestias mollitia recusandae.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, ipsam? Perspiciatis sunt voluptatum officia non harum, dolores omnis fugiat nam ad optio cumque molestiae impedit dignissimos velit commodi aliquid iure?</p>
-        <p class="mb-0">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem sapiente natus architecto aut porro! Vitae iusto praesentium recusandae debitis, cumque illum amet suscipit rem pariatur, magni iure laborum inventore in!</p>
-        <hr class="my-5" />
+      <div class="col-lg-10 text-justify">
         <h4 class="mb-4">
           <div class="icon-stack bg-primary text-white mr-2"><i data-feather="arrow-right"></i></div>
-          This is what we do
+          Who we are
         </h4>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolor, eos quisquam expedita quo officiis porro provident laborum. Earum, consequatur provident, ipsam at excepturi rerum laborum aliquam facere molestias mollitia recusandae.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, ipsam? Perspiciatis sunt voluptatum officia non harum, dolores omnis fugiat nam ad optio cumque molestiae impedit dignissimos velit commodi aliquid iure?</p>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem sapiente natus architecto aut porro! Vitae iusto praesentium recusandae debitis, cumque illum amet suscipit rem pariatur, magni iure laborum inventore in!</p>
+        <p>We are the first online medical products e-commerce hub providing market access to pharmacies, Hospitals and suppliers.</p>
         <div class="card bg-light shadow-none">
           <div class="card-body">
-            <h6>Questions you should ask yourself</h6>
-            <ul class="mb-0">
-              <li class="text-italic">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed soluta fugiat eveniet, dignissimos facere quisquam, odit suscipit aliquid magnam,?</li>
-            </ul>
+            <img class="content-skewed-item img-fluid shadow-lg rounded-lg" src="assets/img/landing/vision.png" />
           </div>
         </div>
         <hr class="my-5" />
         <h4 class="mb-4">
           <div class="icon-stack bg-primary text-white mr-2"><i data-feather="arrow-right"></i></div>
-          Move with urgency and focus
+          Our Business Model
         </h4>
-        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit dolorem suscipit veniam excepturi soluta ducimus tempora quasi, itaque odit libero, eos in dolore natus, ipsam consectetur voluptate nulla provident aliquam?</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque laboriosam consequuntur iusto vero consequatur beatae, tempore voluptatem rerum sit facilis aut ea optio eaque quaerat, libero recusandae soluta molestiae veniam.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, ut! Ut ipsum debitis numquam. Perferendis, laudantium! Itaque ab velit eaque magnam quis quam libero saepe nobis culpa. Vitae, dignissimos iusto.</p>
+        <p>We create supply chain strategic partnerships through technology and innovation.</p>
+        <p>
+          <ul>
+            <li>A Partnership that give members access to the biggest pharmaceutical market network in the country.</li>
+            <li>A partnership that increases members revenue through increased sales and brand visibility for suppliers and increased profitability for pharmacies and Hospitals through quality products with negotiated lowest prices.</li>
+          </ul>
+        </p>
         <div class="card bg-light shadow-none">
           <div class="card-body">
-            <h6>Questions you should ask yourself</h6>
+            <h6>Our Core Value</h6>
             <ul class="mb-0">
-              <li class="text-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit?</li>
-              <li class="text-italic">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quas nobis illum nam?</li>
+              <li class="text-italic"><strong>Trust:</strong> Building strategic partnerships founded on integrity, compliance and ethical behaviors of ourselves and others</li>
             </ul>
           </div>
         </div>
-        <hr class="my-5" />
-        <h4>Feedback</h4>
-        <p class="lead">In the spirit of thinking rigorously, we&#x2019;d love your open and honest feedback on this guide. <a href="#!">Let us know what you think</a>.</p>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum culpa optio nihil id distinctio excepturi dignissimos, iure totam minima, natus ducimus.</p>
       </div>
     </div>
   </div>
-  <div class="svg-border-rounded text-dark">
+  <div class="svg-border-rounded text-success">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor">
       <path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0" /></svg>
   </div>

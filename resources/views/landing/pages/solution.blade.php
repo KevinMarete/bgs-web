@@ -4,7 +4,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-8">
           <h1 class="page-header-title mb-3">Our Solutions</h1>
-          <p class="page-header-text">Our product, priced to fit your specific needs</p>
+          <p class="page-header-text">A variety of solutions to meet the needs of both buyers and sellers of health products.</p>
         </div>
       </div>
     </div>
@@ -17,40 +17,22 @@
 <section class="bg-light py-10">
   <div class="container">
     <div class="text-center mb-5">
-      <h2>Simple Pricing</h2>
-      <p class="lead">Easy pricing means no suprises.</p>
+      <h2>Seller Solutions</h2>
+      <p class="lead">Manufacturers, Suppliers and Distributors can take advantage of our seller solution suite below to meet the needs of their clients.</p>
     </div>
     <div class="row">
       <div class="col-lg-4 mb-5 mb-lg-0">
         <div class="card pricing h-100">
           <div class="card-body p-5">
             <div class="text-center">
-              <div class="badge badge-light badge-pill badge-marketing badge-sm">Free</div>
-              <div class="pricing-price"><sup>$</sup>0<span class="pricing-price-period">/mo</span></div>
+              <div class="badge badge-light badge-pill badge-marketing badge-lg text-warning">eCAT&trade;</div>
             </div>
-            <ul class="fa-ul pricing-list">
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">1 user</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Community support</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Style customizer
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Custom components
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Expanded utilities
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Third-party integration
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Layout options
-              </li>
-            </ul>
+            <p class="card-text">
+              <ul>
+                <li>Your electronic pricelist Visibility to +1000 chemists and Hospitals on a daily basis</li>
+                <li>Direct orders from Chemists and Hospitals</li>
+              </ul>
+            </p>
           </div>
         </div>
       </div>
@@ -58,32 +40,14 @@
         <div class="card pricing h-100">
           <div class="card-body p-5">
             <div class="text-center">
-              <div class="badge badge-primary-soft badge-pill badge-marketing badge-sm text-primary">Standard</div>
-              <div class="pricing-price"><sup>$</sup>19<span class="pricing-price-period">/mo</span></div>
+              <div class="badge badge-light badge-pill badge-marketing badge-lg text-dark">ePROM&trade;</div>
             </div>
-            <ul class="fa-ul pricing-list">
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Up to 15 users</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Email and live chat support</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Style customizer</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Custom components</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Expanded utilities</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Third-party integration</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Layout options</span>
-              </li>
-            </ul>
+            <p class="card-text">
+              <ul>
+                <li>Your electronic Brand Visibility to +1000 chemists and Hospitals on a daily basis</li>
+                <li>Direct orders from Chemists and Hospitals</li>
+              </ul>
+            </p>
           </div>
         </div>
       </div>
@@ -91,256 +55,47 @@
         <div class="card pricing h-100">
           <div class="card-body p-5">
             <div class="text-center">
-              <div class="badge badge-light badge-pill badge-marketing badge-sm">Enterprise</div>
-              <p class="card-text py-10">We offer discounts for larger organizations. Contact us to inquire about enterprise level plans!</p>
+              <div class="badge badge-light badge-pill badge-marketing badge-lg text-primary">eDEAL&trade;</div>
             </div>
+            <p class="card-text">
+              <ul>
+                <li>Your electronic offers Visibility to +1000 chemists and Hospitals on a daily basis</li>
+                <li>Direct orders from Chemists and Hospitals</li>
+              </ul>
+            </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="mt-5 text-center"><a class="btn btn-primary btn-marketing rounded-pill" href="#!">Get Started</a></div>
+    <div class="mt-5 text-center"><a class="btn btn-warning btn-marketing rounded-pill" href="/sign-up" target="_blank">Get Started</a></div>
   </div>
 </section>
 <hr class="my-0" />
 <section class="bg-light py-10">
   <div class="container">
     <div class="text-center mb-5">
-      <h2>One plan, no hassle</h2>
-      <p class="lead">Easy pricing means no suprises.</p>
+      <h2>Buyer Solutions</h2>
+      <p class="lead">Pharmacies, Chemists and Hospitals can take advantage of our buyer solution to meet the health product needs.</p>
     </div>
-    <div class="row no-gutters align-items-center">
-      <div class="col-lg-6 mb-5 mb-lg-0">
-        <div class="card pricing">
-          <div class="card-body p-5">
-            <div class="badge badge-primary-soft badge-pill badge-marketing badge-sm text-primary">Standard</div>
-            <div class="pricing-price"><sup>$</sup>19<span class="pricing-price-period">/mo</span></div>
-            <ul class="fa-ul pricing-list">
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Up to 15 users</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Email and live chat support</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Style customizer</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Custom components</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Expanded utilities</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Third-party integration</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Layout options</span>
-              </li>
-            </ul>
-          </div>
-          <div class="card-footer px-5">
-            <a class="d-flex align-items-center justify-content-between" href="#!">Get Started!<i class="fas fa-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card pricing pricing-right bg-gray-800">
-          <div class="card-body p-5">
-            <div class="badge badge-transparent-light badge-marketing badge-pill badge-sm">Customized</div>
-            <p class="card-text py-5">Need a customized plan? Contact us directly and we can work with you to craft a plan that fits your company&apos;s specific needs.</p>
-          </div>
-          <div class="card-footer bg-gray-900 px-5">
-            <a class="text-white-50 d-flex align-items-center justify-content-between" href="#!">Contact Sales<i class="fas fa-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<hr class="my-0" />
-<section class="bg-light py-10">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2>Simple Pricing</h2>
-      <p class="lead">Easy pricing means no suprises.</p>
-    </div>
-    <div class="row no-gutters align-items-center">
+    <div class="row d-flex justify-content-center">
       <div class="col-lg-4 mb-5 mb-lg-0">
-        <div class="card pricing pricing-left">
+        <div class="card pricing h-100">
           <div class="card-body p-5">
             <div class="text-center">
-              <div class="badge badge-light badge-pill badge-marketing badge-sm">Free</div>
-              <div class="pricing-price"><sup>$</sup>0<span class="pricing-price-period">/mo</span></div>
+              <div class="badge badge-light badge-pill badge-marketing badge-lg text-warning">eACCESS&trade;</div>
             </div>
-            <ul class="fa-ul pricing-list">
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">1 user</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Community support</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Style customizer
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Custom components
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Expanded utilities
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Third-party integration
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Layout options
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 mb-5 mb-lg-0">
-        <div class="card pricing py-4 z-1">
-          <div class="card-body p-5">
-            <div class="text-center">
-              <div class="badge badge-primary-soft badge-pill badge-marketing badge-sm text-primary">Standard</div>
-              <div class="pricing-price"><sup>$</sup>19<span class="pricing-price-period">/mo</span></div>
-            </div>
-            <ul class="fa-ul pricing-list">
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Up to 15 users</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Email and live chat support</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Style customizer</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Custom components</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Expanded utilities
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Third-party integration
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-circle text-gray-200"></i></span>Layout options
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 mb-5 mb-lg-0">
-        <div class="card pricing pricing-right">
-          <div class="card-body p-5">
-            <div class="text-center">
-              <div class="badge badge-secondary-soft badge-pill badge-marketing badge-sm text-secondary">Premium</div>
-              <div class="pricing-price"><sup>$</sup>29<span class="pricing-price-period">/mo</span></div>
-            </div>
-            <ul class="fa-ul pricing-list">
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Unlimited users</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Email and live chat support</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Style customizer</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Custom components</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Expanded utilities</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Third-party integration</span>
-              </li>
-              <li class="pricing-list-item">
-                <span class="fa-li"><i class="far fa-check-circle text-teal"></i></span><span class="text-dark">Layout options</span>
-              </li>
-            </ul>
+            <p class="card-text">
+              <ul>
+                <li>A free electronic ordering system for all your needs from your supplier</li>
+                <li>Any time any where orders are delivered electronically on a real time to your supplier</li>
+                <li>Place your orders at your convenient time</li>
+                <li>Timely delivery</li>
+              </ul>
+            </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="mt-5 text-center"><a class="btn btn-primary btn-marketing rounded-pill" href="#!">Get Started</a></div>
-  </div>
-</section>
-<hr class="my-0" />
-<section class="bg-light pt-10">
-  <div class="container">
-    <div class="row align-items-center mb-10">
-      <div class="col-lg-6">
-        <div class="h4 font-weight-normal">Ready to get started?</div>
-        <p class="lead mb-0 text-gray-500">Get in touch or create an account.</p>
-      </div>
-      <div class="col-lg-6 text-lg-right"><a class="btn btn-primary btn-marketing rounded-pill mr-3 my-2 lift lift-sm" href="#!">Contact Sales</a><a class="btn btn-white btn-marketing rounded-pill my-2 lift lift-sm" href="#!">Create Account</a></div>
-    </div>
-    <div class="row">
-      <div class="col-lg-6 z-1 mb-5 mb-lg-n5">
-        <a class="card text-decoration-none h-100 lift" href="#!">
-          <div class="card-body py-5">
-            <div class="d-flex align-items-center">
-              <div class="icon-stack icon-stack-xl bg-primary text-white flex-shrink-0"><i data-feather="activity"></i></div>
-              <div class="ml-4">
-                <h5 class="text-primary">Work smarter, not harder</h5>
-                <p class="card-text text-gray-600">Learn more about how our product can save you time and effort in the long run!</p>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-6 z-1 mb-10 mb-lg-n5">
-        <a class="card text-decoration-none h-100 lift" href="#!">
-          <div class="card-body py-5">
-            <div class="d-flex align-items-center">
-              <div class="icon-stack icon-stack-xl bg-secondary text-white flex-shrink-0"><i data-feather="code"></i></div>
-              <div class="ml-4">
-                <h5 class="text-secondary">Built for developers</h5>
-                <p class="card-text text-gray-600">Our components, utilities, and layouts are built with developers in mind.</p>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="svg-border-waves text-dark">
-    <svg class="wave" style="pointer-events: none" fill="currentColor" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 75">
-      <defs>
-        <style>
-          .a {
-            fill: none;
-          }
-
-          .b {
-            clip-path: url(#a);
-          }
-
-          .d {
-            opacity: 0.5;
-            isolation: isolate;
-          }
-        </style>
-        <clipPath id="a">
-          <rect class="a" width="1920" height="75" />
-        </clipPath>
-      </defs>
-      <title>wave</title>
-      <g class="b">
-        <path class="c" d="M1963,327H-105V65A2647.49,2647.49,0,0,1,431,19c217.7,3.5,239.6,30.8,470,36,297.3,6.7,367.5-36.2,642-28a2511.41,2511.41,0,0,1,420,48" />
-      </g>
-      <g class="b">
-        <path class="d" d="M-127,404H1963V44c-140.1-28-343.3-46.7-566,22-75.5,23.3-118.5,45.9-162,64-48.6,20.2-404.7,128-784,0C355.2,97.7,341.6,78.3,235,50,86.6,10.6-41.8,6.9-127,10" />
-      </g>
-      <g class="b">
-        <path class="d" d="M1979,462-155,446V106C251.8,20.2,576.6,15.9,805,30c167.4,10.3,322.3,32.9,680,56,207,13.4,378,20.3,494,24" />
-      </g>
-      <g class="b">
-        <path class="d" d="M1998,484H-243V100c445.8,26.8,794.2-4.1,1035-39,141-20.4,231.1-40.1,378-45,349.6-11.6,636.7,73.8,828,150" />
-      </g>
-    </svg>
+    <div class="mt-5 text-center"><a class="btn btn-warning btn-marketing rounded-pill" href="/sign-up" target="_blank">Get Started</a></div>
   </div>
 </section>

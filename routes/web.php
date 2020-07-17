@@ -13,10 +13,11 @@
 
 //Public endpoints
 
-/*Default Route*/
-Route::get('/', function () {
-    return view('auth.sign-in');
-});
+/*Landing Routes*/
+Route::get('/', 'Auth\LandingController@displayView');
+Route::get('/home', 'Auth\LandingController@displayView');
+Route::get('/about', 'Auth\LandingController@displayView');
+Route::get('/solution', 'Auth\LandingController@displayView');
 
 /*Registration*/
 Route::get('/registration', function () {

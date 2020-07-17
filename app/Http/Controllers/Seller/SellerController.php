@@ -963,7 +963,7 @@ class SellerController extends MyController
             $request->session()->flash($flash_id, $flash_msg);
             return redirect($redirect_url);
           }
-          $new_filename = strtolower($organization_name . '-' . $request->type . '-' . Str::random(6)) . '.' . $image_details['extension'];
+          $new_filename = strtolower($organization_name . '-' . Str::random(6)) . '.' . $image_details['extension'];
           $update_data['display_url'] = $this->saveFile($location, $upload_image, $new_filename);
         }
         $response = $this->manageResourceData($token, 'PUT', $singular_resource_name . '/' . $request->id, $update_data);

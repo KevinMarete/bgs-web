@@ -7,15 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content />
     <meta name="author" content />
-    <title>BGS | {{ ucwords($page_title) }}</title>
-    @include('template.styles');
+    <title>Pharmahub | {{ ucwords($page_title) }}</title>
+    @include('template.styles')
 </head>
 
 <body class="sb-nav-fixed">
     @include('template.menu');
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            @include('template.sidebar');
+            @include('template.sidebar')
         </div>
         <div id="layoutSidenav_content">
             <main>

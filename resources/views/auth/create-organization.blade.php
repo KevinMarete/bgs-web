@@ -50,6 +50,7 @@
                                 </div>
                                 <div class="card-footer text-center">
                                     <div class="small"><a href="/registration">Have an organization? Go to Registration</a></div>
+                                    <div class="small"><a href="/">Go to Main Page</a></div>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +62,7 @@
             <footer class="sb-footer py-4 mt-auto sb-footer-dark">
                 <div class="container-fluid">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div>Copyright &copy; BGS {{date('Y')}}</div>
+                        <div>Copyright &copy; Pharmahub {{date('Y')}}</div>
                     </div>
                 </div>
             </footer>

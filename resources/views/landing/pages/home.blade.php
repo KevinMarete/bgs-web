@@ -4,7 +4,7 @@
       <div class="row align-items-center">
         <div class="col-lg-6" data-aos="fade-up">
           <h1 class="page-header-title">Welcome to Pharmahub</h1>
-          <p class="page-header-text mb-5">A marketplace for buyers (pharmacies, hospitals etc..) and sellers (suppliers, manufacturers etc..) to provide a variety of healthcare products that include offers and last mile delivery. </p>
+          <p class="page-header-text mb-5">A marketplace for buyers (pharmacies, hospitals etc..) and sellers (suppliers, manufacturers etc..) to provide quality healthcare products at the lowest possible prices.</p>
           <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#buyers">
             Buyers <i class="fas fa-clinic-medical ml-1"></i></a>
           <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#sellers">
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="col-lg-8 order-0 order-lg-1 mb-5 mb-lg-0" data-aos="fade-left">
-        <div class="mb-5">
+        <div class="mt-2 mb-3">
           <h2>Buyers Package</h2>
         </div>
         <div class="row">
@@ -36,10 +36,11 @@
             <h6>Our Solution</h6>
             <p class="mb-2 small mb-0"><span class="text-warning">eACCESS&trade;</span> - A free electronic ordering system for all your needs from your supplier</p>
             <ul>
-              <li class="mb-2 small">Any time any where orders are delivered electronically on a real time to your supplier</li>
-              <li class="mb-2 small">Place your orders at your convenient time</li>
-              <li class="mb-2 small">Timely delivery</li>
+              <li class="small">Any time any where orders are delivered electronically on a real time to your supplier</li>
+              <li class="small">Place your orders at your convenient time</li>
+              <li class="small">Timely delivery</li>
             </ul>
+            <p class="mb-2 small mb-0"><span class="text-success">eRFQ&trade;</span> - Get quotations from two or more suppliers</p>
           </div>
           <div class="col-md-6 mb-4">
             <h6>Our Promise</h6>
@@ -81,7 +82,7 @@
         </div>
       </div>
       <div class="col-lg-8 order-0 order-lg-1 mb-5 mb-lg-0" data-aos="fade-left">
-        <div class="mb-5">
+        <div class="mt-2 mb-3">
           <h2>Sellers Package</h2>
         </div>
         <div class="row">
@@ -94,6 +95,9 @@
               Direct orders from Chemists and Hospitals.
             </p>
             <p class="mb-2 small mb-0"><span class="text-primary">eDEAL&trade;</span> - Electronic Offers Visibility to +1000 chemists and Hospital on a daily basis. <br />
+              Direct orders from Chemists and Hospitals.
+            </p>
+            <p class="mb-2 small mb-0"><span class="text-success">eRFQ&trade;</span> - Electronic Quote Visibility from +1000 chemists and Hospital on a daily basis. <br />
               Direct orders from Chemists and Hospitals.
             </p>
           </div>

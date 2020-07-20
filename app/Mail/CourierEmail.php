@@ -30,6 +30,6 @@ class CourierEmail extends Mailable
     {
         $this->view('emails/courier_notification');
         return $this->to($this->order->courier->email)
-                    ->subject('BGS Order #'.$this->order->id.' Pickup and Delivery');
+                    ->subject('Pharmahub Order #'.$this->order->id.' Pickup and Delivery');
     }
 }

@@ -21,9 +21,9 @@
       <p class="lead">Manufacturers, Suppliers and Distributors can take advantage of our seller solution suite below to meet the needs of their clients.</p>
     </div>
     <div class="row">
-      <div class="col-lg-4 mb-5 mb-lg-0">
+      <div class="col-lg-3 mb-5 mb-lg-0">
         <div class="card pricing h-100">
-          <div class="card-body p-5">
+          <div class="card-body p-3">
             <div class="text-center">
               <div class="badge badge-light badge-pill badge-marketing badge-lg text-warning">eCAT&trade;</div>
             </div>
@@ -36,9 +36,9 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 mb-5 mb-lg-0">
+      <div class="col-lg-3 mb-5 mb-lg-0">
         <div class="card pricing h-100">
-          <div class="card-body p-5">
+          <div class="card-body p-3">
             <div class="text-center">
               <div class="badge badge-light badge-pill badge-marketing badge-lg text-dark">ePROM&trade;</div>
             </div>
@@ -51,9 +51,9 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-3 mb-lg-0">
         <div class="card pricing h-100">
-          <div class="card-body p-5">
+          <div class="card-body p-3">
             <div class="text-center">
               <div class="badge badge-light badge-pill badge-marketing badge-lg text-primary">eDEAL&trade;</div>
             </div>
@@ -66,8 +66,27 @@
           </div>
         </div>
       </div>
+      <div class="col-lg-3 mb-lg-0">
+        <div class="card pricing h-100">
+          <div class="card-body p-3">
+            <div class="text-center">
+              <div class="badge badge-light badge-pill badge-marketing badge-lg text-success">eRFQ&trade;</div>
+            </div>
+            <p class="card-text">
+              <ul>
+                <li>Get free request for quotations from over 1k hospitals & pharmacies and other organizations</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="mt-5 text-center"><a class="btn btn-warning btn-marketing rounded-pill" href="/sign-up" target="_blank">Get Started</a></div>
+    <div class="mt-5 text-center">
+      <div class="btn-group" role="group">
+        <a class="btn btn-success btn-marketing rounded-pill mr-2" href="/create-organization">Create new Organization</a>
+        <a class="btn btn-warning btn-marketing rounded-pill" href="/sign-up">Join an Organization</a>
+      </div>
+    </div>
   </div>
 </section>
 <hr class="my-0" />
@@ -78,9 +97,9 @@
       <p class="lead">Pharmacies, Chemists and Hospitals can take advantage of our buyer solution to meet the health product needs.</p>
     </div>
     <div class="row d-flex justify-content-center">
-      <div class="col-lg-4 mb-5 mb-lg-0">
+      <div class="col-lg-3 mb-5 mb-lg-0">
         <div class="card pricing h-100">
-          <div class="card-body p-5">
+          <div class="card-body p-3">
             <div class="text-center">
               <div class="badge badge-light badge-pill badge-marketing badge-lg text-warning">eACCESS&trade;</div>
             </div>
@@ -95,7 +114,28 @@
           </div>
         </div>
       </div>
+      <div class="col-lg-3 mb-5 mb-lg-0">
+        <div class="card pricing h-100">
+          <div class="card-body p-3">
+            <div class="text-center">
+              <div class="badge badge-light badge-pill badge-marketing badge-lg text-success">eRFQ&trade;</div>
+            </div>
+            <p class="card-text">
+              <ul>
+                <li>Get quotations from two or more suppliers</li>
+                <li>Get negotiated prices based on your order quantities</li>
+                <li>Compare your prices from different suppliers to get the best value for your money</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="mt-5 text-center"><a class="btn btn-warning btn-marketing rounded-pill" href="/sign-up" target="_blank">Get Started</a></div>
+    <div class="mt-5 text-center">
+      <div class="btn-group" role="group">
+        <a class="btn btn-success btn-marketing rounded-pill mr-2" href="/create-organization">Create new Organization</a>
+        <a class="btn btn-warning btn-marketing rounded-pill" href="/sign-up">Join an Organization</a>
+      </div>
+    </div>
   </div>
 </section>

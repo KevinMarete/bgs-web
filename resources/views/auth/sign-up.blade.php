@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content />
   <meta name="author" content />
-  <title>BGS | Sign-Up</title>
+  <title>Pharmahub | Sign-Up</title>
   <link href="css/styles.css" rel="stylesheet" />
   <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
   <script data-search-pseudo-elements defer src="libs/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>

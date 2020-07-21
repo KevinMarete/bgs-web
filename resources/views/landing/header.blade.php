@@ -1,7 +1,7 @@
 <nav class="navbar navbar-marketing navbar-expand-lg bg-transparent navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand text-warning d-none d-sm-block text-center" href="/">
-      <img src="assets/img/logo.jpg" alt="logo" class="rounded d-inline-block align-middle">
+      <img src="assets/img/landing/logo-lg.jpg" alt="logo" class="rounded d-inline-block align-middle">
       Pharmahub
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i data-feather="menu"></i></button>

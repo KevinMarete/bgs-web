@@ -10,7 +10,7 @@
           <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#sellers">
             Sellers <i class="fas fa-medkit ml-1"></i></a>
         </div>
-        <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="50"><img class="img-fluid rounded" src="assets/img/landing/home.png" /></div>
+        <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="50"><img class="img-fluid rounded" src="assets/img/landing/home.gif" /></div>
       </div>
     </div>
   </div>

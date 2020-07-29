@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddRfqMenuBuyerSellerRole extends Migration
+class AddSupportMenuBuyerSellerRole extends Migration
 {
     /**
      * Run the migrations.
@@ -11,7 +11,7 @@ class AddRfqMenuBuyerSellerRole extends Migration
      */
     public function up()
     {
-        $menu = DB::table('tbl_menu')->where('name', 'RFQ')->first();
+        $menu = DB::table('tbl_menu')->where('name', 'Support')->first();
         $buyer_role = DB::table('tbl_role')->where('name', 'buyer')->first();
         $seller_role = DB::table('tbl_role')->where('name', 'seller')->first();
 
@@ -30,7 +30,7 @@ class AddRfqMenuBuyerSellerRole extends Migration
      */
     public function down()
     {
-        $menu = DB::table('tbl_menu')->where('name', 'RFQ')->first();
+        $menu = DB::table('tbl_menu')->where('name', 'Support')->first();
         $buyer_role = DB::table('tbl_role')->where('name', 'buyer')->first();
         $seller_role = DB::table('tbl_role')->where('name', 'seller')->first();
 

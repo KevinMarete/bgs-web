@@ -975,7 +975,7 @@ class BuyerController extends MyController
         return ['status' => 'success', 'message' => 'Notification sent'];
     }
 
-    public function displayFaqsView(Request $request)
+    public function displaySupportView(Request $request)
     {
         $token = session()->get('token');
         $role_id = session()->get('organization.organization_type.role_id');
@@ -986,24 +986,7 @@ class BuyerController extends MyController
         $data = [
             'page_title' => 'faqs',
             'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.faqs', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayContactUsView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
-        $order_id = $request->id;
-
-        $view_data = [];
-        $data = [
-            'page_title' => 'contact-us',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.contact_us', $view_data)
+            'content_view' => View::make('buyer.support', $view_data)
         ];
 
         return view('template.main', $data);

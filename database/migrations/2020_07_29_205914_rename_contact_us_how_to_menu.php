@@ -11,7 +11,7 @@ class RenameContactUsHowToMenu extends Migration
      */
     public function up()
     {
-        DB::table('tbl_menu')->where('name', 'Contact Us')->update(['name' => 'How To', 'icon' => 'search']);
+        DB::table('tbl_menu')->where('name', 'Contact Us')->update(['name' => 'How To', 'icon' => 'search', 'link' => 'how-to']);
     }
 
     /**
@@ -21,6 +21,6 @@ class RenameContactUsHowToMenu extends Migration
      */
     public function down()
     {
-        DB::table('tbl_menu')->where('name', 'How To')->update(['name' => 'Contact Us', 'icon' => 'phone-call']);
+        DB::table('tbl_menu')->where('name', 'How To')->update(['name' => 'Contact Us', 'icon' => 'phone-call', 'link' => 'contact-us']);
     }
 }

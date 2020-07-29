@@ -111,7 +111,7 @@ Route::middleware('usersession')->group(function () {
     Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
     Route::get('/rejectreasons', 'Admin\AdminController@displayTableView');
     Route::get('/faqs', 'Admin\AdminController@displayTableView');
-    Route::get('/how-to', 'Admin\AdminController@displayTableView');
+    Route::get('/how-tos', 'Admin\AdminController@displayTableView');
 
     /*Buyer Routes*/
     Route::get('/marketplace', 'Buyer\BuyerController@displayMarketplaceView');

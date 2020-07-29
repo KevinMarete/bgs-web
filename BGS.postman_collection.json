@@ -9904,6 +9904,412 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "FAQs",
+			"item": [
+				{
+					"name": "All Faqs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/faqs",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"faqs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Faq",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/faq/1",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"faq",
+								"1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Faq",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"\",\n    \"answer\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{port}}/api/paymentrfq",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"paymentrfq"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Faq",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"\",\n    \"answer\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{port}}/api/paymentrfq/1",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"paymentrfq",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Faq",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/paymentrfq/1",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"paymentrfq",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8baf71fa-4946-4df1-9bd8-f2ee733b73ea",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "757db683-4370-4b9a-9adf-43a47796e3c6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "HowTos",
+			"item": [
+				{
+					"name": "All HowTos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/how-tos",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"how-tos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get HowTo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/how-to/1",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"how-to",
+								"1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add HowTo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"\",\n    \"link\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{port}}/api/how-to",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"how-to"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update HowTo",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"\",\n    \"link\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{port}}/api/how-to/1",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"how-to",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete HowTo",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{port}}/api/how-to/1",
+							"host": [
+								"{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"how-to",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2c5ac56a-9ee6-4563-b866-5e368433d82f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0018c499-2377-4bf0-9e55-b5597d1b56e3",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -9930,17 +10336,17 @@
 	],
 	"variable": [
 		{
-			"id": "962e33c4-2c7d-468b-b4ef-7ab0a46369c9",
+			"id": "31f88f2e-08f7-47c1-a6c9-53c847c52d41",
 			"key": "host",
 			"value": "localhost"
 		},
 		{
-			"id": "c1dbf95c-32c9-4b0d-8f16-37a2994d60c8",
+			"id": "b20bfe75-b81f-43de-9d0c-4bdee7354879",
 			"key": "port",
 			"value": "8000"
 		},
 		{
-			"id": "411c3751-4e75-4a86-a424-f4bffe50cfe1",
+			"id": "53f5d376-842a-411e-8a51-c91679e875fb",
 			"key": "token",
 			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjhmODU5OWEzZTgwMmJkNTA1NDE5N2FkOTFhMWMxZjdkZmM3ZGE2NjY5NTZiMjE3OGI5MTFmNTMxNWVmZjM0MDg0OTU2MjVlMTNlOWQxMGIiLCJpYXQiOjE1ODk4MTY5MTUsIm5iZiI6MTU4OTgxNjkxNSwiZXhwIjoxNjIxMzUyOTE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JpO0QuZrX3_AzYNleXGqDGKIWZxLJ22nxmZyeSiAAkoMl7Xx1CFOyE8VkVr90-ySFGSTc7zbZpawmvj0NBQPYPxgRJZCrW75R88pHVOBLC43KAjzxiol2fqoTJdBR5iF3-yUcJoMWouSM1T9xc__F3FENnNgSDpH7ScgKQOO7NVwWbm9F5EKCju0uu-fzaDABa4tHK2nVMityLs1W-efyAO8vfgtCYf7GXhNKmjmmcIVxEmo1DOMSknZE-MiOt-iJY2xyOP0PxCl0hTeTCJ7oNvuNkaDz3KZzxjHjbCi-3qlAPS3ZqlJgGylBMHzZ-iSQg5ngRcsc8sob8pSRctjsMlnAGIC092-GOogZ_NfpwquqkZ0PAwABVp3mdnBpFJKkbbrdBhaDp8H3LBO4Uqo4AZWvYvdn_9wBgojioocjQOJibsVlJh9bE271FIsmprTEn4kGFssXv1GoyGuTlzEMQlyT9FKBCFWqkGCm8M7OueaVZHwlUPFYrIep0IrkPC23VDhbfO2FITr5BJkW0unQ4n9j-6lD1w2PdS2urvtQ-MD3yMhV9yTawb6OtfE8AChLtOTsZRinlN3UIVdQ4XkAIbQXQwl3NS1oMSvV87scCMO8sYs4wCQtSDxatLa_x4aS7uavBvhJJuT1uPbYwt7lvUIJnbxmUGDw2Q7kVEyRaQ"
 		}

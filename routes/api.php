@@ -376,5 +376,19 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::post('/paymentrfq', 'Api\PaymentRfqController@store');
     Route::put('/paymentrfq/{id}', 'Api\PaymentRfqController@update');
     Route::delete('/paymentrfq/{id}', 'Api\PaymentRfqController@destroy');
+
+    /*FAQs endpoints*/
+    Route::get('/faqs', 'Api\FaqController@index');
+    Route::get('/faq/{id}', 'Api\FaqController@show');
+    Route::post('/faq', 'Api\FaqController@store');
+    Route::put('/faq/{id}', 'Api\FaqController@update');
+    Route::delete('/faq/{id}', 'Api\FaqController@destroy');
+
+    /*HowTos endpoints*/
+    Route::get('/how-tos', 'Api\HowToController@index');
+    Route::get('/how-to/{id}', 'Api\HowToController@show');
+    Route::post('/how-to', 'Api\HowToController@store');
+    Route::put('/how-to/{id}', 'Api\HowToController@update');
+    Route::delete('/how-to/{id}', 'Api\HowToController@destroy');
   });
 });

@@ -17,10 +17,83 @@ class AdminController extends MyController
 	{
 		$token = session()->get('token');
 		$role_id = session()->get('organization.organization_type.role_id');
+
+		$charts = [
+			[
+				'title' => 'Trend Distribution of Buyers',
+				'class' => 'chart-area',
+				'id' => 'buyerChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => [
+					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+					'datasets' => [30, 50, 40, 10, 70, 45, 34]
+				]
+			],
+			[
+				'title' => 'Trend Distribution of Sellers',
+				'class' => 'chart-area',
+				'id' => 'sellerChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => [
+					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+					'datasets' => [30, 50, 40, 10, 70, 45, 34]
+				]
+			],
+			[
+				'title' => 'Trend Distribution of Published Products',
+				'class' => 'chart-bar',
+				'id' => 'productChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => [
+					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+					'datasets' => [30, 50, 40, 10, 70, 45, 34]
+				]
+			],
+			[
+				'title' => 'Trend Distribution of RFQs',
+				'class' => 'chart-bar',
+				'id' => 'rfqChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => [
+					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+					'datasets' => [30, 50, 40, 10, 70, 45, 34]
+				]
+			],
+			[
+				'title' => 'Trend Distribution of Orders',
+				'class' => 'chart-area',
+				'id' => 'orderChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => [
+					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+					'datasets' => [30, 50, 40, 10, 70, 45, 34]
+				]
+			],
+			[
+				'title' => 'Distribution of Sales Revenue',
+				'class' => 'chart-area',
+				'id' => 'revenueChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => [
+					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+					'datasets' => [30, 50, 40, 10, 70, 45, 34]
+				]
+			],
+		];
+
+		$view_data = [
+			'charts' => $charts
+		];
 		$data = [
 			'page_title' => 'Dashboard',
 			'menus' => $this->getRoleMenus($token, $role_id),
-			'content_view' => View::make('admin.dashboard')
+			'content_view' => View::make('admin.dashboard', $view_data)
 		];
 
 		return view('template.main', $data);

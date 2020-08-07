@@ -20,7 +20,9 @@
                     <div class="card mb-4">
                         <div class="card-header">{{ $chart['title'] }}</div>
                         <div class="card-body">
-                            <div class="{{ $chart['class'] }}"><canvas id="{{ $chart['id'] }}" class="{{ $chart['class'] }}-chart" width="{{ $chart['width'] }}" height="{{ $chart['height'] }}"></canvas></div>
+                            <div class="{{ $chart['class'] }}">
+                                <canvas id="{{ $chart['id'] }}" class="{{ $chart['class'] }}-chart" width="{{ $chart['width'] }}" height="{{ $chart['height'] }}" data-labels="{{ json_encode($chart['data']['labels']) }}" data-datasets="{{ json_encode($chart['data']['datasets']) }}"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -29,5 +31,3 @@
         </div>
     </div>
     <script src="libs/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>

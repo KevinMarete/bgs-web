@@ -394,23 +394,85 @@
         }
     });
 
-    //Adding dynamic charts
-    var charts = [
-        { id: "buyerChart", type: "line" },
-        { id: "sellerChart", type: "line" },
-        { id: "productChart", type: "bar" },
-        { id: "rfqChart", type: "line" },
-        { id: "orderChart", type: "line" },
-        { id: "revenueChart", type: "bar" },
-    ];
-    charts.map((chart) => {
-        createChart(chart.id, chart.type);
+    //Add dashboard filter
+    addDashboardFilter();
+
+    function addDashboardFilter() {
+        //var start = moment().subtract(30, "days");
+        //var end = moment();
+        var start = moment($("#dash_start").val());
+        var end = moment($("#dash_end").val());
+
+        function cb(start, end) {
+            $("#reportrange span").html(
+                start.format("MMMM D, YYYY") +
+                    " - " +
+                    end.format("MMMM D, YYYY")
+            );
+        }
+
+        $("#reportrange").daterangepicker(
+            {
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    Today: [moment(), moment()],
+                    Yesterday: [
+                        moment().subtract(1, "days"),
+                        moment().subtract(1, "days"),
+                    ],
+                    "Last 7 Days": [moment().subtract(7, "days"), moment()],
+                    "Last 30 Days": [moment().subtract(30, "days"), moment()],
+                    "This Month": [
+                        moment().startOf("month"),
+                        moment().endOf("month"),
+                    ],
+                    "Last Month": [
+                        moment().subtract(1, "month").startOf("month"),
+                        moment().subtract(1, "month").endOf("month"),
+                    ],
+                },
+            },
+            cb
+        );
+
+        cb(start, end);
+    }
+
+    $("#reportrange").on("apply.daterangepicker", function (ev, picker) {
+        var startDate = picker.startDate.format("YYYY-MM-DD");
+        var endDate = picker.endDate.format("YYYY-MM-DD");
+        var token = $("#token").val();
+        $.post(
+            "/dashfilter",
+            { _token: token, start: startDate, end: endDate },
+            function (data) {
+                location.reload();
+            }
+        );
     });
 
-    // Set new default font family and font color to mimic Bootstrap's default styling
-    (Chart.defaults.global.defaultFontFamily = "Nunito Sans"),
-        '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-    Chart.defaults.global.defaultFontColor = "#858796";
+    //Adding dynamic charts
+    addCharts();
+
+    function addCharts() {
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        (Chart.defaults.global.defaultFontFamily = "Nunito Sans"),
+            '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = "#858796";
+
+        var charts = [
+            { id: "buyerChart", type: "line" },
+            { id: "sellerChart", type: "line" },
+            { id: "productChart", type: "bar" },
+            { id: "rfqChart", type: "line" },
+            { id: "orderChart", type: "line" },
+            { id: "revenueChart", type: "bar" },
+        ];
+        charts.map((chart) => {
+            createChart(chart.id, chart.type);
+        });
+    }
 
     function number_format(number, decimals, dec_point, thousands_sep) {
         // *     example: number_format(1234.56, 2, ',', ' ');
@@ -439,99 +501,105 @@
 
     function createChart(chartId, chartType) {
         var ctx = document.getElementById(chartId);
-        var chartLabels = $("#" + chartId).data("labels");
-        var chartData = $("#" + chartId).data("datasets");
-        var myChart = new Chart(ctx, {
-            type: chartType,
-            data: {
-                labels: chartLabels,
-                datasets: [
-                    {
-                        label: "Revenue",
-                        backgroundColor: "rgba(0, 97, 242, 1)",
-                        hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
-                        borderColor: "#4e73df",
-                        data: chartData,
-                    },
-                ],
-            },
-            options: {
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 25,
-                        top: 25,
-                        bottom: 0,
-                    },
-                },
-                scales: {
-                    xAxes: [
+        if (ctx) {
+            var chartLabels = $("#" + chartId).data("labels");
+            var chartData = $("#" + chartId).data("datasets");
+            var myChart = new Chart(ctx, {
+                type: chartType,
+                data: {
+                    labels: chartLabels,
+                    datasets: [
                         {
-                            time: {
-                                unit: "month",
-                            },
-                            gridLines: {
-                                display: false,
-                                drawBorder: false,
-                            },
-                            ticks: {
-                                //maxTicksLimit: 6,
-                            },
-                            maxBarThickness: 25,
+                            label: "Total",
+                            backgroundColor: "rgba(0, 97, 242, 1)",
+                            hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
+                            borderColor: "#4e73df",
+                            data: chartData,
                         },
                     ],
-                    yAxes: [
-                        {
-                            ticks: {
-                                min: 0,
-                                //max: 15000,
-                                maxTicksLimit: 5,
-                                padding: 10,
-                                // Include a dollar sign in the ticks
-                                callback: function (value, index, values) {
-                                    return "$" + number_format(value);
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 25,
+                            top: 25,
+                            bottom: 0,
+                        },
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                time: {
+                                    unit: "days",
+                                },
+                                gridLines: {
+                                    display: false,
+                                    drawBorder: false,
+                                },
+                                ticks: {
+                                    //maxTicksLimit: 6,
+                                },
+                                maxBarThickness: 25,
+                            },
+                        ],
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                    min: 0,
+                                    //max: 15000,
+                                    maxTicksLimit: 5,
+                                    padding: 10,
+                                    // Include a dollar sign in the ticks
+                                    /*callback: function (value, index, values) {
+                                        //return "$" + number_format(value);
+                                        return number_format(value);
+                                    },*/
+                                    precision: 0,
+                                },
+                                gridLines: {
+                                    color: "rgb(234, 236, 244)",
+                                    zeroLineColor: "rgb(234, 236, 244)",
+                                    drawBorder: false,
+                                    borderDash: [2],
+                                    zeroLineBorderDash: [2],
                                 },
                             },
-                            gridLines: {
-                                color: "rgb(234, 236, 244)",
-                                zeroLineColor: "rgb(234, 236, 244)",
-                                drawBorder: false,
-                                borderDash: [2],
-                                zeroLineBorderDash: [2],
+                        ],
+                    },
+                    legend: {
+                        display: false,
+                    },
+                    tooltips: {
+                        titleMarginBottom: 10,
+                        titleFontColor: "#6e707e",
+                        titleFontSize: 14,
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        borderColor: "#dddfeb",
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        caretPadding: 10,
+                        callbacks: {
+                            label: function (tooltipItem, chart) {
+                                var datasetLabel =
+                                    chart.datasets[tooltipItem.datasetIndex]
+                                        .label || "";
+                                return (
+                                    datasetLabel +
+                                    //": $" +
+                                    ": " +
+                                    number_format(tooltipItem.yLabel)
+                                );
                             },
-                        },
-                    ],
-                },
-                legend: {
-                    display: false,
-                },
-                tooltips: {
-                    titleMarginBottom: 10,
-                    titleFontColor: "#6e707e",
-                    titleFontSize: 14,
-                    backgroundColor: "rgb(255,255,255)",
-                    bodyFontColor: "#858796",
-                    borderColor: "#dddfeb",
-                    borderWidth: 1,
-                    xPadding: 15,
-                    yPadding: 15,
-                    displayColors: false,
-                    caretPadding: 10,
-                    callbacks: {
-                        label: function (tooltipItem, chart) {
-                            var datasetLabel =
-                                chart.datasets[tooltipItem.datasetIndex]
-                                    .label || "";
-                            return (
-                                datasetLabel +
-                                ": $" +
-                                number_format(tooltipItem.yLabel)
-                            );
                         },
                     },
                 },
-            },
-        });
+            });
+        }
     }
 })(jQuery);

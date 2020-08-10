@@ -112,6 +112,7 @@ Route::middleware('usersession')->group(function () {
     Route::get('/rejectreasons', 'Admin\AdminController@displayTableView');
     Route::get('/faqs', 'Admin\AdminController@displayTableView');
     Route::get('/how-tos', 'Admin\AdminController@displayTableView');
+    Route::post('/dashfilter', 'Admin\AdminController@setDashFilter');
 
     /*Buyer Routes*/
     Route::get('/marketplace', 'Buyer\BuyerController@displayMarketplaceView');

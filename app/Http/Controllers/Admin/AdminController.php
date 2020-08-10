@@ -18,6 +18,14 @@ class AdminController extends MyController
 		$token = session()->get('token');
 		$role_id = session()->get('organization.organization_type.role_id');
 
+		if (!session()->has('dash_start') || !session()->has('dash_end')) {
+			session()->put('dash_start', date('Y-m-d', strtotime('-30 days')));
+			session()->put('dash_end', date('Y-m-d'));
+		}
+
+		$start = session()->get('dash_start');
+		$end = session()->get('dash_end');
+
 		$charts = [
 			[
 				'title' => 'Trend Distribution of Buyers',
@@ -25,10 +33,7 @@ class AdminController extends MyController
 				'id' => 'buyerChart',
 				'width' => '100%',
 				'height' => '30',
-				'data' => [
-					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-					'datasets' => [30, 50, 40, 10, 70, 45, 34]
-				]
+				'data' => $this->getDashboardData($token, 'buyers', $start, $end)
 			],
 			[
 				'title' => 'Trend Distribution of Sellers',
@@ -36,10 +41,7 @@ class AdminController extends MyController
 				'id' => 'sellerChart',
 				'width' => '100%',
 				'height' => '30',
-				'data' => [
-					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-					'datasets' => [30, 50, 40, 10, 70, 45, 34]
-				]
+				'data' => $this->getDashboardData($token, 'sellers', $start, $end)
 			],
 			[
 				'title' => 'Trend Distribution of Published Products',
@@ -47,10 +49,7 @@ class AdminController extends MyController
 				'id' => 'productChart',
 				'width' => '100%',
 				'height' => '30',
-				'data' => [
-					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-					'datasets' => [30, 50, 40, 10, 70, 45, 34]
-				]
+				'data' => $this->getDashboardData($token, 'publishedproducts', $start, $end)
 			],
 			[
 				'title' => 'Trend Distribution of RFQs',
@@ -58,10 +57,7 @@ class AdminController extends MyController
 				'id' => 'rfqChart',
 				'width' => '100%',
 				'height' => '30',
-				'data' => [
-					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-					'datasets' => [30, 50, 40, 10, 70, 45, 34]
-				]
+				'data' => $this->getDashboardData($token, 'rfqs', $start, $end)
 			],
 			[
 				'title' => 'Trend Distribution of Orders',
@@ -69,10 +65,7 @@ class AdminController extends MyController
 				'id' => 'orderChart',
 				'width' => '100%',
 				'height' => '30',
-				'data' => [
-					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-					'datasets' => [30, 50, 40, 10, 70, 45, 34]
-				]
+				'data' => $this->getDashboardData($token, 'orders', $start, $end)
 			],
 			[
 				'title' => 'Distribution of Sales Revenue',
@@ -80,15 +73,14 @@ class AdminController extends MyController
 				'id' => 'revenueChart',
 				'width' => '100%',
 				'height' => '30',
-				'data' => [
-					'labels' => ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-					'datasets' => [30, 50, 40, 10, 70, 45, 34]
-				]
+				'data' => $this->getDashboardData($token, 'revenue', $start, $end)
 			],
 		];
 
 		$view_data = [
-			'charts' => $charts
+			'charts' => $charts,
+			'dash_start' => $start,
+			'dash_end' => $end
 		];
 		$data = [
 			'page_title' => 'Dashboard',
@@ -97,6 +89,50 @@ class AdminController extends MyController
 		];
 
 		return view('template.main', $data);
+	}
+
+	public function setDashFilter(Request $request)
+	{
+		session()->put('dash_start', $request->start);
+		session()->put('dash_end', $request->end);
+	}
+
+	public function getDashboardData($token, $report, $start, $end)
+	{
+		$dashboard_data = [];
+		$dates = $this->getDatesRange($start, $end);
+		$response_data = $this->getResourceData($token, 'dashboard/' . $report . '/' . $start . '/' . $end);
+
+		foreach ($dates as $date) {
+			//Get data row
+			$new = array_values(array_filter($response_data, function ($var) use ($date) {
+				return ($var['label'] == $date);
+			}));
+			//Check if date exists in response data
+			if (!empty($new)) {
+				$dashboard_data['datasets'][] = $new[0]['value'];
+			} else {
+				$dashboard_data['datasets'][] = 0; //rand(0, 10);
+			}
+			$dashboard_data['labels'][] = date("m/d", strtotime($date));
+		}
+
+		return $dashboard_data;
+	}
+
+	public function getDatesRange($first, $last, $step = '+1 day', $format = 'Y-m-d')
+	{
+		$dates = array();
+		$current = strtotime($first);
+		$last = strtotime($last);
+
+		while ($current <= $last) {
+
+			$dates[] = date($format, $current);
+			$current = strtotime($step, $current);
+		}
+
+		return $dates;
 	}
 
 	public function displayTableView(Request $request)

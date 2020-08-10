@@ -390,5 +390,13 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::post('/how-to', 'Api\HowToController@store');
     Route::put('/how-to/{id}', 'Api\HowToController@update');
     Route::delete('/how-to/{id}', 'Api\HowToController@destroy');
+
+    /*Dashboard endpoints*/
+    Route::get('/dashboard/buyers/{start}/{end}', 'Api\DashboardController@getBuyers');
+    Route::get('/dashboard/sellers/{start}/{end}', 'Api\DashboardController@getSellers');
+    Route::get('/dashboard/publishedproducts/{start}/{end}', 'Api\DashboardController@getPublishedProducts');
+    Route::get('/dashboard/rfqs/{start}/{end}', 'Api\DashboardController@getRFQs');
+    Route::get('/dashboard/orders/{start}/{end}', 'Api\DashboardController@getOrders');
+    Route::get('/dashboard/revenue/{start}/{end}', 'Api\DashboardController@getRevenue');
   });
 });

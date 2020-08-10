@@ -11,7 +11,15 @@
 <div class="container-fluid mt-n10">
     <div class="card mb-4">
         <div class="card-header">
-            <div class="ml-auto">Filter Here</div>
+            <div class="ml-auto">
+                <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                <input type="hidden" id="dash_start" value="{{ $dash_start }}" />
+                <input type="hidden" id="dash_end" value="{{ $dash_end }}" />
+                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                    <i class="fa fa-calendar"></i>&nbsp;
+                    <span></span> <i class="fa fa-caret-down"></i>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
@@ -30,4 +38,3 @@
             </div>
         </div>
     </div>
-    <script src="libs/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>

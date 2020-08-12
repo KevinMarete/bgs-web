@@ -6,20 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organization extends Model
-{	
-	use SoftDeletes;
+{
+    use SoftDeletes;
 
     protected $table = 'tbl_organization';
 
-    protected $fillable = ['name', 'town', 'road', 'building', 'organization_type_id'];
+    protected $fillable = ['name', 'town', 'road', 'building', 'organization_type_id', 'ppb_licence'];
 
     public static $rules = [
         "name" => "required",
         "town" => "required",
         "road" => "required",
         "building" => "required",
-        "organization_type_id" => "required|numeric"
-	];
+        "organization_type_id" => "required|numeric",
+        "ppb_licence" => "required",
+    ];
 
     public function organization_type()
     {
@@ -30,5 +31,4 @@ class Organization extends Model
     {
         return $this->hasMany('App\User');
     }
-
 }

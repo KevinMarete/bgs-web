@@ -41,7 +41,8 @@ class OrganizationController extends Controller
     $this->validate($request, Organization::$rules);
     $organization = Organization::firstOrCreate([
       'name' => $request->name,
-      'organization_type_id' => $request->organization_type_id
+      'organization_type_id' => $request->organization_type_id,
+      'ppb_licence' => $request->ppb_licence
     ], $request->all());
     return response()->json($organization);
   }

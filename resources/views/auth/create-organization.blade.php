@@ -30,7 +30,7 @@
                                     <div class="h3 text-primary font-weight-300 mb-0">Create an Organization</div>
                                 </div>
                                 <hr class="m-0" />
-                                <div class="card-body p-5">
+                                <div class="card-body px-5">
                                     <form action="/add-organization" method="POST">
                                         @csrf
                                         <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter new organization name" aria-label="Organization Name" aria-describedby="orgNameExample" name="name" required /></div>
@@ -45,6 +45,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter PPB Licence Number" aria-label="Organization PPB Licence Number" aria-describedby="orgPPBLicenceExample" name="ppb_licence" required /></div>
                                         <button class="btn btn-block btn-primary" type="submit">Create organization</button>
                                     </form>
                                 </div>

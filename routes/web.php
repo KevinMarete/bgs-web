@@ -13,10 +13,11 @@
 
 //Public endpoints
 
-/*Default Route*/
-Route::get('/', function () {
-    return view('auth.sign-in');
-});
+/*Landing Routes*/
+Route::get('/', 'Auth\LandingController@displayView');
+Route::get('/home', 'Auth\LandingController@displayView');
+Route::get('/about', 'Auth\LandingController@displayView');
+Route::get('/solution', 'Auth\LandingController@displayView');
 
 /*Registration*/
 Route::get('/registration', function () {
@@ -109,6 +110,10 @@ Route::middleware('usersession')->group(function () {
     Route::post('/manage/{resource}/{action}/{id}', 'Admin\AdminController@displayManageView');
     Route::post('/add-admin-account', 'Admin\AdminController@saveAdminAccount');
     Route::get('/rejectreasons', 'Admin\AdminController@displayTableView');
+    Route::get('/faqs', 'Admin\AdminController@displayTableView');
+    Route::get('/how-tos', 'Admin\AdminController@displayTableView');
+    Route::post('/dashfilter', 'Admin\AdminController@setDashFilter');
+    Route::get('/organizations', 'Admin\AdminController@displayTableView');
 
     /*Buyer Routes*/
     Route::get('/marketplace', 'Buyer\BuyerController@displayMarketplaceView');
@@ -127,8 +132,7 @@ Route::middleware('usersession')->group(function () {
     Route::get('/view-order/{id}', 'Buyer\BuyerController@displayViewOrder');
     Route::get('/action-order/{id}', 'Buyer\BuyerController@displayActionOrder');
     Route::post('/action-order/{id}', 'Buyer\BuyerController@actionOrder');
-    Route::get('/faqs', 'Buyer\BuyerController@displayFaqsView');
-    Route::get('/contact-us', 'Buyer\BuyerController@displayContactUsView');
+    Route::get('/support', 'Buyer\BuyerController@displaySupportView');
     Route::get('/rfq', 'Buyer\BuyerController@displayRFQTableView');
     Route::get('/rfq/new', 'Buyer\BuyerController@displayNewRFQView');
     Route::post('/rfq/save', 'Buyer\BuyerController@saveRFQ');

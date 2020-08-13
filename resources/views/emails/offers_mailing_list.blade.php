@@ -8,7 +8,7 @@
       Dear Customer,
       <br />
       <br />
-      Please see below various offers from BGS available on {{ $mailing_list->date }}: <br /><br />
+      Please see below various offers from Pharmahub available on {{ $mailing_list->date }}: <br /><br />
     </div>
     @if (sizeof($mailing_list->offers) > 0)
     <b>Available Offers({{ sizeof($mailing_list->offers) }}) Click <a href="{{ env('APP_DOMAIN') }}" target="_blank">Here</a> to Purchase Deal Item(s)</b>
@@ -62,7 +62,7 @@
     <br />
     <br />
     Regards, <br />
-    BGS Meds
+    Pharmahub
   </main>
 </body>
 

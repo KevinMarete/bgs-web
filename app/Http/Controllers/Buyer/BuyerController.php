@@ -975,40 +975,6 @@ class BuyerController extends MyController
         return ['status' => 'success', 'message' => 'Notification sent'];
     }
 
-    public function displayFaqsView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
-        $order_id = $request->id;
-
-        $view_data = [];
-        $data = [
-            'page_title' => 'faqs',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.faqs', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
-    public function displayContactUsView(Request $request)
-    {
-        $token = session()->get('token');
-        $role_id = session()->get('organization.organization_type.role_id');
-        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
-        $order_id = $request->id;
-
-        $view_data = [];
-        $data = [
-            'page_title' => 'contact-us',
-            'menus' => $this->getRoleMenus($token, $role_id),
-            'content_view' => View::make('buyer.contact_us', $view_data)
-        ];
-
-        return view('template.main', $data);
-    }
-
     public function displayRFQTableView()
     {
         $resource = 'rfq';
@@ -1420,5 +1386,23 @@ class BuyerController extends MyController
             $emails = $this->get_admin_emails();
         }
         return $emails;
+    }
+
+    public function displaySupportView()
+    {
+        $token = session()->get('token');
+        $role_id = session()->get('organization.organization_type.role_id');
+
+        $view_data = [
+            'faqs' => $this->getResourceData($token, 'faqs'),
+            'how_tos' => $this->getResourceData($token, 'how-tos'),
+        ];
+        $data = [
+            'page_title' => 'faqs',
+            'menus' => $this->getRoleMenus($token, $role_id),
+            'content_view' => View::make('buyer.support', $view_data)
+        ];
+
+        return view('template.main', $data);
     }
 }

@@ -17,13 +17,122 @@ class AdminController extends MyController
 	{
 		$token = session()->get('token');
 		$role_id = session()->get('organization.organization_type.role_id');
+
+		if (!session()->has('dash_start') || !session()->has('dash_end')) {
+			session()->put('dash_start', date('Y-m-d', strtotime('-30 days')));
+			session()->put('dash_end', date('Y-m-d'));
+		}
+
+		$start = session()->get('dash_start');
+		$end = session()->get('dash_end');
+
+		$charts = [
+			[
+				'title' => 'Trend Distribution of Buyers',
+				'class' => 'chart-area',
+				'id' => 'buyerChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => $this->getDashboardData($token, 'buyers', $start, $end)
+			],
+			[
+				'title' => 'Trend Distribution of Sellers',
+				'class' => 'chart-area',
+				'id' => 'sellerChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => $this->getDashboardData($token, 'sellers', $start, $end)
+			],
+			[
+				'title' => 'Trend Distribution of Published Products',
+				'class' => 'chart-bar',
+				'id' => 'productChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => $this->getDashboardData($token, 'publishedproducts', $start, $end)
+			],
+			[
+				'title' => 'Trend Distribution of RFQs',
+				'class' => 'chart-bar',
+				'id' => 'rfqChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => $this->getDashboardData($token, 'rfqs', $start, $end)
+			],
+			[
+				'title' => 'Trend Distribution of Orders',
+				'class' => 'chart-area',
+				'id' => 'orderChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => $this->getDashboardData($token, 'orders', $start, $end)
+			],
+			[
+				'title' => 'Distribution of Sales Revenue',
+				'class' => 'chart-area',
+				'id' => 'revenueChart',
+				'width' => '100%',
+				'height' => '30',
+				'data' => $this->getDashboardData($token, 'revenue', $start, $end)
+			],
+		];
+
+		$view_data = [
+			'charts' => $charts,
+			'dash_start' => $start,
+			'dash_end' => $end
+		];
 		$data = [
 			'page_title' => 'Dashboard',
 			'menus' => $this->getRoleMenus($token, $role_id),
-			'content_view' => View::make('admin.dashboard')
+			'content_view' => View::make('admin.dashboard', $view_data)
 		];
 
 		return view('template.main', $data);
+	}
+
+	public function setDashFilter(Request $request)
+	{
+		session()->put('dash_start', $request->start);
+		session()->put('dash_end', $request->end);
+	}
+
+	public function getDashboardData($token, $report, $start, $end)
+	{
+		$dashboard_data = [];
+		$dates = $this->getDatesRange($start, $end);
+		$response_data = $this->getResourceData($token, 'dashboard/' . $report . '/' . $start . '/' . $end);
+
+		foreach ($dates as $date) {
+			//Get data row
+			$new = array_values(array_filter($response_data, function ($var) use ($date) {
+				return ($var['label'] == $date);
+			}));
+			//Check if date exists in response data
+			if (!empty($new)) {
+				$dashboard_data['datasets'][] = $new[0]['value'];
+			} else {
+				$dashboard_data['datasets'][] = 0; //rand(0, 10);
+			}
+			$dashboard_data['labels'][] = date("m/d", strtotime($date));
+		}
+
+		return $dashboard_data;
+	}
+
+	public function getDatesRange($first, $last, $step = '+1 day', $format = 'Y-m-d')
+	{
+		$dates = array();
+		$current = strtotime($first);
+		$last = strtotime($last);
+
+		while ($current <= $last) {
+
+			$dates[] = date($format, $current);
+			$current = strtotime($step, $current);
+		}
+
+		return $dates;
 	}
 
 	public function displayTableView(Request $request)
@@ -112,6 +221,9 @@ class AdminController extends MyController
 				'couriers' => ['id', 'name', 'phone', 'email', 'contact'],
 				'users' => ['id', 'firstname', 'lastname', 'email', 'phone', 'organization'],
 				'rejectreasons' => ['id', 'name'],
+				'faqs' => ['id', 'question', 'answer'],
+				'how-tos' => ['id', 'title', 'link'],
+				'organizations' => ['id', 'name', 'organization_type', 'town', 'road', 'building', 'ppb_licence'],
 			];
 			$header_data = $headers[$resource];
 		}
@@ -187,6 +299,9 @@ class AdminController extends MyController
 			'couriers' => [],
 			'users' => ['admins'],
 			'rejectreasons' => [],
+			'faqs' => [],
+			'how-tos' => [],
+			'organizations' => ['organizationtypes'],
 		];
 
 		if ($token !== null && $resource !== null) {

@@ -376,5 +376,27 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
     Route::post('/paymentrfq', 'Api\PaymentRfqController@store');
     Route::put('/paymentrfq/{id}', 'Api\PaymentRfqController@update');
     Route::delete('/paymentrfq/{id}', 'Api\PaymentRfqController@destroy');
+
+    /*FAQs endpoints*/
+    Route::get('/faqs', 'Api\FaqController@index');
+    Route::get('/faq/{id}', 'Api\FaqController@show');
+    Route::post('/faq', 'Api\FaqController@store');
+    Route::put('/faq/{id}', 'Api\FaqController@update');
+    Route::delete('/faq/{id}', 'Api\FaqController@destroy');
+
+    /*HowTos endpoints*/
+    Route::get('/how-tos', 'Api\HowToController@index');
+    Route::get('/how-to/{id}', 'Api\HowToController@show');
+    Route::post('/how-to', 'Api\HowToController@store');
+    Route::put('/how-to/{id}', 'Api\HowToController@update');
+    Route::delete('/how-to/{id}', 'Api\HowToController@destroy');
+
+    /*Dashboard endpoints*/
+    Route::get('/dashboard/buyers/{start}/{end}', 'Api\DashboardController@getBuyers');
+    Route::get('/dashboard/sellers/{start}/{end}', 'Api\DashboardController@getSellers');
+    Route::get('/dashboard/publishedproducts/{start}/{end}', 'Api\DashboardController@getPublishedProducts');
+    Route::get('/dashboard/rfqs/{start}/{end}', 'Api\DashboardController@getRFQs');
+    Route::get('/dashboard/orders/{start}/{end}', 'Api\DashboardController@getOrders');
+    Route::get('/dashboard/revenue/{start}/{end}', 'Api\DashboardController@getRevenue');
   });
 });

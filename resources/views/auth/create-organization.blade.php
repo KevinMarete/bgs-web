@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content />
     <meta name="author" content />
-    <title>BGS | Create Organization</title>
+    <title>Pharmahub | Create Organization</title>
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <script data-search-pseudo-elements defer src="libs/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
                                     <div class="h3 text-primary font-weight-300 mb-0">Create an Organization</div>
                                 </div>
                                 <hr class="m-0" />
-                                <div class="card-body p-5">
+                                <div class="card-body px-5">
                                     <form action="/add-organization" method="POST">
                                         @csrf
                                         <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter new organization name" aria-label="Organization Name" aria-describedby="orgNameExample" name="name" required /></div>
@@ -45,11 +45,13 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter PPB Licence Number" aria-label="Organization PPB Licence Number" aria-describedby="orgPPBLicenceExample" name="ppb_licence" required /></div>
                                         <button class="btn btn-block btn-primary" type="submit">Create organization</button>
                                     </form>
                                 </div>
                                 <div class="card-footer text-center">
                                     <div class="small"><a href="/registration">Have an organization? Go to Registration</a></div>
+                                    <div class="small"><a href="/">Go to Main Page</a></div>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +63,7 @@
             <footer class="sb-footer py-4 mt-auto sb-footer-dark">
                 <div class="container-fluid">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div>Copyright &copy; BGS {{date('Y')}}</div>
+                        <div>Copyright &copy; Pharmahub {{date('Y')}}</div>
                     </div>
                 </div>
             </footer>
@@ -76,6 +78,7 @@
     <script src="/libs/daterangepicker/js/moment.min.js"></script>
     <script src="/libs/daterangepicker/js/daterangepicker.js"></script>
     <script src="/libs/select2/js/select2.min.js"></script>
+    <script src="/libs/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>
 
     <!--

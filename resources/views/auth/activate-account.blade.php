@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content />
     <meta name="author" content />
-    <title>BGS | Activate Account</title>
+    <title>Pharmahub | Activate Account</title>
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <script data-search-pseudo-elements defer src="libs/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
@@ -41,6 +41,7 @@
                                 </div>
                                 <div class="card-footer text-center">
                                     <div class="small"><a href="/registration">Need an account? Sign up!</a></div>
+                                    <div class="small"><a href="/">Go to Main Page</a></div>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +53,7 @@
             <footer class="sb-footer py-4 mt-auto sb-footer-dark">
                 <div class="container-fluid">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div>Copyright &copy; BGS {{date('Y')}}</div>
+                        <div>Copyright &copy; Pharmahub {{date('Y')}}</div>
                     </div>
                 </div>
             </footer>
@@ -67,6 +68,7 @@
     <script src="/libs/daterangepicker/js/moment.min.js"></script>
     <script src="/libs/daterangepicker/js/daterangepicker.js"></script>
     <script src="/libs/select2/js/select2.min.js"></script>
+    <script src="/libs/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>
 
     <!--

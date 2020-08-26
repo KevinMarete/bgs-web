@@ -62,7 +62,7 @@
                         <td>{{ $row['product_now']['product']['brand_name'] }}</td>
                         <td>
                           <a href="/promotions/edit/slider/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
-                            <i data-feather="more-vertical"></i>
+                            <i data-feather="edit"></i>
                           </a>
                         </td>
                       </tr>
@@ -110,7 +110,7 @@
                         <td>{{ $row['product_now']['product']['brand_name'] }}</td>
                         <td>
                           <a href="/promotions/edit/static/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
-                            <i data-feather="more-vertical"></i>
+                            <i data-feather="edit"></i>
                           </a>
                         </td>
                       </tr>

@@ -29,13 +29,13 @@
           <div class="tab-pane active" id="faqs">
             <div class="container py-3">
               <div class="row">
-                <div class="col-10 mx-auto">
+                <div class="col-12 mx-auto">
                   <div class="accordion" id="faqList">
                     @foreach($faqs as $faq)
                     <div class="card">
                       <div class="card-header p-2" id="heading-{{ $faq['id'] }}">
                         <h5 class="mb-0">
-                          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{ $faq['id'] }}" aria-expanded="false" aria-controls="collapse-{{ $faq['id'] }}">
+                          <button class="btn btn-link text-left" type="button" data-toggle="collapse" data-target="#collapse-{{ $faq['id'] }}" aria-expanded="false" aria-controls="collapse-{{ $faq['id'] }}">
                             Q: {{ ucwords($faq['question']) }}
                           </button>
                         </h5>
@@ -48,7 +48,6 @@
                     </div>
                     @endforeach
                   </div>
-
                 </div>
               </div>
               <!--/row-->
@@ -58,7 +57,7 @@
           <div class="tab-pane" id="how-to">
             <div class="row">
               @foreach($how_tos as $how_to)
-              <div class="col-4">
+              <div class="col-sm-12 col-md-4 col-lg-4">
                 <h6><strong>{{ $how_to['title'] }}</strong></h6>
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe class="embed-responsive-item" src="{{ $how_to['link'] }}" allowfullscreen></iframe>

@@ -11,7 +11,7 @@
 <div class="container-fluid mt-n10">
     <div class="card mb-4">
         <div class="card-header">
-            <div class="ml-auto">
+            <div class="ml-auto col-sm-12 col-md-4 col-lg-4">
                 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                 <input type="hidden" id="dash_start" value="{{ $dash_start }}" />
                 <input type="hidden" id="dash_end" value="{{ $dash_end }}" />

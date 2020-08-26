@@ -65,7 +65,7 @@
               <td>{{ ($row['is_published'] ? 'Yes' : 'No') }}</td>
               <td>
                 <a href="/pricelist/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
-                  <i data-feather="more-vertical"></i>
+                  <i data-feather="edit"></i>
                 </a>
                 <a href="/pricelist/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
                   <i data-feather="trash-2"></i>

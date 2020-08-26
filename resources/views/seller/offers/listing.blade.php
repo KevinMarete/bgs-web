@@ -48,7 +48,7 @@
                 <td>{{ $row['product_now']['product']['brand_name'] }}</td>
                 <td>
                   <a href="/offers/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
-                    <i data-feather="more-vertical"></i>
+                    <i data-feather="edit"></i>
                   </a>
                   <a href="/offers/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
                     <i data-feather="trash-2"></i>

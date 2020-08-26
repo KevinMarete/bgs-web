@@ -16,7 +16,7 @@
         @csrf
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-12">
               <div class="sb-datatable table-responsive">
                 <table class="table table-bordered table-hover transactions-tbl" id="dataTable" width="100%" cellspacing="0">
                   <thead>

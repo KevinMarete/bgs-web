@@ -302,31 +302,33 @@
                       </div>
                     </div>
                     <div class="col-md-8">
-                      <table class="table table-condensed table-hover table-bordered table-sm dataTable">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>How Earned</th>
-                            <th>Points</th>
-                            <th>When</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @foreach ($loyalty['loyalty_logs'] as $point)
-                          <tr>
-                            <td>{{ $point['status'] }}</td>
-                            <td>{{ $point['points'] }}</td>
-                            <td>{{ $point['created_at'] }}</td>
-                          </tr>
-                          @endforeach
-                        </tbody>
-                        <tfoot class="thead-light">
-                          <tr>
-                            <th>How Earned</th>
-                            <th>Points</th>
-                            <th>When</th>
-                          </tr>
-                        </tfoot>
-                      </table>
+                      <div class="table-responsive">
+                        <table class="table table-condensed table-hover table-bordered table-sm dataTable">
+                          <thead class="thead-light">
+                            <tr>
+                              <th>How Earned</th>
+                              <th>Points</th>
+                              <th>When</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach ($loyalty['loyalty_logs'] as $point)
+                            <tr>
+                              <td>{{ $point['status'] }}</td>
+                              <td>{{ $point['points'] }}</td>
+                              <td>{{ $point['created_at'] }}</td>
+                            </tr>
+                            @endforeach
+                          </tbody>
+                          <tfoot class="thead-light">
+                            <tr>
+                              <th>How Earned</th>
+                              <th>Points</th>
+                              <th>When</th>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -351,31 +353,33 @@
                       </div>
                     </div>
                     <div class="col-md-8">
-                      <table class="table table-condensed table-hover table-bordered table-sm dataTable">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>Status</th>
-                            <th>Credits</th>
-                            <th>When</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @foreach ($credit['credit_logs'] as $credit)
-                          <tr>
-                            <td>{{ $credit['status'] }}</td>
-                            <td>{{ $credit['amount'] }}</td>
-                            <td>{{ $credit['created_at'] }}</td>
-                          </tr>
-                          @endforeach
-                        </tbody>
-                        <tfoot class="thead-light">
-                          <tr>
-                            <th>Status</th>
-                            <th>Credits</th>
-                            <th>When</th>
-                          </tr>
-                        </tfoot>
-                      </table>
+                      <div class="table-responsive">
+                        <table class="table table-condensed table-hover table-bordered table-sm dataTable">
+                          <thead class="thead-light">
+                            <tr>
+                              <th>Status</th>
+                              <th>Credits</th>
+                              <th>When</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach ($credit['credit_logs'] as $credit)
+                            <tr>
+                              <td>{{ $credit['status'] }}</td>
+                              <td>{{ $credit['amount'] }}</td>
+                              <td>{{ $credit['created_at'] }}</td>
+                            </tr>
+                            @endforeach
+                          </tbody>
+                          <tfoot class="thead-light">
+                            <tr>
+                              <th>Status</th>
+                              <th>Credits</th>
+                              <th>When</th>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -331,7 +331,7 @@ class OrganizationController extends Controller
    */
   public function getUnpublishedProductNows($id)
   {
-    $productnows = ProductNow::with('product', 'organization', 'user')->where('organization_id', $id)->where('is_published', false)->get();
+    $productnows = ProductNow::with('product', 'product.product_category', 'organization', 'user')->where('organization_id', $id)->where('is_published', false)->get();
     return response()->json($productnows);
   }
 
@@ -343,7 +343,7 @@ class OrganizationController extends Controller
    */
   public function getPublishedProductNows($id)
   {
-    $productnows = ProductNow::with('product', 'organization', 'user')->where('organization_id', $id)->where('is_published', true)->get();
+    $productnows = ProductNow::with('product', 'product.product_category', 'organization', 'user')->where('organization_id', $id)->where('is_published', true)->get();
     return response()->json($productnows);
   }
 

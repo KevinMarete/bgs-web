@@ -6,14 +6,16 @@
     <button class="btn sb-btn-icon sb-btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#">
         <i data-feather="code"></i>
     </button>
-    <p class="mb-0 text-center">
-        <em class="text-warning">
+    <p class="mb-0 text-center row">
+        <em class="text-warning col-12">
             Pharmahub....Increasing your profitability
         </em>
-        <i data-feather="phone"></i>
-        <em class="text-warning">
-            <a href="tel:{{ str_replace(['(', ')'], ['', ''], env('CONTACT_PHONE')) }}">{{ env('CONTACT_PHONE') }} </a>
-        </em>
+        <span class="col-12">
+            <i data-feather="phone"></i>
+            <em class="text-warning">
+                <a href="tel:{{ str_replace(['(', ')'], ['', ''], env('CONTACT_PHONE')) }}">{{ env('CONTACT_PHONE') }} </a>
+            </em>
+        </span>
     </p>
     <form class="form-inline mr-auto d-none d-lg-block">
     </form>

@@ -49,7 +49,7 @@
                             <td>KES {{ number_format($row['product_total'] + $row['shipping_total']) }}</td>
                             <td>
                                 <a href="/view-order/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
-                                    <i data-feather="more-vertical"></i>
+                                    <i data-feather="eye"></i>
                                 </a>
                             </td>
                         </tr>

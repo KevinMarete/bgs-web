@@ -23,7 +23,7 @@
           @endif
 
           <!-- select category filter control -->
-          <select data-jplist-control="select-filter" data-group="products" data-name="categoryfilter" class="form-control input-md input-group input-group-md col-md-3 mr-2">
+          <select data-jplist-control="select-filter" data-group="products" data-name="categoryfilter" class="form-control input-md input-group input-group-md col-sm-12 col-md-6 col-lg-3 m-2">
             <option value="0" data-path="default">Filter by Category</option>
             @foreach ($productcategories as $index => $productcategory)
             <option value="{{ $index + 1 }}" data-path=".{{ str_replace(' ', '_', $productcategory['name']) }}">{{ strtoupper($productcategory['name']) }}</option>
@@ -31,7 +31,7 @@
           </select>
 
           <!-- select organization filter control -->
-          <select data-jplist-control="select-filter" data-group="products" data-name="organizationfilter" class="form-control input-md input-group input-group-md col-md-3">
+          <select data-jplist-control="select-filter" data-group="products" data-name="organizationfilter" class="form-control input-md input-group input-group-md col-sm-12 col-md-6 col-lg-3 m-2">
             <option value="0" data-path="default">Filter by Organization</option>
             @foreach ($organizations as $index => $organization)
             <option value="{{ $index + 1 }}" data-path=".{{ str_replace(' ', '_', $organization['name']) }}">{{ strtoupper($organization['name']) }}</option>
@@ -39,7 +39,7 @@
           </select>
 
           <!-- text filter control -->
-          <div class="input-group input-group-md col-md-4">
+          <div class="input-group input-group-md col-sm-12 col-md-6 col-lg-4 m-2">
             <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" data-jplist-control="textbox-filter" data-group="products" data-name="product-filter" data-path=".molecular_name, .brand_name" type="text" value="" data-clear-btn-id="name-clear-btn" placeholder="Search..." />
 
             <div class="input-group-append">
@@ -49,7 +49,7 @@
             </div>
           </div>
 
-          <a class="btn btn-success btn-sm col-md-1" href="/cart">
+          <a class="btn btn-success btn-sm col-sm-12 col-md-6 col-lg-1 m-2" href="/cart">
             <i class="fa fa-shopping-cart"></i> Cart
             <span class="badge badge-light ml-1">{{ sizeof(session()->get('cart')) }}</span>
           </a>

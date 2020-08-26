@@ -10,12 +10,16 @@
 </div>
 <div class="container-fluid mt-n10">
     @if (Session::has('bgs_msg'))
-        {!! session('bgs_msg') !!}
+    {!! session('bgs_msg') !!}
     @endif
     <div class="card mb-4">
-        <div class="card-header">
-            {{ $resource_name }} Listing
-            <a href="/manage/{{ str_replace(' ', '-', strtolower($resource_name)) }}" class="btn btn-primary ml-auto"><i data-feather="plus"></i> Add {{ $resource_name }}</a>
+        <div class="card-header row">
+            <div class="col-sm-12 col-md-9 col-lg-9">
+                {{ $resource_name }} Listing
+            </div>
+            <div class="col-sm-12 col-md-3 col-lg-3">
+                <a href="/manage/{{ str_replace(' ', '-', strtolower($resource_name)) }}" class="btn btn-primary ml-auto"><i data-feather="plus"></i> Add {{ $resource_name }}</a>
+            </div>
         </div>
         <div class="card-body">
             <div class="sb-datatable table-responsive">
@@ -23,7 +27,7 @@
                     <thead>
                         <tr>
                             @foreach ($table_headers as $key => $header)
-                                <th>{{ ucwords($header) }}</th>  
+                            <th>{{ ucwords($header) }}</th>
                             @endforeach
                             <th>Actions</th>
                         </tr>
@@ -31,30 +35,30 @@
                     <tfoot>
                         <tr>
                             @foreach ($table_headers as $header)
-                                <th>{{ ucwords($header) }}</th>  
+                            <th>{{ ucwords($header) }}</th>
                             @endforeach
                             <th>Actions</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         @foreach ($table_data as $row)
-                            <tr>
+                        <tr>
                             @foreach ($table_headers as $header)
-                                @if (is_array($row[$header]))
-                                    <td>{{ $row[$header][(array_key_exists('name', $row[$header]) ? 'name' : 'molecular_name')] }}</td>
-                                @else 
-                                    <td>{{ $row[$header] }}</td>                                                  
-                                @endif
+                            @if (is_array($row[$header]))
+                            <td>{{ $row[$header][(array_key_exists('name', $row[$header]) ? 'name' : 'molecular_name')] }}</td>
+                            @else
+                            <td>{{ $row[$header] }}</td>
+                            @endif
                             @endforeach
-                                <td>
-                                    <a href="/manage/{{ str_replace(' ', '-', strtolower($resource_name)) }}/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
-                                        <i data-feather="more-vertical"></i>
-                                    </a>
-                                    <a href="/manage/{{ str_replace(' ', '-', strtolower($resource_name)) }}/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
-                                        <i data-feather="trash-2"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            <td>
+                                <a href="/manage/{{ str_replace(' ', '-', strtolower($resource_name)) }}/edit/{{ $row['id'] }}" class="btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark mr-2">
+                                    <i data-feather="edit"></i>
+                                </a>
+                                <a href="/manage/{{ str_replace(' ', '-', strtolower($resource_name)) }}/delete/{{ $row['id'] }}" class="delete btn sb-btn-datatable sb-btn-icon sb-btn-transparent-dark">
+                                    <i data-feather="trash-2"></i>
+                                </a>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>

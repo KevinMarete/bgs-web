@@ -3,8 +3,8 @@
         <!-- Logo Image -->
         <img src="/assets/img/logo.jpg" alt="" height="60" class="rounded d-inline-block align-middle mr-2">
     </a>
-    <button class="btn sb-btn-icon sb-btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#">
-        <i data-feather="code"></i>
+    <button class="btn sb-btn-icon btn-outline-primary order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#">
+        <i data-feather="menu"></i>
     </button>
     <p class="mb-0 text-center row">
         <em class="text-warning col-12">

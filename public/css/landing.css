@@ -22086,3 +22086,11 @@ section {
     clip: rect(0, 900px, 0, 0);
     animation: noise-anim-2 3s infinite linear alternate-reverse;
 }
+
+.bg-landing-img {
+    background-image: url("/assets/img/landing/background.jpeg");
+    background-color: #06794f !important;
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+}

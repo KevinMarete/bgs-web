@@ -86,7 +86,7 @@
                     <input type="hidden" class="form-control" name="discount" value="{{ round(($product['discount']/100), 2) }}">
                     <input type="hidden" class="form-control" name="sub_total" value="{{ ($product['product_now']['unit_price'] - ($product['discount'] * $product['product_now']['unit_price'])/100)*$product['min_order_quantity'] }}">
                     <input type="hidden" class="form-control" name="product_name" value="{{ $product['product_now']['product']['molecular_name'] }}">
-                    <input type="hidden" class="form-control" name="product_description" value="{{ $product['product_now']['product']['brand_name'].' Packsize:'.$product['product_now']['product']['pack_size'].' Strength:'.$product['product_now']['product']['strength'] }}">
+                    <input type="hidden" class="form-control" name="product_description" value="{{ $product['product_now']['product']['brand_name'] }}">
                     <input type="hidden" class="form-control" name="organization_id" value="{{ $product['product_now']['organization_id'] }}">
                     <input type="hidden" class="form-control" name="organization_name" value="{{ $product['product_now']['organization']['name'] }}">
                     <input type="hidden" class="form-control" name="organization_email" value="{{ $product['product_now']['user']['email'] }}">

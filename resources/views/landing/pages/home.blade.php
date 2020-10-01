@@ -1,10 +1,12 @@
-<header class="page-header page-header-dark bg-gradient-primary-to-secondary">
+<header class="page-header page-header-dark bg-gradient-primary-to-secondary bg-landing-img">
   <div class="page-header-content pt-10">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-lg-6" data-aos="fade-up">
-          <h1 class="page-header-title">Welcome to Pharmahub</h1>
-          <p class="page-header-text mb-5">A marketplace for buyers (pharmacies, hospitals etc..) and sellers (suppliers, manufacturers etc..) to provide quality healthcare products at the lowest possible prices.</p>
+          <h1 class="page-header-title text-dark">Welcome to Pharmahub</h1>
+          <p class="page-header-text mb-5">
+            <p class="text-dark">A marketplace for buyers (pharmacies, hospitals etc..) and sellers (suppliers, manufacturers etc..) to provide quality healthcare products at the lowest possible prices.</p>
+          </p>
           <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#buyers">
             Buyers <i class="fas fa-clinic-medical ml-1"></i></a>
           <a class="btn btn-warning btn-marketing rounded-pill lift lift-sm" href="#sellers">

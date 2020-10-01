@@ -1,10 +1,12 @@
-<header class="page-header page-header-dark bg-gradient-primary-to-secondary">
+<header class="page-header page-header-dark bg-gradient-primary-to-secondary bg-landing-img">
   <div class="page-header-content pt-10">
     <div class="container text-center">
       <div class="row justify-content-center">
         <div class="col-lg-8">
-          <h1 class="page-header-title mb-3">Our Solutions</h1>
-          <p class="page-header-text">A variety of solutions to meet the needs of both buyers and sellers of health products.</p>
+          <h1 class="page-header-title mb-3 text-dark">Our Solutions</h1>
+          <p class="page-header-text">
+            <p class="text-dark">A variety of solutions to meet the needs of both buyers and sellers of health products.</p>
+          </p>
         </div>
       </div>
     </div>

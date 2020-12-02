@@ -105,7 +105,7 @@
                   <strong>Discount:</strong> {{ $product['discount']. '%'}} <br />
                   <strong>MinimumOrderQTY:</strong> {{ $product['min_order_quantity'] }} <br />
                   <strong>Category:</strong> <span class="{{ str_replace(' ', '_', $product['product_now']['product']['product_category']['name']) }}">{{ $product['product_now']['product']['product_category']['name'] }}</span> <br />
-                  <strong>Vendor:</strong> <span class="{{ $product['product_now']['organization']['name'] }}">{{ $product['product_now']['organization']['name'] }}</span>
+                  <strong>Vendor:</strong> <span class="{{ str_replace(' ', '_', $product['product_now']['organization']['name']) }}">{{ $product['product_now']['organization']['name'] }}</span>
                 </p>
               </div>
             </div>

@@ -99,7 +99,7 @@
                   <strong class="brand_name">{{ strtoupper($product['product']['molecular_name']) }}</strong> <br />
                   <strong>Packsize:</strong> {{ $product['product']['pack_size'] }} <br />
                   <strong>Category:</strong> <span class="{{ str_replace(' ', '_', $product['product']['product_category']['name']) }}">{{ $product['product']['product_category']['name'] }}</span> <br />
-                  <strong>Vendor:</strong> <span class="{{ $product['organization']['name'] }}">{{ $product['organization']['name'] }}</span>
+                  <strong>Vendor:</strong> <span class="{{ str_replace(' ', '_', $product['organization']['name']) }}">{{ $product['organization']['name'] }}</span>
                 </p>
               </div>
             </div>

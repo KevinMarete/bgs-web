@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:7.2.31-fpm
 
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
@@ -28,7 +28,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
 RUN docker-php-ext-install mbstring zip exif pcntl pdo pdo_pgsql pgsql
-RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install gd
 
 # Install composer

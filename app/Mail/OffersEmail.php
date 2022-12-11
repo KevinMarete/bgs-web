@@ -30,6 +30,6 @@ class OffersEmail extends Mailable
   {
     $this->view('emails/offers_mailing_list');
     return $this->bcc($this->mailing_list->email)
-      ->subject('Pharmahub Offers # ' . $this->mailing_list->date);
+      ->subject(config('app.label').' Offers # ' . $this->mailing_list->date);
   }
 }

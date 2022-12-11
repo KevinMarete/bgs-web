@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-lg-6" data-aos="fade-up">
-          <h1 class="page-header-title text-dark">Welcome to Pharmahub</h1>
+          <h1 class="page-header-title text-dark">Welcome to {{ config('app.label') }}</h1>
           <p class="page-header-text mb-5">
             <p class="text-dark">A marketplace for buyers (pharmacies, hospitals etc..) and sellers (suppliers, manufacturers etc..) to provide quality healthcare products at the lowest possible prices.</p>
           </p>

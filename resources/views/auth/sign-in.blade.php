@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content/>
     <meta name="author" content/>
-    <title>Pharmahub | Sign-In</title>
+    <title>{{ config('app.label') }} | Sign-In</title>
     <link href="css/styles.css" rel="stylesheet"/>
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
     <script data-search-pseudo-elements defer src="libs/ajax/libs/font-awesome/5.11.2/js/all.min.js"
@@ -71,7 +71,7 @@
         <footer class="sb-footer py-4 mt-auto sb-footer-dark">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div>Copyright &copy; Pharmahub {{date('Y')}}</div>
+                    <div>Copyright &copy; {{ config('app.label') }} {{date('Y')}}</div>
                 </div>
             </div>
         </footer>

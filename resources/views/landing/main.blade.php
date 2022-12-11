@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content />
   <meta name="author" content />
-  <title>Pharmahub | {{ ucwords($page_title) }}</title>
+  <title>{{ config('app.label') }} | {{ ucwords($page_title) }}</title>
   @include('landing.styles')
 </head>
 

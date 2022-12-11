@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content />
   <meta name="author" content />
-  <title>Pharmahub | Sign-Up</title>
+  <title>{{ config('app.label') }} | Sign-Up</title>
   <link href="css/styles.css" rel="stylesheet" />
   <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
   <script data-search-pseudo-elements defer src="libs/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
@@ -165,7 +165,7 @@
             </p>
             <p class="text-justify">
               If you believe that your work has been copied and posted using the PH Platform in a way that
-              constitutes copyright infringement, please contact info@pharmahub.africa
+              constitutes copyright infringement, please contact info@{{ config('app.domain') }}
             </p>
             <p class="text-justify">
               Linking to the Pharma Hub Site and use of Content
@@ -516,7 +516,7 @@
             </p>
             <p class="text-justify">
               For any other concerns regarding user information that was submitted via the PH Platform contact :
-              info@pharmahub.africa.
+              info@{{ config('app.domain') }}.
             </p>
             <p class="text-justify">
               If a user deletes his/her contributions from the PH Platform, copies may remain viewable in cached
@@ -540,7 +540,7 @@
               Telephone: +254722226549
             </p>
             <p class="text-justify">
-              Email: info@pharmahub.africa
+              Email: info@{{ config('app.domain') }}
             </p>
             </p>
           </div>
@@ -551,7 +551,7 @@
       <footer class="sb-footer py-4 mt-auto sb-footer-dark">
         <div class="container-fluid">
           <div class="d-flex align-items-center justify-content-between small">
-            <div>Copyright &copy; Pharmahub {{date('Y')}}</div>
+            <div>Copyright &copy; {{ config('app.label') }} {{date('Y')}}</div>
           </div>
         </div>
       </footer>

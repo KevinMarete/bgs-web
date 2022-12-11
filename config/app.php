@@ -14,6 +14,9 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'label' => env('APP_LABEL', 'BGS-WEB'),
+    'domain' => env('APP_DOMAIN', 'bgs.web'),
+
 
     /*
     |--------------------------------------------------------------------------

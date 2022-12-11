@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-BGS-WEB is the core web application for the BGS MEDS marketplace at [www.pharmahub.africa](www.pharmahub.africa).
+BGS-WEB is the core web application for the BGS MEDS marketplace.
 
 ---
 

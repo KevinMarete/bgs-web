@@ -8,7 +8,7 @@
     </button>
     <p class="mb-0 text-center row">
         <em class="text-warning col-12">
-            Pharmahub....Increasing your profitability
+            {{ config('app.label') }}....Increasing your profitability
         </em>
         <span class="col-12">
             <i data-feather="phone"></i>

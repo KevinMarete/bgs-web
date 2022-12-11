@@ -2,7 +2,7 @@
   <div class="container">
     <a class="navbar-brand text-warning d-none d-sm-block text-center" href="/">
       <img src="assets/img/landing/logo-lg.jpg" alt="logo" class="rounded d-inline-block align-middle">
-      Pharmahub
+        {{ config('app.label') }}
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i data-feather="menu"></i></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">

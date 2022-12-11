@@ -30,6 +30,6 @@ class BusinessMetricsEmail extends Mailable
   {
     $this->view('emails/business_metrics');
     return $this->bcc($this->metric->email)
-      ->subject('Pharmahub Business Metrics # ' . $this->metric->date);
+      ->subject(config('app.label').' Business Metrics # ' . $this->metric->date);
   }
 }

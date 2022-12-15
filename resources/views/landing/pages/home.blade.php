@@ -188,7 +188,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 mb-4">
-                        MAP HERE!
+                        <div id="distribution_map" style="height: 180px;"></div>
                     </div>
                 </div>
             </div>

@@ -62,10 +62,4 @@
     // Collapse the navbar when page is scrolled
     $(window).scroll(navbarCollapse);
 
-    //Leaflet map
-    const map = L.map('distribution_map').setView([0.0236, 37.9062], 13);
-
-    //Add marker to map
-    const marker = L.marker([51.5, -0.09]).addTo(map);
-
 })(jQuery);

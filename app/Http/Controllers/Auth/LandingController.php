@@ -78,8 +78,6 @@ class LandingController extends Controller
 
     public function getOrganizationGeoCoordinates($organizations)
     {
-        print_r($this->getGeocodesWithGoogleMaps("Buckingham Palace, London"));
-
         return array_map(function ($organization) {
             $address = $organization["building"] . "," . $organization["road"] . "," . $organization["town"];
             return $this->getGeocodesWithGoogleMaps($address);

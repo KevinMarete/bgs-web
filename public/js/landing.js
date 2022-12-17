@@ -3,7 +3,7 @@
     * Copyright 2013-2020 Start Bootstrap
     * Licensed under SEE_LICENSE (https://github.com/BlackrockDigital/sb-ui-kit-pro/blob/master/LICENSE)
     */
-    (function($) {
+(function ($) {
     "use strict";
 
     // Enable Bootstrap tooltips via data-attributes globally
@@ -26,7 +26,7 @@
     });
 
     // Scrolls to an offset anchor when a sticky nav link is clicked
-    $('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').click(function() {
+    $('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').click(function () {
         if (
             location.pathname.replace(/^\//, "") ==
             this.pathname.replace(/^\//, "") &&
@@ -47,8 +47,8 @@
 
     // Collapse Navbar
     // Add styling fallback for when a transparent background .navbar-marketing is scrolled
-    var navbarCollapse = function() {
-        if($(".navbar-marketing.bg-transparent.fixed-top").length === 0) {
+    var navbarCollapse = function () {
+        if ($(".navbar-marketing.bg-transparent.fixed-top").length === 0) {
             return;
         }
         if ($(".navbar-marketing.bg-transparent.fixed-top").offset().top > 0) {

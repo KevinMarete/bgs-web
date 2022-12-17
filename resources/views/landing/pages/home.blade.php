@@ -188,7 +188,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 mb-4">
-                        MAP HERE!
+                        <input type="hidden" id="partner_geo_coordinates" data-coordinates="{{ $partner_geo_coordinates }}" />
+                        <div id="distribution_map" style="height: 300px;"></div>
                     </div>
                 </div>
             </div>

@@ -25,7 +25,7 @@ services:
   bgs_webserver:
     image: nginx:alpine
     container_name: bgs_webserver
-    restart: unless-stopped
+    restart: always
     tty: true
     ports:
       - "80:80"
@@ -43,6 +43,7 @@ services:
   #Cerbot Service
   bgs_certbot:
     image: certbot/certbot:latest
+    container_name: bgs_certbot
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw

@@ -38,7 +38,7 @@ services:
     networks:
       - app-network
     depends_on:
-      - bgs_app
+      - bgs_certbot
 
   #Cerbot Service
   bgs_certbot:
@@ -48,7 +48,7 @@ services:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
     depends_on:
-      - bgs_webserver
+      - bgs_app
 
   #PostgeSQL Service
   bgs_db:

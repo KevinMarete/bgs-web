@@ -29,13 +29,27 @@ services:
     tty: true
     ports:
       - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${APP_DOMAIN}
     volumes:
       - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
     networks:
       - app-network
     depends_on:
       - bgs_app
+
+  #Cerbot Service
+  bgs_certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    depends_on:
+      - bgs_webserver
 
   #PostgeSQL Service
   bgs_db:

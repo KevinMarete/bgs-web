@@ -31,7 +31,7 @@ services:
       - "85:80"
     volumes:
       - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/conf.d/dev/:/etc/nginx/conf.d/
     networks:
       - app-network
     depends_on:

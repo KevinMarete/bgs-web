@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose -f $dockerfile)" ]; then
   exit 1
 fi
 
-domains=(accessmed.co.ke www.accessmed.co.ke)
+domains=(www.accessmed.co.ke)
 rsa_key_size=4096
 data_path="./certbot"
 email="kevinmmarete@gmail.com" # Adding a valid address is strongly recommended
@@ -68,7 +68,7 @@ esac
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 docker-compose -f $dockerfile run --rm --entrypoint "\
-  certbot certonly --webroot -w /var/www/certbot \
+  certbot certonly --webroot -v -w /var/www/certbot \
     $staging_arg \
     $email_arg \
     $domain_args \

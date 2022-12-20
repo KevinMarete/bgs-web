@@ -29,23 +29,11 @@ services:
     tty: true
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./:/var/www
-      - ./nginx/conf.d/prod/:/etc/nginx/conf.d/
+      - ./nginx/conf.d/dev/:/etc/nginx/conf.d/
     networks:
       - app-network
-    depends_on:
-      - bgs_certbot
-
-  #Certbot Service
-  bgs_certbot:
-    image: certbot/certbot
-    container_name: bgs_certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -v -w /var/www/certbot --agree-tos --email ${APP_EMAIL} -d ${APP_DOMAIN}
     depends_on:
       - bgs_app
 

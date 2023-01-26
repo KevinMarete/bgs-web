@@ -45,7 +45,11 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter PPB Licence Number" aria-label="Organization PPB Licence Number" aria-describedby="orgPPBLicenceExample" name="ppb_licence" required /></div>
+                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter PPB licence number" aria-label="Organization PPB Licence Number" aria-describedby="orgPPBLicenceExample" name="ppb_licence" required /></div>
+                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter organization primary phone" aria-label="Organization Primary Phone" aria-describedby="orgPrimaryPhoneExample" name="primary_phone" required /></div>
+                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter organization secondary phone" aria-label="Organization Secondary Phone" aria-describedby="orgSecondaryPhoneExample" name="secondary_phone"/></div>
+                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter organization email" aria-label="Organization Email" aria-describedby="orgEmailExample" name="email" required/></div>
+                                        <div class="form-group"><input class="form-control form-control-solid" type="text" placeholder="Enter organization website" aria-label="Organization Website" aria-describedby="orgWebsiteExample" name="website"/></div>
                                         <button class="btn btn-block btn-primary" type="submit">Create organization</button>
                                     </form>
                                 </div>

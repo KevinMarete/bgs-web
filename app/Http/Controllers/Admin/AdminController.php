@@ -301,7 +301,7 @@ class AdminController extends MyController
 			'rejectreasons' => [],
 			'faqs' => [],
 			'how-tos' => [],
-			'organizations' => ['organizationtypes'],
+			'organizations' => ['organizationtypes_all'],
 		];
 
 		if ($token !== null && $resource !== null) {
@@ -402,7 +402,7 @@ class AdminController extends MyController
 
 	public function saveAdminAccount(Request $request)
 	{
-		//Check if passwords match 
+		//Check if passwords match
 		if ($request->password !== $request->cpassword) {
 			$flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Error!</strong> Your passwords do not match, please confirm again
@@ -418,7 +418,7 @@ class AdminController extends MyController
 		$response = $this->client->post("register", ['json' => $request->all()]);
 		$response = json_decode($response->getBody(), true);
 
-		//Send Account Email 
+		//Send Account Email
 		$response = $this->client->post("activateaccountemail", ['json' => ['id' => $response['id']]]);
 		$response = json_decode($response->getBody(), true);
 

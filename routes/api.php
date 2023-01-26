@@ -27,6 +27,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
 
   /*OrganizationType endpoints*/
   Route::get('/organizationtypes', 'Api\OrganizationTypeController@index');
+  Route::get('/organizationtypes_all', 'Api\OrganizationTypeController@all');
 
   /*Organization endpoints*/
   Route::get('/organizations', 'Api\OrganizationController@index');

@@ -11,7 +11,18 @@ class Organization extends Model
 
     protected $table = 'tbl_organization';
 
-    protected $fillable = ['name', 'town', 'road', 'building', 'organization_type_id', 'ppb_licence'];
+    protected $fillable = [
+        'name',
+        'town',
+        'road',
+        'building',
+        'organization_type_id',
+        'ppb_licence',
+        'primary_phone',
+        'secondary_phone',
+        'email',
+        'website'
+    ];
 
     public static $rules = [
         "name" => "required",
@@ -20,6 +31,8 @@ class Organization extends Model
         "building" => "required",
         "organization_type_id" => "required|numeric",
         "ppb_licence" => "required",
+        "primary_phone" => "required",
+        "email" => "required",
     ];
 
     public function organization_type()

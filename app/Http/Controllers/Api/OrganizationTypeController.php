@@ -9,13 +9,24 @@ use Illuminate\Http\Request;
 class OrganizationTypeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display all organizationTypes listings except 'admins'.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $organizationtypes = OrganizationType::with('role')->where('name','NOT ILIKE','%admin%')->get(); //Hide Admin Type
+        return response()->json($organizationtypes);
+    }
+
+    /**
+     * Display all organizationTypes listings.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all()
+    {
+        $organizationtypes = OrganizationType::all();
         return response()->json($organizationtypes);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Organization;
 use App\Offer;
 use App\OrganizationPaymentType;
+use App\OrganizationSupplierCategory;
 use App\Stock;
 use App\StockBalance;
 use App\ProductNow;
@@ -384,4 +385,17 @@ class OrganizationController extends Controller
     })->get();
     return response()->json($seller_rfqs);
   }
+
+    /**
+     * Display all organization supplier_categories
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrganizationSupplierCategories($id)
+    {
+        $supplier_categories = OrganizationSupplierCategory::with('organization', 'supplier_category')
+            ->where('organization_id', $id)->get();
+        return response()->json($supplier_categories);
+    }
 }

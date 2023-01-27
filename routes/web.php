@@ -88,7 +88,7 @@ Route::middleware('usersession')->group(function () {
     Route::get('/offers', 'Seller\SellerController@displayOffersTableView');
     Route::post('/offers/save', 'Seller\SellerController@saveOffers');
     Route::get('/offers/{action}', 'Seller\SellerController@manageOffers'); //new
-    Route::post('/offers/{action}', 'Seller\SellerController@manageOffers'); //update 
+    Route::post('/offers/{action}', 'Seller\SellerController@manageOffers'); //update
     Route::get('/offers/{action}/{id}', 'Seller\SellerController@manageOffers'); //edit or delete
 
     /*Admin Routes*/
@@ -114,6 +114,8 @@ Route::middleware('usersession')->group(function () {
     Route::get('/how-tos', 'Admin\AdminController@displayTableView');
     Route::post('/dashfilter', 'Admin\AdminController@setDashFilter');
     Route::get('/organizations', 'Admin\AdminController@displayTableView');
+    Route::get('/suppliercategories', 'Admin\AdminController@displayTableView');
+    Route::get('/organizationsuppliercategories', 'Admin\AdminController@displayTableView');
 
     /*Buyer Routes*/
     Route::get('/marketplace', 'Buyer\BuyerController@displayMarketplaceView');

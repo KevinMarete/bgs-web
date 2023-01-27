@@ -165,7 +165,7 @@ class BuyerController extends MyController
         }
 
         if ($request->productId) {
-            //Sorting 
+            //Sorting
             $products = $this->sortMultiArray($products, ['product'], 'brand_name', SORT_ASC);
             //Find product in product array
             $key = array_search($request->productId, array_column($products, 'product_id'));
@@ -206,7 +206,7 @@ class BuyerController extends MyController
         $products = $this->getResourceData($token, 'offers');
 
         if ($request->productId) {
-            //Sorting 
+            //Sorting
             $products = $this->sortMultiArray($products, ['product_now', 'product'], 'brand_name', SORT_ASC);
             //Find product in product array
             $productNows = array_map(function ($product) {
@@ -386,7 +386,7 @@ class BuyerController extends MyController
                     ]
                 ];
             } else {
-                //Update existing order 
+                //Update existing order
                 $orders[$seller_id]['product_total'] = round(($orders[$seller_id]['product_total'] + $sub_total), 2);
                 $orders[$seller_id]['shipping_total'] = round(($orders[$seller_id]['shipping_total'] + $shipping_total), 2);
             }
@@ -434,7 +434,7 @@ class BuyerController extends MyController
             $supplier_emails = [];
             $credits_balance = round(($credits_balance - $credits_per_order), 2);
 
-            //Add Order 
+            //Add Order
             $order_data = [
                 'status' => $order['status'],
                 'product_total' => round(($order['product_total'] - $credits_per_order), 2),
@@ -720,7 +720,7 @@ class BuyerController extends MyController
         //Trigger Actions based on status
         $trigger_response = $this->triggerStatusAction($status, $request->all());
         if ($trigger_response['status'] == 'success') {
-            //Update Order 
+            //Update Order
             $order_data = [
                 'status' => $status,
                 'product_total' => $request->product_total,
@@ -791,7 +791,7 @@ class BuyerController extends MyController
         $user_id = session()->get('id');
         $response = ['status' => 'error', 'message' => 'Refund was unsuccessful'];
 
-        //Get Order 
+        //Get Order
         $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
         //Get Organization PaymentType
@@ -878,10 +878,10 @@ class BuyerController extends MyController
         $token = session()->get('token');
         $response = ['status' => 'error', 'message' => 'Courier was not assigned'];
 
-        //Get Order 
+        //Get Order
         $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
-        //Add Order Courier 
+        //Add Order Courier
         $order_courier_data = ['order_id' => $order_id, 'courier_id' => $courier_id];
         $order_courier_response = $this->manageResourceData($token, "POST", "ordercourier", $order_courier_data);
 
@@ -915,7 +915,7 @@ class BuyerController extends MyController
         $user_id = session()->get('id');
         $response = ['status' => 'error', 'message' => 'Payout was unsuccessful'];
 
-        //Get Order 
+        //Get Order
         $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
         //Get Organization PaymentType
@@ -955,7 +955,7 @@ class BuyerController extends MyController
     {
         $token = session()->get('token');
 
-        //Get Order 
+        //Get Order
         $order = $this->manageResourceData($token, "GET", "order/" . $order_id, []);
 
         //Send notification to buyer
@@ -1015,10 +1015,12 @@ class BuyerController extends MyController
         //Filter unique product nows
         $product_nows = [];
         $all_product_nows = $this->getResourceData($token, 'productnows');
-        $product_nows = array_reduce($all_product_nows, function ($product_nows, $item) {
-            $product_nows[mb_strtoupper($item['product']['brand_name']) . '-' . mb_strtoupper($item['product']['molecular_name'])] = $item['id'];
-            return $product_nows;
-        });
+        if(sizeof($all_product_nows) > 0) {
+            $product_nows = array_reduce($all_product_nows, function ($product_nows, $item) {
+                $product_nows[mb_strtoupper($item['product']['brand_name']) . '-' . mb_strtoupper($item['product']['molecular_name'])] = $item['id'];
+                return $product_nows;
+            });
+        }
 
         $view_data = [
             'productnows' =>  array_flip($product_nows),
@@ -1063,7 +1065,7 @@ class BuyerController extends MyController
             $seller_id = $seller[0];
             $seller_emails = $seller[1];
 
-            //Add Rfq 
+            //Add Rfq
             $rfq_data = [
                 'status' => $status,
                 'terms' => '',
@@ -1222,7 +1224,7 @@ class BuyerController extends MyController
         $organization_id = session()->get('organization_id');
         $user_id = session()->get('id');
 
-        //Update RFQ 
+        //Update RFQ
         $rfq_data = [
             'status' => $status,
             'terms' => $request->terms,
@@ -1306,7 +1308,7 @@ class BuyerController extends MyController
 
     public function sendRFQEmail($token, $rfq_id)
     {
-        //Get Rfq 
+        //Get Rfq
         $rfq = $this->manageResourceData($token, "GET", "rfq/" . $rfq_id, []);
 
         $rfq_status = [

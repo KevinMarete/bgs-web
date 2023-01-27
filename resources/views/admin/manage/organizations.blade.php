@@ -44,7 +44,7 @@
                     <div class="col-lg-9">
                         <select class="form-control" size="0" name="organization_type_id" required>
                             <option value="">Select OrganizationType</option>
-                            @foreach ($organizationtypes as $organizationtype)
+                            @foreach ($organizationtypes_all as $organizationtype)
                             @if ($organizationtype['id'] === (isset($edit['organization_type_id']) ? $edit['organization_type_id'] : ''))
                             <option value="{{ $organizationtype['id'] }}" selected>{{ $organizationtype['name'] }}</option>
                             @else
@@ -58,6 +58,30 @@
                     <label class="col-lg-3 col-form-label form-control-label">PPB Licence</label>
                     <div class="col-lg-9">
                         <input class="form-control" type="text" value="{{ isset($edit['ppb_licence']) ? $edit['ppb_licence'] : '' }}" name="ppb_licence" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Primary Phone</label>
+                    <div class="col-lg-9">
+                        <input class="form-control" type="text" value="{{ isset($edit['primary_phone']) ? $edit['primary_phone'] : '' }}" name="primary_phone" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Secondary Phone</label>
+                    <div class="col-lg-9">
+                        <input class="form-control" type="text" value="{{ isset($edit['secondary_phone']) ? $edit['secondary_phone'] : '' }}" name="secondary_phone">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Email</label>
+                    <div class="col-lg-9">
+                        <input class="form-control" type="email" value="{{ isset($edit['email']) ? $edit['email'] : '' }}" name="email" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Website</label>
+                    <div class="col-lg-9">
+                        <input class="form-control" type="text" value="{{ isset($edit['website']) ? $edit['website'] : '' }}" name="website">
                     </div>
                 </div>
                 <div class="form-group row">

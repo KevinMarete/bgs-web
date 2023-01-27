@@ -170,7 +170,10 @@ class AdminController extends MyController
 		} else if ($role_name == 'admin' && $resource == 'users') {
 			//Get resource_url for admin users
 			$resource_url = 'user-admins';
-		}
+		} else if ($role_name == 'seller' && $resource == 'organizationsuppliercategories') {
+            //Get resource_url for seller supplier categories
+            $resource_url = 'organization/' . $organization_id . '/suppliercategories';
+        }
 
 		return $resource_url;
 	}
@@ -224,7 +227,9 @@ class AdminController extends MyController
 				'faqs' => ['id', 'question', 'answer'],
 				'how-tos' => ['id', 'title', 'link'],
 				'organizations' => ['id', 'name', 'organization_type', 'town', 'road', 'building', 'ppb_licence'],
-			];
+                'suppliercategories' => ['id', 'name'],
+                'organizationsuppliercategories' => ['id', 'organization', 'supplier_category']
+            ];
 			$header_data = $headers[$resource];
 		}
 
@@ -236,8 +241,12 @@ class AdminController extends MyController
 		$resource_name = $request->resource;
 		$singular_resource_name = Str::singular($resource_name);
 		$token = session()->get('token');
+        $organization_id = session()->get('organization_id');
 		$role_id = session()->get('organization.organization_type.role_id');
-		$view_data = $this->getDropDownData($token, $resource_name);
+        $role_name = strtolower(session()->get('organization.organization_type.role.name'));
+        $view_data = $this->getDropDownData($token, $resource_name);
+        $view_data['role_name'] = $role_name;
+        $view_data['organization_id'] = $organization_id;
 		$view_data['manage_label'] = 'new';
 
 		if ($request->action) {
@@ -301,7 +310,9 @@ class AdminController extends MyController
 			'rejectreasons' => [],
 			'faqs' => [],
 			'how-tos' => [],
-			'organizations' => ['organizationtypes'],
+			'organizations' => ['organizationtypes_all'],
+            'suppliercategories' => [],
+            'organizationsuppliercategories' => ['sellers', 'suppliercategories']
 		];
 
 		if ($token !== null && $resource !== null) {
@@ -402,7 +413,7 @@ class AdminController extends MyController
 
 	public function saveAdminAccount(Request $request)
 	{
-		//Check if passwords match 
+		//Check if passwords match
 		if ($request->password !== $request->cpassword) {
 			$flash_msg = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Error!</strong> Your passwords do not match, please confirm again
@@ -418,7 +429,7 @@ class AdminController extends MyController
 		$response = $this->client->post("register", ['json' => $request->all()]);
 		$response = json_decode($response->getBody(), true);
 
-		//Send Account Email 
+		//Send Account Email
 		$response = $this->client->post("activateaccountemail", ['json' => ['id' => $response['id']]]);
 		$response = json_decode($response->getBody(), true);
 

@@ -43,7 +43,7 @@ class CreateMenusTable extends Migration
                 ['name' => 'Promos', 'link' => '/promos', 'icon' => 'bar-chart', 'created_at' => now()],
                 ['name' => 'Orders', 'link' => '/orders', 'icon' => 'package', 'created_at' => now()],
                 ['name' => 'Menus', 'link' => '/menus', 'icon' => 'tablet', 'created_at' => now()],
-                ['name' => 'MenuRoles', 'link' => '/menus', 'icon' => 'tablet', 'created_at' => now()],
+                ['name' => 'MenuRoles', 'link' => '/menu-roles', 'icon' => 'tablet', 'created_at' => now()],
                 ['name' => 'Couriers', 'link' => '/couriers', 'icon' => 'package', 'created_at' => now()],
             )
         );

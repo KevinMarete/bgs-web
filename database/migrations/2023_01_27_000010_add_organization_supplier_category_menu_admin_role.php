@@ -15,7 +15,7 @@ class AddOrganizationSupplierCategoryMenuAdminRole extends Migration
         $role = DB::table('tbl_role')->where('name', 'admin')->first();
 
         DB::table('tbl_menu_role')->insert(
-            ['menu_id' => $menu->id, 'role_id' => $role->id, 'created_at' => now()],
+            ['menu_id' => $menu->id, 'role_id' => $role->id, 'created_at' => now()]
         );
     }
 

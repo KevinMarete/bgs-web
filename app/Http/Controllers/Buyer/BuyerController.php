@@ -1315,12 +1315,12 @@ class BuyerController extends MyController
             'created, awaiting_quotation' => [
                 'to' => 'seller',
                 'from' => 'buyer',
-                'message' => 'I would like to request a quotation for the products listed below. <br/> <br/> You can view the requested RFQ <a href="' . env('APP_DOMAIN') . 'rfq/manage/' . $rfq_id . '" target="_blank">here</a>.'
+                'message' => 'I would like to request a quotation for the products listed below. <br/> <br/> You can view the requested RFQ <a href="' . env('APP_DOMAIN') . '/rfq/manage/' . $rfq_id . '" target="_blank">here</a>.'
             ],
             'quotation_sent, awaiting_confirmation' => [
                 'to' => 'buyer',
                 'from' => 'seller',
-                'message' => 'Please find the quotation as requested. Also note that we have only listed products in stock. <br/> <br/> You can accept/reject the quotation <a href="' . env('APP_DOMAIN') . 'rfq/manage/' . $rfq_id . '" target="_blank">here</a>.'
+                'message' => 'Please find the quotation as requested. Also note that we have only listed products in stock. <br/> <br/> You can accept/reject the quotation <a href="' . env('APP_DOMAIN') . '/rfq/manage/' . $rfq_id . '" target="_blank">here</a>.'
             ],
             'rejected, quotation_rejected' => [
                 'to' => 'seller',

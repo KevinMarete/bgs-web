@@ -1024,7 +1024,7 @@ class BuyerController extends MyController
 
         $view_data = [
             'productnows' =>  array_flip($product_nows),
-            'organizations' =>  $this->getResourceData($token, 'sellers'),
+            'supplier_categories' =>  $this->getResourceData($token, 'sellers/suppliercategories'),
             'rfq_cost' => env('RFQ_COST'),
             'rfq_discount' => env('RFQ_DISCOUNT_COUNT'),
         ];

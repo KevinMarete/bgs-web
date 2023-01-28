@@ -311,6 +311,32 @@ class OrganizationController extends Controller
     return response()->json($seller_orgs);
   }
 
+    /**
+     * Display all seller organizations group by supplier_categories
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getSellerOrganizationsBySupplierCategory()
+    {
+        $formatted_organization_supplier_categories = array();
+        $seller_orgs = Organization::with('supplier_categories.supplier_category', 'organization_type', 'organization_type.role', 'users')->whereHas('organization_type.role', function ($query) {
+            $query->where('name', 'seller');
+        })->get();
+
+        foreach ($seller_orgs as $seller_org){
+            $supplier_categories = $seller_org["supplier_categories"];
+            if(sizeof($supplier_categories) == 0){
+                $formatted_organization_supplier_categories["None"][] = $seller_org;
+                continue;
+            }
+            foreach ($supplier_categories as $supplier_category){
+                $formatted_organization_supplier_categories[$supplier_category["supplier_category"]["name"]][] = $seller_org;
+            }
+        }
+
+        return response()->json($formatted_organization_supplier_categories);
+    }
+
   /**
    * Display the all admin organizations.
    *

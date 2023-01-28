@@ -82,6 +82,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/seller-orders', 'Api\OrganizationController@getOrganizationSellerOrders');
         Route::get('/organization/{id}/products', 'Api\OrganizationController@getOrganizationProducts');
         Route::get('/sellers', 'Api\OrganizationController@getSellerOrganizations');
+        Route::get('/sellers/suppliercategories', 'Api\OrganizationController@getSellerOrganizationsBySupplierCategory');
         Route::get('/admins', 'Api\OrganizationController@getAdminOrganizations');
         Route::get('/organization/{id}/unpublished', 'Api\OrganizationController@getUnpublishedProductNows');
         Route::get('/organization/{id}/published', 'Api\OrganizationController@getPublishedProductNows');
@@ -89,6 +90,7 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/organization/{id}/rfqs', 'Api\OrganizationController@getOrganizationRfqs');
         Route::get('/organization/{id}/seller-rfqs', 'Api\OrganizationController@getOrganizationSellerRfqs');
         Route::get('/organization/{id}/suppliercategories', 'Api\OrganizationController@getOrganizationSupplierCategories');
+
 
         /*Package endpoints*/
         Route::get('/packages', 'Api\PackageController@index');
@@ -415,6 +417,5 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::post('/organizationsuppliercategory', 'Api\OrganizationSupplierCategoryController@store');
         Route::put('/organizationsuppliercategory/{id}', 'Api\OrganizationSupplierCategoryController@update');
         Route::delete('/organizationsuppliercategory/{id}', 'Api\OrganizationSupplierCategoryController@destroy');
-
     });
 });

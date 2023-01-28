@@ -44,4 +44,9 @@ class Organization extends Model
     {
         return $this->hasMany('App\User');
     }
+
+    public function supplier_categories()
+    {
+        return $this->hasMany('App\OrganizationSupplierCategory');
+    }
 }

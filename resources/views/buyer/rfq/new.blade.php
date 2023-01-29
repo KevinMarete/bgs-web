@@ -22,7 +22,7 @@
             <input type="hidden" id="total_rfq_cost" name="total_rfq_cost" value="" />
             <select class="form-control btn btn-outline-primary" size="0" name="organizations[]" id="rfq_organizations" multiple="multiple" required>
               @foreach ($supplier_categories as $supplier_category => $organizations)
-                    <optgroup label="{{ $supplier_category }}">
+                    <optgroup label="{{ $supplier_category }}" class="{{ strtolower(str_ireplace(" ", "-", $supplier_category)) }}">
                         @foreach ($organizations as $organization)
                             <option value="{{ $organization['id'].'@'.implode(',', array_map(function($user){ return $user['email']; }, $organization['users'])) }}">{{ strtoupper($organization['name']) }}</option>
                         @endforeach

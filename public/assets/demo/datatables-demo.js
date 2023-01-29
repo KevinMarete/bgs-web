@@ -3,6 +3,10 @@ $(document).ready(function () {
     var oTable = $("#dataTable, .dataTable").DataTable({
         order: [[1, "asc"]],
         pagingType: "full_numbers",
+        dom: "Bfrtip",
+        buttons: [
+            "copy", "excel", "pdf"
+        ]
     });
 
     $(".bulk_all_unpublish[type=checkbox]").on("change", function (e) {

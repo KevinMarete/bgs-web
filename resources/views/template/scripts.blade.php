@@ -11,6 +11,11 @@
 <script src="/js/scripts.js"></script>
 <script src="/libs/datatables/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script src="/libs/datatables/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+<script src="/libs/js-zip/2.5.0/jszip.js"></script>
+<script src="/libs/pdfmake/0.1.36/pdfmake.js"></script>
+<script src="/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="/libs/buttons/2.3.3/js/dataTables.buttons.js"></script>
+<script src="/libs/buttons/2.3.3/js/buttons.html5.js"></script>
 <script src="/assets/demo/datatables-demo.js"></script>
 
 <!--Start of Tawk.to Script-->

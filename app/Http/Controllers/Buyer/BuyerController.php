@@ -161,7 +161,7 @@ class BuyerController extends MyController
         if ($request->organizationId) {
             $products = $this->getResourceData($token, 'organization/' . $request->organizationId . '/published');
         } else {
-            $products = $this->getResourceData($token, 'productnows');
+            $products = $this->getResourceData($token, 'productnows/published');
         }
 
         if ($request->productId) {

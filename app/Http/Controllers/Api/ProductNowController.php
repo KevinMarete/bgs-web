@@ -104,4 +104,38 @@ class ProductNowController extends Controller
         $productnow->delete();
         return response()->json(['msg' => 'Removed successfully']);
     }
+
+    /**
+     * Display all published productnows
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getPublishedProductNows()
+    {
+        $order = 'ASC';
+        $published_productnows = ProductNow::with(['product' => function ($q) use ($order) {
+            $q->orderBy('molecular_name', $order);
+        }, 'product.product_category', 'organization', 'user'])
+            ->where('is_published', true)
+            ->orderBy('unit_price', $order)->get();
+
+        return response()->json($published_productnows);
+    }
+
+    /**
+     * Display all unpublished productnows
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getUnPublishedProductNows()
+    {
+        $order = 'ASC';
+        $unpublished_productnows = ProductNow::with(['product' => function ($q) use ($order) {
+            $q->orderBy('molecular_name', $order);
+        }, 'product.product_category', 'organization', 'user'])
+            ->where('is_published', false)
+            ->orderBy('unit_price', $order)->get();
+
+        return response()->json($unpublished_productnows);
+    }
 }

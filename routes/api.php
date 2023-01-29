@@ -200,6 +200,8 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::put('/productnow/{id}', 'Api\ProductNowController@update');
         Route::post('/productnow/{id}', 'Api\ProductNowController@patch');
         Route::delete('/productnow/{id}', 'Api\ProductNowController@destroy');
+        Route::get('/productnows/published', 'Api\ProductNowController@getPublishedProductNows');
+        Route::get('/productnows/unpublished', 'Api\ProductNowController@getUnPublishedProductNows');
 
         /*Promotions endpoints*/
         Route::get('/promotions', 'Api\PromotionController@index');

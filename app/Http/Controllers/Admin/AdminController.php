@@ -228,7 +228,7 @@ class AdminController extends MyController
 				'how-tos' => ['id', 'title', 'link'],
 				'organizations' => ['id', 'name', 'organization_type', 'town', 'road', 'building', 'ppb_licence'],
                 'suppliercategories' => ['id', 'name'],
-                'organizationsuppliercategories' => ['id', 'organization', 'supplier_category']
+                'organizationsuppliercategories' => ['id', 'organization', 'email', 'primary_phone', 'supplier_category']
             ];
 			$header_data = $headers[$resource];
 		}

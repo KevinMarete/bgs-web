@@ -310,7 +310,7 @@ class AdminController extends MyController
 			'faqs' => [],
 			'how-tos' => [],
 			'organizations' => ['organizationtypes_all'],
-            'organizationsuppliercategories' => ['sellers', 'suppliercategories']
+            'organizationsuppliercategories' => ['sellers', 'product-categories']
 		];
 
 		if ($token !== null && $resource !== null) {

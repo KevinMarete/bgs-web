@@ -13,6 +13,7 @@ class AlterSupplierCategoryReferenceOrganizationSupplierCategoryTable extends Mi
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::table('tbl_organization_supplier_category', function (Blueprint $table) {
             $table->dropForeign(['supplier_category_id']);
             $table->foreign('supplier_category_id')
@@ -21,6 +22,7 @@ class AlterSupplierCategoryReferenceOrganizationSupplierCategoryTable extends Mi
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -30,6 +32,7 @@ class AlterSupplierCategoryReferenceOrganizationSupplierCategoryTable extends Mi
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::table('tbl_organization_supplier_category', function (Blueprint $table) {
             $table->dropForeign(['supplier_category_id']);
             $table->foreign('supplier_category_id')
@@ -38,5 +41,6 @@ class AlterSupplierCategoryReferenceOrganizationSupplierCategoryTable extends Mi
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
+        Schema::enableForeignKeyConstraints();
     }
 }

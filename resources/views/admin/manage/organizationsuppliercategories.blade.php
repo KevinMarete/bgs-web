@@ -41,13 +41,13 @@
                                name="id" required>
                         <select class="form-control" size="0" name="supplier_category_id" required>
                             <option value="">Select SupplierCategory</option>
-                            @foreach ($suppliercategories as $suppliercategory)
-                                @if ($suppliercategory['id'] === (isset($edit['supplier_category_id']) ? $edit['supplier_category_id'] : ''))
-                                    <option value="{{ $suppliercategory['id'] }}"
-                                            selected>{{ $suppliercategory['name'] }}</option>
+                            @foreach ($product_categories as $product_category)
+                                @if ($product_category['id'] === (isset($edit['supplier_category_id']) ? $edit['supplier_category_id'] : ''))
+                                    <option value="{{ $product_category['id'] }}"
+                                            selected>{{ $product_category['name'] }}</option>
                                 @else
                                     <option
-                                        value="{{ $suppliercategory['id'] }}">{{ $suppliercategory['name'] }}</option>
+                                        value="{{ $product_category['id'] }}">{{ $product_category['name'] }}</option>
                                 @endif
                             @endforeach
                         </select>

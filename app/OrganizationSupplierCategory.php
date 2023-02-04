@@ -25,7 +25,7 @@ class OrganizationSupplierCategory extends Model
 
     public function supplier_category()
     {
-        return $this->belongsTo('App\SupplierCategory');
+        return $this->belongsTo('App\ProductCategory');
     }
 
 }

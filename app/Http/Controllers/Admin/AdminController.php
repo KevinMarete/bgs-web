@@ -227,7 +227,6 @@ class AdminController extends MyController
 				'faqs' => ['id', 'question', 'answer'],
 				'how-tos' => ['id', 'title', 'link'],
 				'organizations' => ['id', 'name', 'organization_type', 'town', 'road', 'building', 'ppb_licence'],
-                'suppliercategories' => ['id', 'name'],
                 'organizationsuppliercategories' => ['id', 'organization', 'email', 'primary_phone', 'supplier_category']
             ];
 			$header_data = $headers[$resource];
@@ -311,8 +310,7 @@ class AdminController extends MyController
 			'faqs' => [],
 			'how-tos' => [],
 			'organizations' => ['organizationtypes_all'],
-            'suppliercategories' => [],
-            'organizationsuppliercategories' => ['sellers', 'suppliercategories']
+            'organizationsuppliercategories' => ['sellers', 'product-categories']
 		];
 
 		if ($token !== null && $resource !== null) {

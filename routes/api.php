@@ -405,14 +405,6 @@ Route::group(['middleware' => ['json.response', 'cors']], function () {
         Route::get('/dashboard/orders/{start}/{end}', 'Api\DashboardController@getOrders');
         Route::get('/dashboard/revenue/{start}/{end}', 'Api\DashboardController@getRevenue');
 
-        /*SupplierCategory endpoints*/
-        Route::get('/suppliercategories', 'Api\SupplierCategoryController@index');
-        Route::get('/suppliercategory/{id}', 'Api\SupplierCategoryController@show');
-        Route::post('/suppliercategory', 'Api\SupplierCategoryController@store');
-        Route::put('/suppliercategory/{id}', 'Api\SupplierCategoryController@update');
-        Route::delete('/suppliercategory/{id}', 'Api\SupplierCategoryController@destroy');
-        Route::get('/suppliercategory/{id}/organizations', 'Api\SupplierCategoryController@getOrganizationsBySupplierCategory');
-
         /*OrganizationSupplierCategory endpoints*/
         Route::get('/organizationsuppliercategories', 'Api\OrganizationSupplierCategoryController@index');
         Route::get('/organizationsuppliercategory/{id}', 'Api\OrganizationSupplierCategoryController@show');

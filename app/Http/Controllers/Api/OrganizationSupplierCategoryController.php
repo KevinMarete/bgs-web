@@ -22,23 +22,34 @@ class OrganizationSupplierCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request, OrganizationSupplierCategory::$rules);
-        $organization_supplier_category = OrganizationSupplierCategory::firstOrCreate([
-            'organization_id' => $request->organization_id,
-            'supplier_category_id' => $request->supplier_category_id
-        ], $request->all());
-        return response()->json($organization_supplier_category);
+        try {
+            $this->validate($request, OrganizationSupplierCategory::$rules);
+            $organization_supplier_category = OrganizationSupplierCategory::firstOrCreate([
+                'organization_id' => $request->organization_id,
+                'supplier_category_id' => $request->supplier_category_id
+            ], $request->all());
+            return response()->json($organization_supplier_category);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == '7') {
+                OrganizationSupplierCategory::withTrashed()->where([
+                    'organization_id' => $request->organization_id,
+                    'supplier_category_id' => $request->supplier_category_id
+                ])->restore();
+                return response()->json(['error' => 'Deleted duplicate entry was restored!']);
+            }
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -53,25 +64,36 @@ class OrganizationSupplierCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, OrganizationSupplierCategory::$rules);
-        $organization_supplier_category  = OrganizationSupplierCategory::find($id);
-        if (is_null($organization_supplier_category)) {
-            return response()->json(['error' => 'not_found']);
+        try {
+            $this->validate($request, OrganizationSupplierCategory::$rules);
+            $organization_supplier_category = OrganizationSupplierCategory::find($id);
+            if (is_null($organization_supplier_category)) {
+                return response()->json(['error' => 'not_found']);
+            }
+            $organization_supplier_category->update($request->all());
+            return response()->json($organization_supplier_category);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == '7') {
+                OrganizationSupplierCategory::withTrashed()->where([
+                    'organization_id' => $request->organization_id,
+                    'supplier_category_id' => $request->supplier_category_id
+                ])->restore();
+                return response()->json(['error' => 'Deleted duplicate entry was restored!']);
+            }
         }
-        $organization_supplier_category->update($request->all());
-        return response()->json($organization_supplier_category);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -114,7 +114,6 @@ Route::middleware('usersession')->group(function () {
     Route::get('/how-tos', 'Admin\AdminController@displayTableView');
     Route::post('/dashfilter', 'Admin\AdminController@setDashFilter');
     Route::get('/organizations', 'Admin\AdminController@displayTableView');
-    Route::get('/suppliercategories', 'Admin\AdminController@displayTableView');
     Route::get('/organizationsuppliercategories', 'Admin\AdminController@displayTableView');
 
     /*Buyer Routes*/

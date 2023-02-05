@@ -1015,16 +1015,16 @@ class BuyerController extends MyController
         //Filter unique product nows
         $product_nows = [];
         $all_product_nows = $this->getResourceData($token, 'productnows');
-        if(sizeof($all_product_nows) > 0) {
+        if (sizeof($all_product_nows) > 0) {
             $product_nows = array_reduce($all_product_nows, function ($product_nows, $item) {
-                $product_nows[mb_strtoupper($item['product']['brand_name']) . '-' . mb_strtoupper($item['product']['molecular_name'])] = $item['id'];
+                $product_nows[$item['product']['product_category']['name']][mb_strtoupper($item['product']['brand_name']) . '-' . mb_strtoupper($item['product']['molecular_name'])] = $item['id'];
                 return $product_nows;
             });
         }
 
         $view_data = [
-            'productnows' =>  array_flip($product_nows),
-            'supplier_categories' =>  $this->getResourceData($token, 'sellers/suppliercategories'),
+            'productnows' => json_encode($product_nows),
+            'supplier_categories' => $this->getResourceData($token, 'sellers/suppliercategories'),
             'rfq_cost' => env('RFQ_COST'),
             'rfq_discount' => env('RFQ_DISCOUNT_COUNT'),
         ];
@@ -1059,6 +1059,12 @@ class BuyerController extends MyController
         ];
         $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
+
+        //Check for Unique Sellers due to duplicate ProductCategories
+        $sellers = array_unique(array_map(function ($seller){
+            $seller = explode('#', $seller);
+            return $seller[0];
+        }, $sellers));
 
         foreach ($sellers as $seller) {
             $seller = explode('@', $seller);

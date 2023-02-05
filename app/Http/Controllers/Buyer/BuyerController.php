@@ -1060,11 +1060,16 @@ class BuyerController extends MyController
         $payment_response = $this->process_payment($token, $organization_id, $user_id, $payment_data);
         $payment_id = $payment_response['id'];
 
+        //Check for Unique Sellers due to duplicate ProductCategories
+        $sellers = array_unique(array_map(function ($seller){
+            $seller = explode('#', $seller);
+            return $seller[0];
+        }, $sellers));
+
         foreach ($sellers as $seller) {
             $seller = explode('@', $seller);
             $seller_id = $seller[0];
-            $seller_emails_category = explode("#", $seller[1]);
-            $seller_emails = $seller_emails_category[0];
+            $seller_emails = $seller[1];
 
             //Add Rfq
             $rfq_data = [

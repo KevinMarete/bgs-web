@@ -44,7 +44,7 @@
         function () {
             if (
                 location.pathname.replace(/^\//, "") ==
-                    this.pathname.replace(/^\//, "") &&
+                this.pathname.replace(/^\//, "") &&
                 location.hostname == this.hostname
             ) {
                 var target = $(this.hash);
@@ -129,7 +129,10 @@
         var rowCount = $(".transactions-tbl>tbody tr").length;
         if (rowCount > 1) {
             var r = confirm("Are you sure, you want to remove this row?");
-            if (r == true) {
+            if (r === true) {
+                const productId = $(this).closest("tr").find(".rfq_product").val();
+                console.log(productId);
+                removeRfqProduct(productId);
                 $(this).parent().parent().remove();
             } else {
                 return false;
@@ -275,8 +278,8 @@
     $(".valid_period").on("apply.daterangepicker", function (ev, picker) {
         $(this).val(
             picker.startDate.format("MM/DD/YYYY hh:mm A") +
-                " - " +
-                picker.endDate.format("MM/DD/YYYY hh:mm A")
+            " - " +
+            picker.endDate.format("MM/DD/YYYY hh:mm A")
         );
 
         $("#valid_from").val(picker.startDate.format("YYYY-MM-DD HH:mm:ss"));
@@ -303,13 +306,8 @@
         enableCaseInsensitiveFiltering: true,
         onChange: function () {
             calculateRFQTotal();
-        },
-        onSelectAll: function () {
-            calculateRFQTotal();
-        },
-        onDeselectAll: function () {
-            calculateRFQTotal();
-        },
+            getProductNowsByProductCategory();
+        }
     });
 
     function calculateRFQTotal() {
@@ -328,6 +326,39 @@
         $("#total_rfq_cost").val(totalRfqCost);
 
         return totalRfqCost;
+    }
+
+    function getProductNowsByProductCategory() {
+        const selectedSellers = $("#rfq_organizations option:selected");
+        const rfqProductElement = $(".rfq_product");
+
+        //Remove all rows except the firstOne
+        $(".transactions-tbl>tbody tr").filter(function(){
+            return $(this).index() > 0;
+        }).remove();
+
+        //Reset ProductNow Dropdown
+        rfqProductElement.empty();
+        rfqProductElement.append(`<option value="">Select Product</option>`);
+
+        //Reset Quantity
+        $(".quantity").val("");
+
+        //Reset product selection
+        $("#rfq_product_list").data("products", []);
+
+        for (let i = 0; i < selectedSellers.length; i++) {
+            const selectedSeller = selectedSellers[i];
+            const category = $(selectedSeller).parent("optgroup").attr("label");
+            const allProductNows = $("#rfq_product_nows").data("productnows");
+            const categoryProductNows = Object.values(Object.fromEntries(Object.entries(allProductNows).filter(([key]) => key.includes(category))));
+
+            categoryProductNows.forEach(categoryProductNow => {
+                for (const [productName, productId] of Object.entries(categoryProductNow)) {
+                    rfqProductElement.append(`<option value='${productId}@${productName}'>${productName}</option>`);
+                }
+            });
+        }
     }
 
     /*Auto-hide reject reason dropdown*/
@@ -371,6 +402,15 @@
         }
     });
 
+    function removeRfqProduct(productId){
+        const rfqProducts = $("#rfq_product_list").data("products");
+        const index = rfqProducts.indexOf(productId);
+        if (index > -1) {
+            rfqProducts.splice(index, 1);
+            $("#rfq_product_list").data("products", rfqProducts);
+        }
+    }
+
     /*Rfq product selecting (unselect) event*/
     $(document).on("select2:selecting", ".rfq_product", function (e) {
         var rfqProducts = $("#rfq_product_list").data("products");
@@ -408,8 +448,8 @@
         function cb(start, end) {
             $("#reportrange span").html(
                 start.format("MMMM D, YYYY") +
-                    " - " +
-                    end.format("MMMM D, YYYY")
+                " - " +
+                end.format("MMMM D, YYYY")
             );
         }
 
@@ -447,7 +487,7 @@
         var token = $("#token").val();
         $.post(
             "/dashfilter",
-            { _token: token, start: startDate, end: endDate },
+            {_token: token, start: startDate, end: endDate},
             function (data) {
                 location.reload();
             }
@@ -464,12 +504,12 @@
         Chart.defaults.global.defaultFontColor = "#858796";
 
         var charts = [
-            { id: "buyerChart", type: "line" },
-            { id: "sellerChart", type: "line" },
-            { id: "productChart", type: "bar" },
-            { id: "rfqChart", type: "line" },
-            { id: "orderChart", type: "line" },
-            { id: "revenueChart", type: "bar" },
+            {id: "buyerChart", type: "line"},
+            {id: "sellerChart", type: "line"},
+            {id: "productChart", type: "bar"},
+            {id: "rfqChart", type: "line"},
+            {id: "orderChart", type: "line"},
+            {id: "revenueChart", type: "bar"},
         ];
         charts.map((chart) => {
             createChart(chart.id, chart.type);

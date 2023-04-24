@@ -840,7 +840,7 @@
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/promises": "^1.0",
-                "guzzlehttp/psr7": "^1.9",
+                "guzzlehttp/psr7": "^1.9.1",
                 "php": ">=5.5",
                 "symfony/polyfill-intl-idn": "^1.17"
             },
@@ -1134,7 +1134,7 @@
         },
         {
             "name": "laminas/laminas-diactoros",
-            "version": "2.24.0",
+            "version": "2.24.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-diactoros.git",
@@ -1411,7 +1411,7 @@
                 "illuminate/support": "^6.0|^7.0",
                 "laminas/laminas-diactoros": "^2.2",
                 "league/oauth2-server": "^8.0",
-                "nyholm/psr7": "^1.0",
+                "nyholm/psr7": "^1.6.1",
                 "php": "^7.2",
                 "phpseclib/phpseclib": "^2.0",
                 "symfony/psr-http-message-bridge": "^2.0"

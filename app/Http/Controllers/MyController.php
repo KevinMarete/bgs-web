@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
 use Illuminate\Support\Str;
+use GeneaLabs\LaravelMixpanel\LaravelMixpanel;
 
 class MyController extends Controller
 {
   protected $client;
+  protected $mixPanel;
 
-  public function __construct()
+  public function __construct(LaravelMixPanel $mixPanel)
   {
     //Setup Curl client
     $this->client = new Client([
@@ -20,6 +22,8 @@ class MyController extends Controller
       ],
       'timeout'  => 10.0
     ]);
+    //Mixpanel instance
+    $this->mixPanel = $mixPanel;
   }
 
   public function getRoleMenus($token = null, $role_id = null)

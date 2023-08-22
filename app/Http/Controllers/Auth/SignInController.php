@@ -3,27 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\MyController;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
-class SignInController extends Controller
-{   
+class SignInController extends MyController
+{
     protected $client;
 
-    public function __construct()
-    {   
-        //Setup Curl client
-        $this->client = new Client([
-            'base_uri' => env('API_URL'),
-            'defaults' => [
-                'exceptions' => false
-            ],
-            'timeout'  => 10.0
-        ]); 
-    }
-
     public function authenticateAccount(Request $request)
-    {   
+    {
         $redirect_url = [
             'admin' => '/dashboard',
             'buyer' => '/marketplace',
@@ -58,6 +47,9 @@ class SignInController extends Controller
             session($this->getProfile($token));
             $fullname = session()->get('firstname').' '.session()->get('lastname');
             session()->put('cart', []);
+
+            //Set mixpanel user profile
+            $this->mixPanel->identify(session()->get('id'));
 
             //Set flash message to View
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -99,7 +91,7 @@ class SignInController extends Controller
     }
 
     public function getProfile($token=null)
-    {   
+    {
         $profile = [];
         if($token !== null){
             $request = $this->client->get('me', [

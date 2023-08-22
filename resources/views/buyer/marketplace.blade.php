@@ -29,7 +29,7 @@
                   <div class="img-wrapper">
                     <img class="img-responsive mb-1 w-100 rounded" height="190" src="{{ $promotion['display_url'] }}">
                     <div class="img-overlay text-right">
-                      <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
+                      <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'].'/promotion' }}" class="btn btn-sm btn-warning">Shop Now</a>
                     </div>
                   </div>
                   @endif
@@ -55,7 +55,7 @@
                       <div class="carousel-item">
                         <img class="d-block w-100 rounded mx-auto" src="{{ $promotion['display_url'] }}" alt="Promotion Image" height="395">
                         <div class="carousel-caption d-none d-md-block text-right">
-                          <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
+                          <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'].'/promotion' }}" class="btn btn-sm btn-warning">Shop Now</a>
                         </div>
                       </div>
                       @endforeach
@@ -89,7 +89,7 @@
                   <div class="img-wrapper">
                     <img class="img-responsive mb-1 w-100 rounded" height="190" src="{{ $promotion['display_url'] }}">
                     <div class="img-overlay text-right">
-                      <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'] }}" class="btn btn-sm btn-warning">Shop Now</a>
+                      <a href="/ordernow/{{ $promotion['product_now']['product_id'].'/'.$promotion['product_now']['organization_id'].'/promotion' }}" class="btn btn-sm btn-warning">Shop Now</a>
                     </div>
                   </div>
                   @endif

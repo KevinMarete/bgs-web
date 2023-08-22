@@ -121,6 +121,7 @@ Route::middleware('usersession')->group(function () {
     Route::get('/ordernow', 'Buyer\BuyerController@displayOrderNowView');
     Route::get('/ordernow/{productId}', 'Buyer\BuyerController@displayOrderNowView');
     Route::get('/ordernow/{productId}/{organizationId}', 'Buyer\BuyerController@displayOrderNowView');
+    Route::get('/ordernow/{productId}/{organizationId}/{offering}', 'Buyer\BuyerController@displayOrderNowView');
     Route::get('/offers-day', 'Buyer\BuyerController@displayOffersDayView');
     Route::get('/offers-day/{productId}', 'Buyer\BuyerController@displayOffersDayView');
     Route::post('/add-cart', 'Buyer\BuyerController@addCart');

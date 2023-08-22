@@ -178,6 +178,14 @@ class BuyerController extends MyController
             $is_sort = false;
         }
 
+        //Mixpanel Product Promotion
+        if ($request->offering === "promotion") {
+            $this->mixPanel->track('Product Promotion', [
+                'product_id' => $request->productId,
+                'organization_id' => $request->organizationId
+            ]);
+        }
+
         $view_data = [
             'products_per_page' => env('PRODUCTS_PER_PAGE'),
             'products' => $products,
@@ -220,6 +228,11 @@ class BuyerController extends MyController
             array_unshift($products, $tempProduct);
             //No sorting of data
             $is_sort = false;
+
+            //Mixpanel Product Offer
+            $this->mixPanel->track('Product Offer', [
+                'product_id' => $request->productId
+            ]);
         }
 
         $view_data = [
@@ -466,15 +479,19 @@ class BuyerController extends MyController
                 $this->manageResourceData($token, "POST", "orderitem", $orderitem_data);
 
                 //Add mail orderitems
-                $orderitems[] = [
+                $mail_item = [
                     'product_name' => $order_item['product_name'],
                     'quantity' => $order_item['quantity'],
                     'unit_price' => $order_item['unit_price'],
                     'sub_total' => round(($order_item['sub_total'] - $credits_per_item), 2),
                 ];
+                $orderitems[] = $mail_item;
 
                 //Add supplier emails
                 $supplier_emails[] = $order_item['organization_email'];
+
+                //Mixpanel Product Order
+                $this->mixPanel->track('Product Order', $mail_item);
             }
 
             //Add payment
@@ -1061,7 +1078,7 @@ class BuyerController extends MyController
         $payment_id = $payment_response['id'];
 
         //Check for Unique Sellers due to duplicate ProductCategories
-        $sellers = array_unique(array_map(function ($seller){
+        $sellers = array_unique(array_map(function ($seller) {
             $seller = explode('#', $seller);
             return $seller[0];
         }, $sellers));
@@ -1118,6 +1135,9 @@ class BuyerController extends MyController
                     'product_name' => $product_now_name,
                     'quantity' => $product_qty,
                 ];
+
+                //Mixpanel RFQ Product
+                $this->mixPanel->track('Product Quotation', $rfqitems);
             }
 
             //Send RFQ Email to Seller Copy Buyer and BGS Admins

@@ -50,7 +50,6 @@ class SignInController extends MyController
 
             //Set mixpanel user profile
             $this->mixPanel->identify(session()->get('id'));
-            $this->mixPanel->track('User just signed in!', ["name" => $fullname, "email" => session()->get('email')]);
 
             //Set flash message to View
             $flash_msg = '<div class="alert alert-success alert-dismissible fade show" role="alert">
